@@ -60,7 +60,7 @@
         "babelify",
         {
           "presets": [
-            "es2015"
+            "env"
           ]
         }
       ]

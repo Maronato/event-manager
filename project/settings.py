@@ -213,6 +213,8 @@ if HEROKU_ENV:
 COMPRESS_PRECOMPILERS = (
     ('module', 'compressor_toolkit.precompilers.ES6Compiler'),
     ('text/es6', 'compressor_toolkit.precompilers.ES6Compiler'),
+    ('text/js', 'compressor_toolkit.precompilers.ES6Compiler'),
+    ('text/javascript', 'compressor_toolkit.precompilers.ES6Compiler'),
     ('text/x-scss', 'compressor_toolkit.precompilers.SCSSCompiler'),
     ('text/less', 'lessc {infile} {outfile}'),
 )
@@ -221,7 +223,7 @@ COMPRESS_ES6_COMPILER_CMD = (
     'export NODE_PATH="{paths}" && '
     '{browserify_bin} "{infile}" -o "{outfile}" '
     '-t [ envify --NODE_ENV production ] '
-    '-t [ "{node_modules}/babelify" --presets="{node_modules}/babel-preset-es2015" ] '
+    '-t [ "{node_modules}/babelify" --presets="{node_modules}/babel-preset-env" ] '
 )
 if not DEBUG:
     COMPRESS_ES6_COMPILER_CMD = COMPRESS_ES6_COMPILER_CMD.replace("{browserify_bin}", "NODE_ENV=production {browserify_bin} -g envify")
