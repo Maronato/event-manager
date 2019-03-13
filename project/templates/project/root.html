@@ -1,0 +1,105 @@
+{% load compress %}
+{% load staticfiles %}
+{% load pwa %}
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"">
+    <title>Talento Unicamp</title>
+    <link rel="apple-touch-icon" sizes="57x57" href="{% static 'project/img/icons/apple-icon-57x57.png' %}">
+    <link rel="apple-touch-icon" sizes="60x60" href="{% static 'project/img/icons/apple-icon-60x60.png' %}">
+    <link rel="apple-touch-icon" sizes="72x72" href="{% static 'project/img/icons/apple-icon-72x72.png' %}">
+    <link rel="apple-touch-icon" sizes="76x76" href="{% static 'project/img/icons/apple-icon-76x76.png' %}">
+    <link rel="apple-touch-icon" sizes="114x114" href="{% static 'project/img/icons/apple-icon-114x114.png' %}">
+    <link rel="apple-touch-icon" sizes="120x120" href="{% static 'project/img/icons/apple-icon-120x120.png' %}">
+    <link rel="apple-touch-icon" sizes="144x144" href="{% static 'project/img/icons/apple-icon-144x144.png' %}">
+    <link rel="apple-touch-icon" sizes="152x152" href="{% static 'project/img/icons/apple-icon-152x152.png' %}">
+    <link rel="apple-touch-icon" sizes="180x180" href="{% static 'project/img/icons/apple-icon-180x180.png' %}">
+    <link rel="icon" type="image/png" sizes="192x192"  href="{% static 'project/img/icons/android-icon-192x192.png' %}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'project/img/icons/favicon-32x32.png' %}">
+    <link rel="icon" type="image/png" sizes="96x96" href="{% static 'project/img/icons/favicon-96x96.png' %}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'project/img/icons/favicon-16x16.png' %}">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="{% static 'project/img/icons/ms-icon-144x144.png' %}">
+    <meta name="theme-color" content="#ffffff">
+    {% progressive_web_app_meta %}
+
+    {% compress js %}
+    <script src="{% static 'project/plugins/jquery/dist_show/jquery.min.js' %}"></script>
+    <script src="{% static 'project/plugins/semantic/dist_show/semantic.js' %}"></script>
+    {% endcompress %}
+    {% compress css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'project/css/normalize.css' %}">
+    {% endcompress %}
+
+    <!-- Semantic-UI -->
+    {% compress css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'project/plugins/semantic/dist_show/semantic.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'project/plugins/izitoast/izitoast.min.css' %}">
+    {% endcompress %}
+
+    <!-- Custom styling -->
+    {% compress css %}
+    <link rel="stylesheet" type="text/x-scss" href="{% static 'project/css/site.scss' %}">
+    {% endcompress %}
+    <link href='//fonts.googleapis.com/css?family=Montserrat:700' rel='stylesheet' type='text/css'>
+    <link href='//fonts.googleapis.com/css?family=Lato:300,400' rel='stylesheet' type='text/css'>
+    <style type="text/css">
+        .qrcode-reader{display:flex;flex-flow:row nowrap;justify-content:space-around;align-items:center}.qrcode-reader__inner-wrapper{display:inline-block;position:relative}.qrcode-reader__camera{display:block;object-fit:contain;max-width:100%;max-height:100%;z-index:10}.qrcode-reader__overlay,.qrcode-reader__tracking-layer{position:absolute;width:100%;height:100%}.qrcode-reader__overlay{z-index:30}.qrcode-reader__tracking-layer{z-index:20}
+    </style>
+
+    <!-- Django vars -->
+    <script type="text/javascript">
+        var csrf_token = "{{ csrf_token }}";
+    </script>
+
+    <!-- iOS Web Clip -->
+    <!-- <link rel="apple-touch-icon" href="assets/images/favicon.png"> -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+
+    <!-- <link rel="icon" href="assets/images/favicon.png"> -->
+
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-122824976-1"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'UA-122824976-1');
+    </script>
+
+</head>
+<body>
+    <!-- Messages are loaded automatically as notifications -->
+    {% if messages %}
+    <script type="text/javascript">
+        var messages = [];
+        {% for message in messages %}
+            message = {message: "{{ message }}", 'level': "{{ message.tags }}"};
+            messages.push(message);
+        {% endfor %}
+    </script>
+    {% compress js %}
+    <script type="module" src="{% static 'project/js/notify_messages.js' %}"></script>
+    {% endcompress %}
+    {% endif %}
+
+    </script>
+    {% block root %}
+    {% endblock root %}
+
+    <!-- Sidebar app -->
+    {% block sidebarapp %}
+    {% endblock sidebarapp %}
+
+    <!-- Subscriptions app -->
+    {% block subscriptionapp %}
+    {% endblock subscriptionapp %}
+
+    <!-- Page app -->
+    {% block appjs %}
+    {% endblock appjs %}
+</body>
+</html>

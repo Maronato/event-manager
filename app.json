@@ -1,0 +1,104 @@
+{
+  "name": "Event Manager",
+  "description": "Event manager packed full of features",
+  "keywords": ["django", "vue.js"],
+  "addons": [
+    "heroku-redis",
+    "scout",
+    "sentry",
+    "redismonitor",
+    "librato"
+  ],
+  "buildpacks": [
+    {
+      "url": "heroku/python"
+    }
+  ],
+  "repository": "https://github.com/Maronato/event-manager",
+  "success_url": "/",
+  "env": {
+    "EVENT_NAME": {
+      "description": "Name of your event",
+      "value": "My Event"
+    },
+    "DEBUG": {
+      "description": "Ativar modo debug (se em dúvida, deixe False)",
+      "value": "False"
+    },
+    "MAINTENANCE_MODE": {
+      "description": "Modo de manutenção. Deixe em False",
+      "value": "False"
+    },
+    "ALLOWED_HOSTS": {
+      "description": "Hosts permitidos. Em dúvida deixe com está",
+      "value": "[]"
+    },
+    "SECRET_KEY": {
+      "description": "String longa e aleatória usada como chave de encriptação das comunicações do site.",
+      "generator": "secret"
+    },
+    "EMAIL_ACCOUNT": {
+      "description": "Conta de email de onde serão enviados os emails do site. Use uma existente.",
+      "value": "",
+      "required": false
+    },
+    "EMAIL_PASSWORD": {
+      "description": "Senha do email ai de cima, pra ser possível enviar emails.",
+      "value": "",
+      "required": false
+    },
+    "ADMIN_ACCOUNT": {
+      "description": "Email do admnistrador que vai receber os error reports. Use o meu email",
+      "value": "gustavomaronato@gmail.com"
+    },
+    "ROOT_URL" : {
+        "description": "URL do seu app (<nome-do-app>.herokuapp.com)",
+        "value": ""
+    },
+    "FACEBOOK_KEY" : {
+        "description": "(Opcional) Facebook dev key para login social",
+        "value": "",
+        "required": false
+    },
+    "FACEBOOK_SECRET" : {
+        "description": "(Opcional) Facebook dev secret para login social",
+        "value": "",
+        "required": false
+    },
+    "GITHUB_KEY" : {
+        "description": "(Opcional) Github dev key para login social",
+        "value": "",
+        "required": false
+    },
+    "GITHUB_SECRET" : {
+        "description": "(Opcional) Github dev secret para login social",
+        "value": "",
+        "required": false
+    },
+    "GOOGLE_KEY" : {
+        "description": "(Opcional) Facebook dev key para login social",
+        "value": "",
+        "required": false
+    },
+    "GOOGLE_SECRET" : {
+        "description": "(Opcional) Facebook dev secret para login social",
+        "value": "",
+        "required": false
+    },
+    "AWS_ACCESS_KEY_ID" : {
+        "description": "(Opcional) Key ID da AWS para salvar static files em buckets",
+        "value": "",
+        "required": false
+    },
+    "AWS_SECRET_ACCESS_KEY" : {
+        "description": "(Opcional) Key secret da AWS para salvar static files em buckets",
+        "value": "",
+        "required": false
+    },
+    "AWS_STORAGE_BUCKET_NAME" : {
+        "description": "(Opcional) bucket name da AWS para salvar static files em buckets",
+        "value": "",
+        "required": false
+    }
+  }
+}
