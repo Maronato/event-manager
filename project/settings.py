@@ -233,7 +233,7 @@ if not DEBUG:
 CELERY_BROKER_URL = os.environ.get('REDIS_URL')
 
 # Update database configuration with $DATABASE_URL.
-db_from_env = dj_database_url.config(conn_max_age=500)
+db_from_env = dj_database_url.config()
 DATABASES['default'].update(db_from_env)
 
 # Honor the 'X-Forwarded-Proto' header for request.is_secure()
@@ -282,7 +282,7 @@ MSOCKS_SELF_SUBSCRIPTION_FIELDS = [
 # Override model sockets router
 ASGI_APPLICATION = "project.router_application.application"
 
-SHOW_TOOLBAR_CALLBACK = eval(os.environ.get('SHOW_TOOLBAR_CALLBACK', 'True').capitalize())
+SHOW_TOOLBAR_CALLBACK = eval(os.environ.get('SHOW_TOOLBAR_CALLBACK', str(DEBUG)).capitalize())
 
 DEBUG_TOOLBAR_CONFIG = {
     'SHOW_TOOLBAR_CALLBACK': lambda r: SHOW_TOOLBAR_CALLBACK  # disables it
