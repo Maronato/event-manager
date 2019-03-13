@@ -12,7 +12,7 @@ class IsCheckedin(IsHacker):
 
     def has_permission(self, request, view):
         parent = super().has_permission(request, view)
-        return parent and request.user.profile.state == 'checked_in'
+        return parent and request.user.profile.state == 'checkedin'
 
 
 class IsAdmitted(IsHacker):

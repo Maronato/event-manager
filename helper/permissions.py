@@ -16,6 +16,5 @@ CanSubmitTickets = Or(
     EmployeeHasAccess,
     IsMentor,
     IsStaff,
-    IsCheckedin,
-    permissions.AllowAny
+    IsCheckedin
 )

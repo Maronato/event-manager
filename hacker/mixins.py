@@ -9,13 +9,13 @@ class IsHackerMixin(LoginRequiredMixin, UserPassesTestMixin):
 class IsCheckedinMixin(IsHackerMixin):
     def test_func(self):
         parent = super().test_func()
-        return parent and self.request.user.profile.state == 'checked_in'
+        return parent and self.request.user.profile.state == 'checkedin'
 
 
 class IsAdmittedMixin(IsHackerMixin):
     def test_func(self):
         parent = super().test_func()
-        return parent and self.request.user.profile.state == 'checked_in'
+        return parent and self.request.user.profile.state == 'checkedin'
 
 
 class IsSubmittedOrIncompleteMixin(IsHackerMixin):
