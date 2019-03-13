@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -eo pipefail
 
-npm install -g less@~3 node-sass@4.11.0 postcss-cli@5.0.1 autoprefixer@8.6.4 browserify@16.2.3 babelify@8.0.0 envify@4.1.0 babel-preset-es2015
+npm install -g less@~3 node-sass@4.11.0 postcss-cli@5.0.1 autoprefixer@8.6.4 browserify@16.2.3 babelify@8.0.0 envify@4.1.0 babel-preset-env
 
 echo "-----> Installing all deps"
 npm install
