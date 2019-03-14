@@ -28,7 +28,7 @@ O Event Manager vem com várias features prontas pra serem usadas. Algumas delas
     - Equipe pode fazer check in dos participantes nos eventos para garantir que só quem se inscreveu poderá entrar
     - Participantes podem avaliar eventos depois e enviar feedback
     - Palestrantes podem ser vinculados a eventos para lerem o feedback
-- Helper
+- Helper:
     - Plataforma completa para geração e controle de tickets de ajuda
     - Mentores e staff pegam tickets de participantes/outros staffs
     - Participantes avaliam mentores após o evento
@@ -36,15 +36,23 @@ O Event Manager vem com várias features prontas pra serem usadas. Algumas delas
     - Patrocinadores podem ter contas especiais na plataforma
     - Podem escanear o QR code de participantes que forem interessantes para manter contato no futuro
     - Algumas áreas do sistema podem ser restritas a apenas alguns patrocinadores
-- Anúncios
+- Anúncios:
     - Anúncios e avisos podem ser criados durante o evento
     - Ficam visíveis em todas as telas para todos os participantes
-- Estatísticas
+- Estatísticas:
     - Histogramas interativos de inscrições ao longo do tempo
     - Estatísticas dos inscritos e dos dados preenchidos no formulário de inscrição
     - Estatísticas linguísticas dos campos de texto do formulário
-- Exportações
+- Exportações:
     - Todos os dados podem ser exportados em 8 formatos diferentes
+- Equipes:
+    - Participantes podem criar equipes entre si
+    - Podem submeter seu código para avaliação dos jurados
+- Jurados:
+    - Jurados podem avaliar equipes
+    - Mecanismo de avaliação segue um algoritmo de comparação entre pares, mais preciso e intuitivo que avaliações quantitativas
+    - Avaliação dos jurados é individual entre o jurado e a equipe
+    - O sistema envia jurados para mesas das equipes automaticamente e cuida de calcular as pontuações e montar o ranking
 
 [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
 
