@@ -55,7 +55,7 @@ O Event Manager vem com várias features prontas pra serem usadas. Algumas delas
     - Jurados podem avaliar equipes
     - Mecanismo de avaliação segue um algoritmo de comparação entre pares, mais preciso e intuitivo que avaliações quantitativas
     - Avaliação dos jurados é individual entre o jurado e a equipe
-    - O sistema envia jurados para mesas das equipes automaticamente e cuida de calcular as pontuações e montar o ranking=
+    - O sistema envia jurados para mesas das equipes automaticamente e cuida de calcular as pontuações e montar o ranking
 
 # Interface
 ## Dashboard
