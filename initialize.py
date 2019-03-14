@@ -64,6 +64,30 @@ env = [
         'ask': False,
     },
     {
+        'name': 'MAINTENANCE_MODE',
+        'title': 'Se o site está em manutenção',
+        'default': False,
+        'ask': False
+    },
+    {
+        'name': 'ALLOWED_HOSTS',
+        'title': 'Hosts permitidos a acessar o site',
+        'default': ['*'],
+        'ask': False
+    },
+    {
+        'name': 'EVENT_NAME',
+        'title': 'Nome do seu evento',
+        'default': 'Meu evento',
+        'ask': True
+    },
+    {
+        'name': 'EVENT_DESCRIPTION',
+        'title': 'Descrição do seu evento',
+        'default': 'Minha descrição',
+        'ask': True
+    },
+    {
         'name': 'EMAIL_ACCOUNT',
         'title': 'Endereço de email para envio de logs de erro',
         'ask': True,
@@ -76,6 +100,24 @@ env = [
         'required': True
     },
     {
+        'name': 'EMAIL_HOST',
+        'title': 'Host do seu servidor de email',
+        'default': 'smtp.gmail.com',
+        'ask': False
+    },
+    {
+        'name': 'EMAIL_PORT',
+        'title': 'Porta do seu servidor de email',
+        'ask': False,
+        'default': 587
+    },
+    {
+        'name': 'EMAIL_USE_TLS',
+        'title': 'Se TLS deverá ser usado nas comunicações de email',
+        'ask': False,
+        'default': True
+    },
+    {
         'name': 'ADMIN_ACCOUNT',
         'title': 'Conta de admin para receber logs de erro',
         'default': 'gustavomaronato@gmail.com',
@@ -86,9 +128,81 @@ env = [
         'name': 'ROOT_URL',
         'title': 'URL base do seu app',
         'default': 'localhost:8000',
-        'ask': True,
+        'ask': False,
         'required': True
     },
+    {
+        'name': 'FACEBOOK_KEY',
+        'title': 'App key do seu app de Facebook para login social',
+        'ask': True
+    },
+    {
+        'name': 'FACEBOOK_SECRET',
+        'title': 'App secret do seu app de Facebook para login social',
+        'ask': True
+    },
+    {
+        'name': 'GITHUB_KEY',
+        'title': 'App key do seu app de Github para login social',
+        'ask': True
+    },
+    {
+        'name': 'GITHUB_SECRET',
+        'title': 'App secret do seu app de Github para login social',
+        'ask': True
+    },
+    {
+        'name': 'GOOGLE_KEY',
+        'title': 'App key do seu app de Google para login social',
+        'ask': True
+    },
+    {
+        'name': 'GOOGLE_SECRET',
+        'title': 'App secret do seu app de Google para login social',
+        'ask': True
+    },
+    {
+        'name': 'AWS_ACCESS_KEY_ID',
+        'title': 'IAM Access key da AWS para hosteamento de arquivos estáticos no S3',
+        'ask': True
+    },
+    {
+        'name': 'AWS_SECRET_ACCESS_KEY',
+        'title': 'IAM Access secret da AWS para hosteamento de arquivos estáticos no S3',
+        'ask': True
+    },
+    {
+        'name': 'AWS_STORAGE_BUCKET_NAME',
+        'title': 'Nome do bucket S3 para hosteamento de arquivos estáticos',
+        'ask': True
+    },
+    {
+        'name': 'REDIS_URL',
+        'title': 'URI de acesso do Redis',
+        'ask': False,
+        'default': 'redis://localhost:6379/0'
+    },
+    {
+        'name': 'SHOW_TOOLBAR_CALLBACK',
+        'title': 'Se a debug toolbar deve sempre ser mostrada para superusers',
+        'ask': False
+    },
+    {
+        'name': 'GOOGLE_ANALYTICS',
+        'title': 'ID do seu domínio para tracking com o Google Analytics',
+        'ask': False
+    },
+    {
+        'name': 'HEROKU_ENV',
+        'title': 'Variável que define se o ambiente atual é o ambiente de build do Heroku',
+        'ask': False,
+        'default': False
+    },
+    {
+        'name': 'SENTRY_DSN',
+        'title': 'DSN do Sentry.io para error tracking',
+        'ask': False
+    }
 ]
 
 

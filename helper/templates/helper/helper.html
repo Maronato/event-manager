@@ -2,6 +2,7 @@
 {% load compress %}
 {% load staticfiles %}
 
+{% block title %}Helper{% endblock title %}
 {% block appjs %}
 {% compress js %}
 <script type="module" src="{% static 'helper/apps/helper.js' %}"></script>

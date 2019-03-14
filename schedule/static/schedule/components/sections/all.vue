@@ -54,7 +54,7 @@
                     // Only show events in the future (don't include started events)
                     return moment().isBefore(event.start);
                 }).sort((event1, event2) => {
-                    return moment(event1.start).isAfter(event2.start);
+                    return moment(event1.start) - moment(event2.start)
                 })
             }
         },

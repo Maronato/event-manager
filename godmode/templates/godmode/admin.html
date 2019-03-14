@@ -2,6 +2,7 @@
 {% load compress %}
 {% load staticfiles %}
 
+{% block title %}Admin{% endblock title %}
 {% block appjs %}
 {% compress js %}
 <script type="module" src="{% static 'godmode/apps/admin.js' %}"></script>

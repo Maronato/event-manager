@@ -6,7 +6,8 @@
 <head lang="en">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-    <title>Talento Unicamp</title>
+    <title>{{ EVENT_NAME }} - {% block title %}{% endblock title %} </title>
+    <meta name="description" content="{{ EVENT_DESCRIPTION }}">
     <link rel="apple-touch-icon" sizes="57x57" href="{% static 'project/img/icons/apple-icon-57x57.png' %}">
     <link rel="apple-touch-icon" sizes="60x60" href="{% static 'project/img/icons/apple-icon-60x60.png' %}">
     <link rel="apple-touch-icon" sizes="72x72" href="{% static 'project/img/icons/apple-icon-72x72.png' %}">
@@ -20,9 +21,7 @@
     <link rel="icon" type="image/png" sizes="32x32" href="{% static 'project/img/icons/favicon-32x32.png' %}">
     <link rel="icon" type="image/png" sizes="96x96" href="{% static 'project/img/icons/favicon-96x96.png' %}">
     <link rel="icon" type="image/png" sizes="16x16" href="{% static 'project/img/icons/favicon-16x16.png' %}">
-    <meta name="msapplication-TileColor" content="#ffffff">
     <meta name="msapplication-TileImage" content="{% static 'project/img/icons/ms-icon-144x144.png' %}">
-    <meta name="theme-color" content="#ffffff">
     {% progressive_web_app_meta %}
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/7.2.5/polyfill.min.js"></script>

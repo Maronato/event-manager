@@ -1,6 +1,8 @@
 {% extends 'project/root.html' %}
 {% load compress %}
 {% load staticfiles %}
+
+{% block title %}Login{% endblock title %}
 {% block appjs %}
 {% compress js %}
 <script type="module" src="{% static 'project/apps/login.js' %}"></script>

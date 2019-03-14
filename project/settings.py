@@ -118,6 +118,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'settings.context_processors.event_info'
             ],
         },
     },
@@ -256,7 +257,7 @@ ADMINS = [('Admin', os.environ.get('ADMIN_ACCOUNT')), ]
 
 
 # Event data
-EVENT_NAME = os.environ.get('EVENT_NAME', 'Hackathon')
+EVENT_NAME = os.environ.get('EVENT_NAME', 'Meu evento')
 EVENT_DESCRIPTION = os.environ.get('EVENT_DESCRIPTION', '')
 
 
@@ -309,9 +310,3 @@ PWA_APP_DESCRIPTION = EVENT_DESCRIPTION
 PWA_APP_THEME_COLOR = '#0A0302'
 PWA_APP_DISPLAY = 'standalone'
 PWA_APP_START_URL = '/'
-PWA_APP_ICONS = [
-    {
-        'src': "{% static 'project/img/icons/android-icon-192x192.png' %}",
-        'sizes': '192x192'
-    }
-]

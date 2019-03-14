@@ -2,6 +2,7 @@
 {% load compress %}
 {% load staticfiles %}
 
+{% block title %}{{ company_context_raw.company_name }} {% endblock title %}
 {% block appjs %}
 {% compress js %}
 <script type="module" src="{% static 'company/apps/company.js' %}"></script>

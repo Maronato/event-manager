@@ -51,7 +51,7 @@
         computed: {
             filteredEventList() {
                 return this.eventList.slice(0).sort((event1, event2) => {
-                    return moment(event1.start).isAfter(event2.start)
+                    return moment(event1.start) - moment(event2.start)
                 })
             }
         },

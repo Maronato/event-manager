@@ -2,6 +2,7 @@
 {% load compress %}
 {% load staticfiles %}
 
+{% block title %}Staff{% endblock title %}
 {% block appjs %}
 {% compress js %}
 <script type="module" src="{% static 'staff/apps/staff.js' %}"></script>

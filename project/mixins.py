@@ -27,6 +27,7 @@ class SidebarContextMixin(LoginRequiredMixin, SettingsContextMixin, ContextMixin
         sidebar_context = {
             'active_tab': self.active_tab,
             'event_name': dj_settings.EVENT_NAME,
+            'event_description': dj_settings.EVENT_DESCRIPTION,
             'event_logo': static('project/img/logo.svg'),
             'event_logo_png': static('project/img/logo.png'),
             'redirect_urls': {
@@ -96,7 +97,6 @@ class LoginContextMixin(ContextMixin):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         login_context = {
-            'event_logo_text': static('project/img/logo_text.svg'),
             'event_bg': static('project/img/bg.png'),
             'check_token_url': reverse('profile:api:check_token'),
             'reset_email_url': reverse('profile:api:reset_token_email'),

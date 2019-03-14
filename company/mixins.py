@@ -51,4 +51,5 @@ class CompanyContextMixin(LoginRequiredMixin, ContextMixin):
         }
         context = super().get_context_data(**kwargs)
         context['company_context'] = json.dumps(company_context)
+        context['company_context_raw'] = company_context
         return context
