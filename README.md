@@ -58,7 +58,7 @@ O Event Manager vem com várias features prontas pra serem usadas. Algumas delas
 # Interface
 ## Dashboard
 
-![Aplicação Incompleta](./project/static/img/docs/incomplete.png)
+![Aplicação Incompleta](./project/static/project/img/docs/incomplete.png)
 Depois de fazerem seu login pela primeira vez, o participante terá acesso ao Dashboard. Nele, é possível acompanhar seu status atual e outras coisas, como vincular redes sociais para login, confirmar presença e acessar seu QR code de identificação.
 
 Os status que o participante podem ter variam entre:
@@ -75,38 +75,38 @@ Os status que o participante podem ter variam entre:
 
 ## Aplicação
 
-![Formulário de Aplicação](./project/static/img/docs/application.png)
+![Formulário de Aplicação](./project/static/project/img/docs/application.png)
 O formulário de aplicação é personalizável no código.
 
 ## Identificação
-![QR code](./project/static/img/docs/qr_code.png)
+![QR code](./project/static/project/img/docs/qr_code.png)
 Após confirmar sua presença, o participante receberá um QR code que o identifica no evento. Esse QR code servirá para fazer o check in no evento principal, nos sub eventos, ser escaneado por patrocinadores, etc
 
 Ele fica sempre disponível na sua Dashboard
 
 ## Sub eventos
-![QR code](./project/static/img/docs/qr_code.png)
+![QR code](./project/static/project/img/docs/qr_code.png)
 Também após confirmar sua presença, o participante terá acesso à tela de inscrição nos sub eventos. Nela é possível ver informações sobre todos os sub eventos que acontecerão e é possível se inscrever para eles.
 
 Após participar do sub evento, o participante poderá avaliar este e fornecer feedback ao palestrante
 
 ## Mentoria
-![Helper Participante](./project/static/img/docs/helper_attendee.png)
+![Helper Participante](./project/static/project/img/docs/helper_attendee.png)
 Dentro do evento será aberta a plataforma de tickets de ajuda. Nela, participantes ou membros da equipe podem abrir tickets que serão pegos por outros membros da equipe e por mentores.
 
 Com tickets, participantes nunca terão que ir atrás de mentores e membros da equipe. Basta submeter sua dúvida e ela estará imediatamente disponível para ser pego. Isso reduz o tempo para solução de dúvidas e estimula que participantes façam perguntas.
 
-![Helper Mentor](./project/static/img/docs/mentor.png)
+![Helper Mentor](./project/static/project/img/docs/mentor.png)
 Mentores e administradores têm acesso à lista de tickets abertos e podem facilmente pegá-los. Após solucionar tickets, os participantes poderão avaliar a ajuda que receberam e esses dados vão para um ranking de mentores.
 
 ## Anúncios
-![Anúncios](./project/static/img/docs/announcements.png)
+![Anúncios](./project/static/project/img/docs/announcements.png)
 Adminstradores podem criar mensagens de anúncio a qualquer momento do evento e enviar para os usuários. Estas aparecerão no topo de todas as páginas da plataforma a todo momento.
 
 ## Administradores
-![Admin](./project/static/img/docs/godmode.png)
+![Admin](./project/static/project/img/docs/godmode.png)
 Os administradores têm acesso a uma interface clara para gerenciamento dos usuários ao longo do evento. Podem facilmente atribuir ou remover títulos, remover usuários, criar vários usuários de uma vez, criar anúncios, criar empresas patrocinadoras e associar seus empregados e gerenciar as configurações gerais do evento.
-![Config](./project/static/img/docs/config.png)
+![Config](./project/static/project/img/docs/config.png)
 É possível alterar várias configurações do evento em tempo real, como número de participantes, datas de abertura das inscrições e do evento e muito mais.
 
 # Setup
