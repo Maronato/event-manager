@@ -160,5 +160,5 @@ Para ter o sistema rodando rapidamente no Heroku, basta clicar no botão abaixo 
 # Personalizando para o seu evento
 coming soon
 
-# Disclaimer
-The core of the app CSS was taken from [Quill](https://github.com/techx/quill) and all rights to the borrowed code go to [Edwin Zhang](https://github.com/ehzhang). The helper interface's CSS was taken from [HELPq](https://github.com/ehzhang/HELPq) and all rights to the borrowed code go to [Edwin Zhang](https://github.com/ehzhang).
+# License
+Copyright (c) 2019 Gustavo Maronato (https://github.com/maronato). Released under AGPLv3. See LICENSE.txt for details.

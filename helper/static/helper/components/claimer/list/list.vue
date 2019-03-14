@@ -140,6 +140,9 @@ export default {
 };
 </script>
 <style scoped>
+/* This part of the code was taken from https://github.com/ehzhang/HELPq and is subject to its original authors copyright:
+ * Copyright (c) 2015 Edwin Zhang
+*/
 .tickets {
     text-align: center;
 }
