@@ -85,7 +85,7 @@ Após confirmar sua presença, o participante receberá um QR code que o identif
 Ele fica sempre disponível na sua Dashboard
 
 ## Sub eventos
-![QR code](./project/static/project/img/docs/qr_code.png)
+![QR code](./project/static/project/img/docs/events.png)
 Também após confirmar sua presença, o participante terá acesso à tela de inscrição nos sub eventos. Nela é possível ver informações sobre todos os sub eventos que acontecerão e é possível se inscrever para eles.
 
 Após participar do sub evento, o participante poderá avaliar este e fornecer feedback ao palestrante
