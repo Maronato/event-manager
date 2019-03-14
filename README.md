@@ -5,6 +5,8 @@ Tudo pro seu evento, feito em Django e Vue.js
 
 Event Manager é um sistema feito para gerenciar _quase_ tudo do seu evento por você. Ele vai ser toda a sua infraestrutura virtual antes e durante o evento, unificando suas inscrições, checkin envio de emails, mini-eventos como palestras durante seu evento maior e muito mais! Pros seus usuários, é uma plataforma unificada e limpa que vai substituir diversos outros sistemas independentes e ruins.
 
+![Login](./project/static/project/img/docs/login.png)
+
 # Features
 O Event Manager vem com várias features prontas pra serem usadas. Algumas delas são:
 - *Inscrição*:
