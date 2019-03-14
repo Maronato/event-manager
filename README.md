@@ -111,8 +111,14 @@ Os administradores têm acesso a uma interface clara para gerenciamento dos usu�
 
 # Setup
 ## Pré requisitos
-Event Manager requer os seguintes softwares
-...
+Event Manager requer os seguintes softwares:
+
+|Software                           |Versão |
+|-----------------------------------|-------|
+|[Python](https://www.python.org/)  |3.7+   |
+|[Node](https://nodejs.org/en/)     |10+    |
+|[Redis](https://redis.io/)         |5.0.3+ |
+
 ## Rodando localmente
 Depois de instalados Python e Node, você deverá instalar as dependências deles. Para isso, rode:
 ```
@@ -149,7 +155,21 @@ Para inicializar o servidor, rode
 ./run.sh
 ```
 
-Você precisará fazer login na conta de admin, mas ainda não possui vínculo à sua rede social. Por isso, você precisará acessar usando o painel de admin do Django. Faça isso acessando `http://localhost:8000/admin/` e fazendo o login. Depois disso você pode voltar para `http://localhost:8000/` e configurar seu evento.
+Esse comando executa 3 comandos diferentes em sequência:
+```
+python manage.py runserver
+```
+Para iniciar o servidor. Pode ser substituído por `daphne project.asgi:application` para simular o ambiente em produção.
+```
+redis-server
+```
+Para iniciar o redis.
+```
+celery -A project worker -l info
+```
+Para iniciar o celery worker.
+
+Com o servidor rodando, você precisará fazer login na conta de admin, mas ainda não possui vínculo à sua rede social. Por isso, você precisará acessar usando o painel de admin do Django. Faça isso acessando `http://localhost:8000/admin/` e fazendo o login. Depois disso você pode voltar para `http://localhost:8000/` e configurar seu evento.
 
 Você vai perceber que o site é meio lento. Isso é por design e acontece apenas durante o desenvolvimento local.
 
