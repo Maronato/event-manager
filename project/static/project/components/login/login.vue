@@ -4,22 +4,11 @@
             <div class="content">
                 <sui-segment>
                     <div class="logo">
-                        <img v-bind:src="context.event_logo_text">
+                        <img v-bind:src="context.event_logo">
                     </div>
                     <sui-divider horizontal></sui-divider>
                     <div v-if="loginState === 'login'">
-                        <sui-form @submit.prevent="tokenLogin()" v-bind:error="error">
-                            <sui-form-field>
-                                <sui-message error>
-                                    {{ errorMessage }}
-                                </sui-message>
-                                <label>Token</label>
-                                <sui-input v-bind:loading="tokenLoading" v-bind:disabled="tokenLoading" type="text" required placeholder="AbC123" v-model="token"/>
-                            </sui-form-field>
-                            <sui-button v-bind:loading="tokenLoading" v-bind:disabled="tokenLoading" className='login' fluid content='Entrar com token' type="submit" />
-                        </sui-form>
                         <sui-form :loading="formLoading">
-                            <sui-divider horizontal>Ou</sui-divider>
                             <sui-form-field>
                                 <sui-button type="button" @click="socialLogin('facebook')" fluid social="facebook" content="Entrar com Facebook" icon="facebook"/>
                             </sui-form-field>
@@ -29,6 +18,18 @@
                             <sui-form-field>
                                 <sui-button type="button" @click="socialLogin('google')" fluid social="youtube" content="Entrar com Google" icon="google"/>
                             </sui-form-field>
+                        </sui-form>
+                        <sui-divider horizontal>Ou</sui-divider>
+                        <sui-button type="button" className='login' @click="showTokenField = true" v-show="!showTokenField" fluid content="Usar token para acesso"/>
+                        <sui-form @submit.prevent="tokenLogin()" v-bind:error="error" v-show="showTokenField">
+                            <sui-form-field>
+                                <sui-message error>
+                                    {{ errorMessage }}
+                                </sui-message>
+                                <label>Token</label>
+                                <sui-input v-bind:loading="tokenLoading" v-bind:disabled="tokenLoading" type="text" required placeholder="AbC123" v-model="token"/>
+                            </sui-form-field>
+                            <sui-button v-bind:loading="tokenLoading" v-bind:disabled="tokenLoading" className='login' fluid content='Entrar com token' type="submit" />
                         </sui-form>
                     </div>
                     <div v-if="loginState === 'forgot'">
@@ -78,6 +79,7 @@ export default {
             tokenLoading: false,
             emailLoading: false,
             formLoading: false,
+            showTokenField: false,
             resetEmail: "",
             token: "",
             context: login_context
