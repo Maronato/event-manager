@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.com/TalentoUnicamp/my.svg?branch=master)](https://travis-ci.com/TalentoUnicamp/my)
+[![Build Status](https://travis-ci.com/Maronato/event-manager.svg?branch=master)](https://travis-ci.com/Maronato/event-manager)
 
 # Event Manager
 Tudo pro seu evento, feito em Django e Vue.js
