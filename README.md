@@ -1,7 +1,7 @@
 [![Build Status](https://travis-ci.com/TalentoUnicamp/my.svg?branch=master)](https://travis-ci.com/TalentoUnicamp/my)
 
 # Event Manager
-Tudo pro seu evento :)
+Tudo pro seu evento, feito em Django e Vue.js
 
 Event Manager é um sistema feito para gerenciar _quase_ tudo do seu evento por você. Ele vai ser toda a sua infraestrutura virtual antes e durante o evento, unificando suas inscrições, checkin envio de emails, mini-eventos como palestras durante seu evento maior e muito mais! Pros seus usuários, é uma plataforma unificada e limpa que vai substituir diversos outros sistemas independentes e ruins.
 
