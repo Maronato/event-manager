@@ -98,6 +98,7 @@ class LoginContextMixin(ContextMixin):
         context = super().get_context_data(**kwargs)
         login_context = {
             'event_bg': static('project/img/bg.png'),
+            'event_logo': static('project/img/logo.png'),
             'check_token_url': reverse('profile:api:check_token'),
             'reset_email_url': reverse('profile:api:reset_token_email'),
             'error': self.form_error,
