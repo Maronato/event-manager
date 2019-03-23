@@ -9,7 +9,7 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('user_profile', '0009_auto_20180723_0429'),
+        ('user_profile', '0001_squashed_0010_shortcuts_is_mentor'),
     ]
 
     operations = [
