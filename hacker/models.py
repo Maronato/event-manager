@@ -1,6 +1,8 @@
 from django.db.models.signals import post_save, pre_delete
 from django.db import models
 from django.utils import timezone
+from pagseguro.signals import notificacao_recebida
+from pagseguro.api import PagSeguroApi
 from user_profile.models import Profile
 from settings.models import Settings
 from . import tasks
@@ -15,7 +17,8 @@ class Hacker(models.Model):
         ('unique_id', 'profile.unique_id'),
         ('email', 'profile.user.email'),
         ('full_name', 'profile.shortcuts.full_name'),
-        ('state', 'profile.shortcuts.state')
+        ('state', 'profile.shortcuts.state'),
+        'transaction_status'
     ]
 
     profile = models.OneToOneField(
@@ -39,8 +42,23 @@ class Hacker(models.Model):
     # Checked in at the event
     checked_in = models.BooleanField(default=False)
 
+    # Payment status
+    # Internal payment transaction referece
+    transaction_reference = models.CharField(max_length=32, default='', blank=True)
+
+    @property
+    def payed(self):
+        return self.transactions.filter(status__in=['pago', 'disponivel']).exists()
+
+    @property
+    def transaction_status(self):
+        return self.transactions.last().get_status_display() if self.transactions.count() > 0 else 'Não pago'
+
     @property
     def hacker_state(self):
+        # If the user submitted an application but didn't pay (i.e. asked for a refund or something)
+        if Settings.get().require_payment and not self.payed and hasattr(self, 'application'):
+            return 'unpaid'
         if self.checked_in:
             return 'checkedin'
         if self.confirmed:
@@ -90,6 +108,9 @@ class Hacker(models.Model):
         tasks.send_notify_decline.delay(self.id)
         Hacker.cycle_waitlist()
 
+        for transaction in self.transactions.filter(status__in=['pago', 'disponivel']):
+            PagSeguroApi().refund_transaction(transaction.code)
+
     def put_on_waitlist(self, send_email=True):
         # Put hacker on waitlist (Done automatically by the server
         # if the event is full)
@@ -117,6 +138,9 @@ class Hacker(models.Model):
         self.save()
         Hacker.cycle_waitlist()
 
+        for transaction in self.transactions.filter(status__in=['pago', 'disponivel']):
+            PagSeguroApi().refund_transaction(transaction.code)
+
     def confirm(self):
         # Hacker confirmed presence
         self.confirmed = True
@@ -126,16 +150,30 @@ class Hacker(models.Model):
         self.checked_in = True
         self.save()
 
-    @staticmethod
-    def cycle_waitlist():
+    @classmethod
+    def cycle_waitlist(cls):
         # get the current waitlist
-        waitlist = list(Hacker.objects.filter(waitlist=True).order_by('waitlist_date'))
+        waitlist = list(cls.objects.filter(waitlist=True).order_by('waitlist_date'))
         # while the event is not full and there are waitlisted hackers
         while not Settings.is_full() and len(waitlist) > 0:
             hacker = waitlist.pop(0)
             # Hacker can be waitlisted but not in waitlist(e.g late)
             if hacker.profile.state == 'waitlist':
                 hacker.unwaitlist()
+
+    @classmethod
+    def handle_payment_notification(cls, sender, transaction, **kwargs):
+        from pagseguro.models import Transaction
+        reference = transaction['reference']
+        hacker = cls.objects.filter(transaction_reference=reference)
+        trans = Transaction.objects.filter(reference=reference)
+        if hacker.exists() and trans.exists():
+            hacker.first().transactions.add(trans.first())
+            if transaction['status'] not in ['3', '4']:
+                hacker.checked_in = False
+                hacker.confirmed = False
+                hacker.save()
+                cls.cycle_waitlist()
 
     def __str__(self):
         return f'Hacker {self.profile}'
@@ -155,3 +193,4 @@ def delete_hacker(sender, **kwargs):
 
 post_save.connect(update_hacker, sender=Hacker)
 pre_delete.connect(delete_hacker, sender=Hacker)
+notificacao_recebida.connect(Hacker.handle_payment_notification)

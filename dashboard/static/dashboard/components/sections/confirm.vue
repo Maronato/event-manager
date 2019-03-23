@@ -11,13 +11,19 @@
         <br>
             <b>Não confirmar sua presença até esse dia significará a perda de seu lugar no evento!</b>
         </div>
-        <sui-button color="blue" @click="confirm()" content="Confirmar presença" />
+        <sui-button color="blue" @click="confirm()" :loading="loading" :disabled="loading" content="Confirmar presença" />
         <br>
         <br>
         <div class="description">
             Não vai poder participar? Nos avise!
+            <template v-if="settings.require_payment">
+                <br>
+                <b>
+                    Nós vamos extornar seu ticket imediatamente caso você desista do evento.
+                </b>
+            </template>
         </div>
-        <sui-button color="red" @click="withdraw()" content="Não posso participar" />
+        <sui-button color="red" @click="withdraw()" :loading="loading" :disabled="loading" content="Não posso participar" />
         <br>
     </div>
 </template>
@@ -45,7 +51,8 @@
                 settings: this.settings_context,
                 dashboard: this.dashboard_context,
                 reg_close_raw: this.settings_context.registration_close_seconds,
-                conf_close_raw: this.settings_context.confirmation_seconds
+                conf_close_raw: this.settings_context.confirmation_seconds,
+                loading: false
             }
         },
         computed: {
@@ -59,26 +66,32 @@
         methods: {
             confirm() {
                 self = this;
+                self.loading = true
                 axios.post(this.dashboard.api.confirm)
                 .then(function (data) {
                     toast('Sucesso!', data.data.message, 'success');
                     self.user.state = data.data.state;
+                    self.loading = false
                 })
                 .catch(function (error) {
                     console.log(error);
                     toast('Opa!', 'Algo de errado aconteceu :(', 'error');
+                    self.loading = false
                 });
             },
             withdraw() {
                 self = this;
+                self.loading = true
                 axios.post(this.dashboard.api.withdraw)
                 .then(function (data) {
                     toast('Que pena :(', data.data.message, 'info');
                     self.user.state = data.data.state;
+                    self.loading = false
                 })
                 .catch(function (error) {
                     console.log(error);
                     toast('Opa!', 'Algo de errado aconteceu :(', 'error');
+                    self.loading = false
                 });
             }
         }

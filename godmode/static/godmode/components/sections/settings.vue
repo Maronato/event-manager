@@ -43,6 +43,16 @@
                     <sui-input v-model="ticket_expire" type='number' placeholder="30" />
                 </sui-form-field>
             </sui-form-fields>
+            <div class="divided title">Pagamentos</div>
+            <sui-form-fields fields="two">
+                <sui-form-field>
+                    <sui-checkbox label="Inscritos devem pagar por inscrição" toggle v-model="require_payment"/>
+                </sui-form-field>
+                <sui-form-field>
+                    <label>Preço da inscrição</label>
+                    <sui-input v-model="ticket_price" type='decimal' placeholder="Preço" />
+                </sui-form-field>
+            </sui-form-fields>
             <div class="divided title">Datas</div>
             <sui-form-fields fields="two">
                 <sui-form-field>
@@ -116,7 +126,9 @@ export default {
             max_hackers: this.settings_context["max_hackers"],
             ticket_expire: this.settings_context["ticket_expire"],
             ticket_queue_open: this.settings_context["ticket_queue_open"],
-            verify_email: this.settings_context["verify_email"]
+            verify_email: this.settings_context["verify_email"],
+            ticket_price: this.settings_context['ticket_price'],
+            require_payment: this.settings_context['require_payment']
         };
     },
     watch: {
@@ -129,6 +141,8 @@ export default {
                 this.ticket_expire = data["ticket_expire"];
                 this.ticket_queue_open = data["ticket_queue_open"];
                 this.verify_email = data["verify_email"];
+                this.ticket_price = data["ticket_price"];
+                this.require_payment = data["require_payment"]
                 this.refreshCalendars(data);
             },
             deep: true
@@ -154,6 +168,8 @@ export default {
                 ticket_expire: this.ticket_expire,
                 ticket_queue_open: this.ticket_queue_open,
                 verify_email: this.verify_email,
+                ticket_price: this.ticket_price,
+                require_payment: this.require_payment,
                 registration_open: moment(
                     $("#registration_open").calendar("get date")
                 ).format(),

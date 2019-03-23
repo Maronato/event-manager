@@ -54,3 +54,9 @@ django-analytical==2.5.0
 
 # Progressive Web App
 django-progressive-web-app==0.1.1
+
+# Payments
+https://github.com/Maronato/django-pagseguro2/archive/master.zip
+six
+python-dateutil
+xmltodict

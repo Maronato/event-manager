@@ -99,6 +99,16 @@
         "description": "(Opcional) bucket name da AWS para salvar static files em buckets",
         "value": "",
         "required": false
+    },
+    "PAGSEGURO_EMAIL" : {
+        "description": "(Opcional) Pagseguro email for ticket payments",
+        "value": "",
+        "required": false
+    },
+    "PAGSEGURO_TOKEN" : {
+        "description": "(Opcional) Pagseguro seller token for ticket payments",
+        "value": "",
+        "required": false
     }
   }
 }

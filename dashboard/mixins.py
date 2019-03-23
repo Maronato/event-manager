@@ -20,12 +20,15 @@ class DashboardContextMixin(ContextMixin):
                 'unlink_provider': reverse('social:api:unlink_provider'),
                 'confirm': reverse('hacker:api:confirm'),
                 'withdraw': reverse('hacker:api:withdraw'),
-                'undo_withdraw': reverse('hacker:api:undo_withdraw'),
+                'undo_withdraw': reverse('hacker:api:undo_withdraw')
             },
             'social_urls': {
                 'facebook': reverse('social:login', kwargs={'provider': 'facebook'}),
                 'github': reverse('social:login', kwargs={'provider': 'github'}),
-                'google': reverse('social:login', kwargs={'provider': 'google'}),
+                'google': reverse('social:login', kwargs={'provider': 'google'})
+            },
+            'urls': {
+                'checkout': reverse('hacker:checkout')
             }
         }
         context['dashboard_context'] = json.dumps(dashboard_context)

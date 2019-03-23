@@ -10,9 +10,13 @@ https://docs.djangoproject.com/en/1.10/ref/settings/
 """
 
 import os
+import logging
 import dj_database_url
 import sentry_sdk
 from sentry_sdk.integrations.django import DjangoIntegration
+
+
+# logging.basicConfig(level=logging.DEBUG)
 
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -88,6 +92,8 @@ INSTALLED_APPS = [
     'stats',
     'schedule',
     'helper',
+
+    'pagseguro',
 ]
 
 
@@ -270,6 +276,7 @@ MSOCK_AUTH_USER_RELATION_ID = 'user.profile.id'
 MSOCKS_SELF_SUBSCRIPTION_FIELDS = [
     'unique_id',
     'state',
+    'payment_state',
     'is_hacker',
     'is_staff',
     'is_admin',
@@ -286,7 +293,7 @@ MSOCKS_SELF_SUBSCRIPTION_FIELDS = [
 # Override model sockets router
 ASGI_APPLICATION = "project.router_application.application"
 
-SHOW_TOOLBAR_CALLBACK = eval(os.environ.get('SHOW_TOOLBAR_CALLBACK', str(DEBUG)).capitalize())
+SHOW_TOOLBAR_CALLBACK = eval(str(os.environ.get('SHOW_TOOLBAR_CALLBACK', DEBUG)).capitalize())
 
 DEBUG_TOOLBAR_CONFIG = {
     'SHOW_TOOLBAR_CALLBACK': lambda r: SHOW_TOOLBAR_CALLBACK and r.user.is_superuser  # disables it
@@ -310,3 +317,9 @@ PWA_APP_DESCRIPTION = EVENT_DESCRIPTION
 PWA_APP_THEME_COLOR = '#0A0302'
 PWA_APP_DISPLAY = 'standalone'
 PWA_APP_START_URL = '/'
+
+# PagSeguro settings
+PAGSEGURO_EMAIL = os.environ.get('PAGSEGURO_EMAIL', '')
+PAGSEGURO_TOKEN = os.environ.get('PAGSEGURO_TOKEN', '')
+PAGSEGURO_SANDBOX = DEBUG
+PAGSEGURO_LOG_IN_MODEL = DEBUG

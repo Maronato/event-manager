@@ -48,7 +48,8 @@ class Profile(models.Model):
         'employee_company_access',
         'has_facebook',
         'has_github',
-        'has_google'
+        'has_google',
+        'payment_state'
     ]
 
     user = models.OneToOneField(
@@ -81,6 +82,12 @@ class Profile(models.Model):
         if self.is_hacker:
             return self.hacker.hacker_state
         return 'verified'
+
+    @property
+    def payment_state(self):
+        if self.is_hacker:
+            return self.hacker.transaction_status
+        return 'N/A'
 
     def trigger_update(self):
         """Trigger Update

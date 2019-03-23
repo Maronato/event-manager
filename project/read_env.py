@@ -23,4 +23,5 @@ def read_env():
             m3 = re.match(r'\A"(.*)"\Z', val)
             if m3:
                 val = re.sub(r'\\(.)', r'\1', m3.group(1))
-            os.environ.setdefault(key, val)
+            if val.strip() != '':
+                os.environ.setdefault(key, val)

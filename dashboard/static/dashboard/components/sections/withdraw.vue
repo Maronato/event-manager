@@ -9,9 +9,15 @@
             <b>Nos avise!</b> Assim poderemos cancelar sua inscrição e liberar a vaga para outra pessoa :)
             <br>
             Você ainda pode mudar de ideia até {{ conf_close }}.
+            <template v-if="settings.require_payment">
+                <br>
+                <b>
+                    Nós vamos extornar seu ticket imediatamente caso você desista do evento.
+                </b>
+            </template>
         </div>
         <br>
-        <sui-button primary @click="withdraw()" content="Desculpe, não vou conseguir" />
+        <sui-button primary @click="withdraw()" :loading="loading" :disabled="loading" content="Desculpe, não vou conseguir" />
         <br>
     </div>
 </template>
@@ -38,7 +44,8 @@
                 user: this.user_context,
                 settings: this.settings_context,
                 dashboard: this.dashboard_context,
-                conf_close_raw: this.settings_context.confirmation_seconds
+                conf_close_raw: this.settings_context.confirmation_seconds,
+                loading: false
             }
         },
         computed: {
@@ -49,14 +56,17 @@
         methods: {
             withdraw() {
                 self = this;
+                self.loading = true
                 axios.post(this.dashboard.api.withdraw)
                 .then(function (data) {
                     toast('Que pena :(', data.data.message, 'info');
                     self.user.state = data.data.state;
+                    self.loading = false
                 })
                 .catch(function (error) {
                     console.log(error);
                     toast('Opa!', 'Algo de errado aconteceu :(', 'error');
+                    self.loading = false
                 });
             }
         }

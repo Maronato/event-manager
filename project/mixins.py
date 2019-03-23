@@ -72,6 +72,7 @@ class UserContextMixin(ContextMixin):
             'is_judge': False,
             'employee_company_access': profile.employee_company_access,
             'state': profile.state,
+            'payment_state': profile.payment_state,
             'email': user.email,
             'first_name': user.first_name,
             'last_name': user.last_name,

@@ -40,6 +40,13 @@
                         v-bind:settings_context="settings"
                         v-bind:dashboard_context="dashboard" />
 
+                        <!-- Visível a hackers que não pagaram -->
+                        <Payment
+                        v-if="user.state=='unpaid'"
+                        v-bind:user_context="user"
+                        v-bind:settings_context="settings"
+                        v-bind:dashboard_context="dashboard" />
+
                         <!-- Visível a hackers que confirmaram -->
                         <Info
                         v-if="user.state=='confirmed'"
@@ -83,6 +90,7 @@
     import Info from "dashboard/components/sections/important_info.vue";
     import CompleteApp from "dashboard/components/sections/complete_app.vue";
     import Reminders from "dashboard/components/sections/reminders.vue";
+    import Payment from "dashboard/components/sections/payment.vue";
 
     import LatestAnnouncement from "announcement/components/latest_announcement.vue";
 
@@ -104,7 +112,8 @@
             Info,
             CompleteApp,
             Reminders,
-            LatestAnnouncement
+            LatestAnnouncement,
+            Payment
         },
         data() {
             return {

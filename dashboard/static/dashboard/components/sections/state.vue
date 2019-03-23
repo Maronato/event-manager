@@ -34,7 +34,8 @@
                     'waitlist': 'Fila de Espera',
                     'withdraw': 'Desistência',
                     'confirmed': 'Confirmado',
-                    'checkedin': 'Check-in Realizado'
+                    'checkedin': 'Check-in Realizado',
+                    'unpaid': 'Pagar Inscrição'
                 }
                 return map[this.user.state];
             },
@@ -49,7 +50,8 @@
                     'waitlist': 'Atingimos o máximo de inscritos confirmados e você entrou para a fila de espera',
                     'withdraw': 'Você decidiu se abster dessa edição do nosso evento',
                     'confirmed': 'Tudo está em ordem! Agora é só esperar o dia do evento',
-                    'checkedin': ''
+                    'checkedin': '',
+                    'unpaid': 'Você precisa efetuar o pagamento da sua inscrição'
                 }
                 return map[this.user.state];
             }

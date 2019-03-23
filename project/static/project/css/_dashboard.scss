@@ -61,6 +61,10 @@
       &.late {
         background: $status-late-color;
       }
+
+      &.unpaid {
+        background: $status-late-color;
+      }
     }
   }
 
