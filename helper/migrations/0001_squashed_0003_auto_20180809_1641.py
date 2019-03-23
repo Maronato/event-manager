@@ -7,8 +7,6 @@ import helper.models
 
 class Migration(migrations.Migration):
 
-    replaces = [('helper', '0001_initial'), ('helper', '0002_auto_20180807_1218'), ('helper', '0003_auto_20180809_1641')]
-
     initial = True
 
     dependencies = [

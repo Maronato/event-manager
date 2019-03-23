@@ -6,8 +6,6 @@ import django.utils.timezone
 
 class Migration(migrations.Migration):
 
-    replaces = [('settings', '0001_initial'), ('settings', '0002_settings_ticket_expire'), ('settings', '0003_settings_ticket_queue_open'), ('settings', '0004_settings_verify_email'), ('settings', '0005_auto_20190320_0034'), ('settings', '0006_auto_20190320_0051')]
-
     initial = True
 
     dependencies = [
@@ -30,8 +28,6 @@ class Migration(migrations.Migration):
                 ('ticket_expire', models.IntegerField(default=30)),
                 ('ticket_queue_open', models.BooleanField(default=False)),
                 ('verify_email', models.BooleanField(default=True)),
-                ('require_payment', models.BooleanField(default=False)),
-                ('ticket_price', models.DecimalField(decimal_places=2, default=0, max_digits=10)),
             ],
         ),
     ]

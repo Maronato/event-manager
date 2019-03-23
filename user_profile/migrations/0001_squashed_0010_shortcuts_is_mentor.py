@@ -8,8 +8,6 @@ import user_profile.models
 
 class Migration(migrations.Migration):
 
-    replaces = [('user_profile', '0001_initial'), ('user_profile', '0002_auto_20180711_1829'), ('user_profile', '0003_profile_unique_id'), ('user_profile', '0004_auto_20180713_2335'), ('user_profile', '0005_auto_20180714_0043'), ('user_profile', '0006_auto_20180715_1528'), ('user_profile', '0007_shortcuts'), ('user_profile', '0008_auto_20180723_0329'), ('user_profile', '0009_auto_20180723_0429'), ('user_profile', '0010_shortcuts_is_mentor')]
-
     initial = True
 
     dependencies = [

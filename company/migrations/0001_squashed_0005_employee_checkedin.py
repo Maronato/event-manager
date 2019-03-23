@@ -6,8 +6,6 @@ import django.db.models.deletion
 
 class Migration(migrations.Migration):
 
-    replaces = [('company', '0001_initial'), ('company', '0002_auto_20180717_1432'), ('company', '0003_auto_20180717_2237'), ('company', '0004_company_access_level'), ('company', '0005_employee_checkedin')]
-
     initial = True
 
     dependencies = [

@@ -6,8 +6,6 @@ import django.db.models.deletion
 
 class Migration(migrations.Migration):
 
-    replaces = [('announcement', '0001_initial'), ('announcement', '0002_announcement_level')]
-
     initial = True
 
     dependencies = [
