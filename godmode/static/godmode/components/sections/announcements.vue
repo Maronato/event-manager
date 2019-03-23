@@ -16,7 +16,7 @@
                 <sui-input v-model="title" type='text' placeholder="Meu anúncio" />
             </sui-form-field>
             <sui-form-field>
-                <label>Texto do anúncio</label>
+                <label>Texto do anúncio (HTML e Markdown suportados)</label>
                 <textarea v-model="text"></textarea>
             </sui-form-field>
             <sui-form-field>

@@ -10,7 +10,7 @@
                     {{ humanDate }}
                 </p>
                 <p>
-                    {{ announcement.text }}
+                    <VueMarkdown :source="announcement.text"></VueMarkdown>
                 </p>
                 <p class="float right">
                     - {{ announcement.creator_name }}
@@ -22,6 +22,7 @@
 
 <script>
     import * as mome from "moment";
+    import VueMarkdown from 'vue-markdown';
     import "moment/locale/pt-br";
 
     if ("default" in mome) {
@@ -33,6 +34,7 @@
     moment.locale("pt-BR");
 
     export default {
+        components: { VueMarkdown },
         props: ['announcement', 'allowDelete'],
         computed: {
             humanDate() {
