@@ -8,8 +8,6 @@ import django.db.models.deletion
 
 class Migration(migrations.Migration):
 
-    replaces = [('application', '0001_initial'), ('application', '0002_remove_application_facebook'), ('application', '0003_auto_20180723_1758'), ('application', '0004_auto_20180723_2005'), ('application', '0005_auto_20180724_0105'), ('application', '0006_auto_20180725_2105'), ('application', '0007_auto_20190313_1433')]
-
     initial = True
 
     dependencies = [

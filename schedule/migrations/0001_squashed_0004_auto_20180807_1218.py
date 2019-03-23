@@ -6,8 +6,6 @@ import django.db.models.deletion
 
 class Migration(migrations.Migration):
 
-    replaces = [('schedule', '0001_initial'), ('schedule', '0002_auto_20180727_2329'), ('schedule', '0003_auto_20180731_1554'), ('schedule', '0004_auto_20180807_1218')]
-
     initial = True
 
     dependencies = [
