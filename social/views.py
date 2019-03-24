@@ -31,7 +31,6 @@ class SocialLoginResponse(RedirectView):
             self.request = login_canceled(self.request)
             return settings.LOGIN_REDIRECT_URL
         else:
-            print(self.request.user)
             response = provider.login_successful(code, self.request)
             if response == 'auth code used' or response == 'token missing':
                 # if the auth code has already been used, redirect
