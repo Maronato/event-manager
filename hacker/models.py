@@ -48,11 +48,11 @@ class Hacker(models.Model):
 
     @property
     def payed(self):
-        return self.transactions.filter(status__in=['pago', 'disponivel']).exists()
+        return self.transactions.filter(status__in=['pago', 'disponivel']).filter(reference=self.transaction_reference).exists()
 
     @property
     def transaction_status(self):
-        return self.transactions.last().get_status_display() if self.transactions.count() > 0 else 'Não pago'
+        return self.transactions.get(reference=self.transaction_reference).get_status_display() if self.transactions.filter(reference=self.transaction_reference).exists() else 'Não pago'
 
     @property
     def hacker_state(self):
@@ -168,12 +168,15 @@ class Hacker(models.Model):
         hacker = cls.objects.filter(transaction_reference=reference)
         trans = Transaction.objects.filter(reference=reference)
         if hacker.exists() and trans.exists():
-            hacker.first().transactions.add(trans.first())
+            hacker = hacker.first()
+            trans = trans.first()
+            hacker.transactions.add(trans)
             if transaction['status'] not in ['3', '4']:
                 hacker.checked_in = False
                 hacker.confirmed = False
                 hacker.save()
                 cls.cycle_waitlist()
+            hacker.profile.trigger_update()
 
     def __str__(self):
         return f'Hacker {self.profile}'

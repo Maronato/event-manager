@@ -223,6 +223,12 @@ env = [
         'title': 'Token do pagseguro para cobrança de entrada',
         'ask': False,
         'default': ''
+    },
+    {
+        'name': 'PAGSEGURO_SANDBOX',
+        'title': 'Se o pagseguro deve usar o modo sandbox ou não.',
+        'ask': False,
+        'default': True
     }
 ]
 

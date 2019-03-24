@@ -219,6 +219,8 @@ class Shortcuts(models.Model):
 
     full_name = models.CharField(default='', max_length=100)
 
+    payment_state = models.CharField(default='', max_length=20)
+
 
 def update_shortcuts(profile):
     data = {
@@ -233,6 +235,7 @@ def update_shortcuts(profile):
         'state': profile.state,
         'is_verified': profile.is_verified,
         'full_name': profile.full_name,
+        'payment_state': profile.payment_state
     }
     Shortcuts.objects.update_or_create(
         profile=profile,

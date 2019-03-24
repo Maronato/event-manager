@@ -50,7 +50,7 @@
                 </sui-form-field>
                 <sui-form-field>
                     <label>Preço da inscrição</label>
-                    <sui-input v-model="ticket_price" type='decimal' placeholder="Preço" />
+                    <sui-input v-model="ticket_price" type='decimal' placeholder="Preço" :error="ticket_price < 0.01" />
                 </sui-form-field>
             </sui-form-fields>
             <div class="divided title">Datas</div>

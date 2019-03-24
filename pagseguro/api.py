@@ -8,11 +8,12 @@ from dateutil.parser import parse
 
 from pagseguro.settings import (
     PAGSEGURO_EMAIL, PAGSEGURO_TOKEN, CHECKOUT_URL, PAYMENT_URL,
-    NOTIFICATION_URL, TRANSACTION_URL, SESSION_URL, REFUND_URL
+    NOTIFICATION_URL, TRANSACTION_URL, SESSION_URL, REFUND_URL,
+    PAGSEGURO_LOG_IN_MODEL
 )
 from pagseguro.signals import (
     notificacao_recebida, NOTIFICATION_STATUS, checkout_realizado,
-    checkout_realizado_com_sucesso, checkout_realizado_com_erro
+    checkout_realizado_com_sucesso, checkout_realizado_com_erro, update_transaction
 )
 from pagseguro.forms import PagSeguroItemForm
 
@@ -154,6 +155,8 @@ class PagSeguroApi(object):
         if response.status_code == 200:
             root = xmltodict.parse(response.text)
             transaction = root['transaction']
+            if PAGSEGURO_LOG_IN_MODEL:
+                update_transaction(None, transaction)
             notificacao_recebida.send(
                 sender=self, transaction=transaction
             )

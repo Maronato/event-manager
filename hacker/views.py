@@ -32,11 +32,10 @@ class PaymentView(
         api.add_item(item)
         checkout = api.checkout()
         if checkout['success']:
-            print(checkout)
             hacker = self.request.user.profile.hacker
             hacker.transaction_reference = reference
             hacker.save()
             return checkout['redirect_url']
         else:
-            add_message(self.request, ERROR, 'Erro ao criar pedido de pagamento')
+            add_message(self.request, ERROR, 'Erro ao criar pedido de pagamento. Tente novamente mais tarde.')
             return '/'

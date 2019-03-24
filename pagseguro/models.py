@@ -5,8 +5,7 @@ from django.utils.encoding import python_2_unicode_compatible
 
 from pagseguro.settings import PAGSEGURO_LOG_IN_MODEL
 from pagseguro.signals import (
-    checkout_realizado, notificacao_recebida, save_checkout,
-    update_transaction
+    checkout_realizado, save_checkout
 )
 from hacker.models import Hacker
 
@@ -137,4 +136,3 @@ class TransactionHistory(models.Model):
 # Signals
 if PAGSEGURO_LOG_IN_MODEL:
     checkout_realizado.connect(save_checkout)
-    notificacao_recebida.connect(update_transaction)
