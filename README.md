@@ -19,6 +19,7 @@ O Event Manager vem com várias features prontas pra serem usadas. Algumas delas
     - Integração com Facebook, Github e Google
     - Importação automática de dados das redes sociais
     - Integrações com mais de 20 serviços de analytics, incluindo o Google Analytics
+    - Integração com PagSeguro para pagamento de tickets
 - *Check in*:
     - Check in de participantes com QR code pelo celular
     - Opção de inscrever participantes manualmente durante o evento, depois da janela de inscrição
