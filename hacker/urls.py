@@ -1,5 +1,5 @@
 from django.urls import path, include
-from . import api, exports
+from . import api, exports, views
 
 apipatterns = [
     path('confirm/', api.ConfirmPresence.as_view(), name='confirm'),
@@ -23,5 +23,7 @@ exportpatterns = [
 app_name = 'hacker'
 urlpatterns = [
     path('api/', include((apipatterns, 'api')), name='api'),
-    path('exports/', include((exportpatterns, 'exports')), name='exports')
+    path('exports/', include((exportpatterns, 'exports')), name='exports'),
+    path('pagseguro/checkout/', views.PaymentView.as_view(), name='checkout'),
+    path('pagseguro/notifications/', include('pagseguro.urls')),
 ]

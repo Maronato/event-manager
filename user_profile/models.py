@@ -48,7 +48,8 @@ class Profile(models.Model):
         'employee_company_access',
         'has_facebook',
         'has_github',
-        'has_google'
+        'has_google',
+        'payment_state'
     ]
 
     user = models.OneToOneField(
@@ -81,6 +82,12 @@ class Profile(models.Model):
         if self.is_hacker:
             return self.hacker.hacker_state
         return 'verified'
+
+    @property
+    def payment_state(self):
+        if self.is_hacker:
+            return self.hacker.transaction_status
+        return 'N/A'
 
     def trigger_update(self):
         """Trigger Update
@@ -212,6 +219,8 @@ class Shortcuts(models.Model):
 
     full_name = models.CharField(default='', max_length=100)
 
+    payment_state = models.CharField(default='', max_length=20)
+
 
 def update_shortcuts(profile):
     data = {
@@ -226,6 +235,7 @@ def update_shortcuts(profile):
         'state': profile.state,
         'is_verified': profile.is_verified,
         'full_name': profile.full_name,
+        'payment_state': profile.payment_state
     }
     Shortcuts.objects.update_or_create(
         profile=profile,

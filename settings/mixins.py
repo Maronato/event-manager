@@ -4,6 +4,14 @@ from django.contrib.auth.mixins import AccessMixin
 from django.contrib import messages
 from .models import Settings
 import json
+from decimal import Decimal
+
+
+class DecimalEncoder(json.JSONEncoder):
+    def default(self, o):
+        if isinstance(o, Decimal):
+            return float(o)
+        return super(DecimalEncoder, self).default(o)
 
 
 class SettingsContextMixin(ContextMixin):
@@ -33,12 +41,14 @@ class SettingsContextMixin(ContextMixin):
             'hackathon_end_seconds': Settings.hackathon_end_seconds(settings=settings),
             'ticket_expire': settings.ticket_expire,
             'ticket_queue_open': settings.ticket_queue_open,
+            'ticket_price': settings.ticket_price,
+            'require_payment': settings.require_payment,
             'api': {
                 'dashboard': reverse('dashboard:index'),
             }
         }
         context = super().get_context_data(**kwargs)
-        context['settings_context'] = json.dumps(settings_context)
+        context['settings_context'] = json.dumps(settings_context, cls=DecimalEncoder)
         return context
 
 
@@ -54,6 +64,7 @@ class RegistrationOpenMixin(AccessMixin):
 
 
 class EventIsHappeningMixin(AccessMixin):
+    """Only allow if event is happening"""
     permission_denied_message = 'O evento não está acontecendo!'
 
     def dispatch(self, request, *args, **kwargs):
@@ -64,6 +75,7 @@ class EventIsHappeningMixin(AccessMixin):
 
 
 class CanConfirmMixin(AccessMixin):
+    """Only allow if can confirm"""
     permission_denied_message = 'Período de confirmação acabou!'
 
     def dispatch(self, request, *args, **kwargs):

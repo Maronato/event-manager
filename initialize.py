@@ -183,14 +183,22 @@ env = [
         'default': 'redis://localhost:6379/0'
     },
     {
+        'name': 'DATABASE_URL',
+        'title': 'URI de acesso do banco de dados',
+        'ask': False,
+        'default': ''
+    },
+    {
         'name': 'SHOW_TOOLBAR_CALLBACK',
         'title': 'Se a debug toolbar deve sempre ser mostrada para superusers',
-        'ask': False
+        'ask': False,
+        'default': ''
     },
     {
         'name': 'GOOGLE_ANALYTICS',
         'title': 'ID do seu domínio para tracking com o Google Analytics',
-        'ask': False
+        'ask': False,
+        'default': ''
     },
     {
         'name': 'HEROKU_ENV',
@@ -201,7 +209,26 @@ env = [
     {
         'name': 'SENTRY_DSN',
         'title': 'DSN do Sentry.io para error tracking',
-        'ask': False
+        'ask': False,
+        'default': ''
+    },
+    {
+        'name': 'PAGSEGURO_EMAIL',
+        'title': 'Email do Pagseguro para cobrança de entrada',
+        'ask': False,
+        'default': ''
+    },
+    {
+        'name': 'PAGSEGURO_TOKEN',
+        'title': 'Token do pagseguro para cobrança de entrada',
+        'ask': False,
+        'default': ''
+    },
+    {
+        'name': 'PAGSEGURO_SANDBOX',
+        'title': 'Se o pagseguro deve usar o modo sandbox ou não.',
+        'ask': False,
+        'default': True
     }
 ]
 
@@ -220,7 +247,8 @@ if __name__ == "__main__":
     except KeyboardInterrupt:
         print('\n')
         print('Revertendo alterações...')
-        pass
+        os.remove('.env-temp')
+        exit()
     os.remove('.env-temp')
     print()
     print('Migrando banco de dados...')
