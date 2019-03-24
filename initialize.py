@@ -183,6 +183,12 @@ env = [
         'default': 'redis://localhost:6379/0'
     },
     {
+        'name': 'DATABASE_URL',
+        'title': 'URI de acesso do banco de dados',
+        'ask': False,
+        'default': ''
+    },
+    {
         'name': 'SHOW_TOOLBAR_CALLBACK',
         'title': 'Se a debug toolbar deve sempre ser mostrada para superusers',
         'ask': False
