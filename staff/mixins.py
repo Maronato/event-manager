@@ -1,17 +1,6 @@
-from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.views.generic.base import ContextMixin
 from django.shortcuts import reverse
 import json
-
-
-class IsStaffMixin(LoginRequiredMixin, UserPassesTestMixin):
-    def test_func(self):
-        return self.request.user.profile.is_staff
-
-
-class IsStaffOrSuperuserMixin(IsStaffMixin):
-    def test_func(self):
-        return super().test_func() or self.request.user.is_superuser
 
 
 class StaffContextMixin(ContextMixin):

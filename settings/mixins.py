@@ -1,7 +1,5 @@
 from django.shortcuts import reverse
 from django.views.generic.base import ContextMixin
-from django.contrib.auth.mixins import AccessMixin
-from django.contrib import messages
 from .models import Settings
 import json
 from decimal import Decimal
@@ -50,36 +48,3 @@ class SettingsContextMixin(ContextMixin):
         context = super().get_context_data(**kwargs)
         context['settings_context'] = json.dumps(settings_context, cls=DecimalEncoder)
         return context
-
-
-class RegistrationOpenMixin(AccessMixin):
-    """Only allow if registrations are open"""
-    permission_denied_message = 'Estamos fora do período de registro :('
-
-    def dispatch(self, request, *args, **kwargs):
-        if not Settings.registration_is_open():
-            messages.add_message(self.request, messages.INFO, self.get_permission_denied_message())
-            return self.handle_no_permission()
-        return super().dispatch(request, *args, **kwargs)
-
-
-class EventIsHappeningMixin(AccessMixin):
-    """Only allow if event is happening"""
-    permission_denied_message = 'O evento não está acontecendo!'
-
-    def dispatch(self, request, *args, **kwargs):
-        if not Settings.hackathon_is_happening():
-            messages.add_message(self.request, messages.INFO, self.get_permission_denied_message())
-            return self.handle_no_permission()
-        return super().dispatch(request, *args, **kwargs)
-
-
-class CanConfirmMixin(AccessMixin):
-    """Only allow if can confirm"""
-    permission_denied_message = 'Período de confirmação acabou!'
-
-    def dispatch(self, request, *args, **kwargs):
-        if not Settings.can_confirm():
-            messages.add_message(self.request, messages.INFO, self.get_permission_denied_message())
-            return self.handle_no_permission()
-        return super().dispatch(request, *args, **kwargs)

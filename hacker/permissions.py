@@ -34,3 +34,24 @@ class IsWithdraw(IsHacker):
     def has_permission(self, request, view):
         parent = super().has_permission(request, view)
         return parent and request.user.profile.state == 'withdraw'
+
+
+class IsSubmitted(IsHacker):
+
+    def has_permission(self, request, view):
+        parent = super().has_permission(request, view)
+        return parent and request.user.profile.state == 'submitted'
+
+
+class IsIncomplete(IsHacker):
+
+    def has_permission(self, request, view):
+        parent = super().has_permission(request, view)
+        return parent and request.user.profile.state == 'incomplete'
+
+
+class IsUnpayed(IsHacker):
+
+    def has_permission(self, request, view):
+        parent = super().has_permission(request, view)
+        return parent and not request.user.profile.hacker.payed

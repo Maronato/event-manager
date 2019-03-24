@@ -1,8 +1,11 @@
 from django.shortcuts import reverse
 from django.views.generic.base import ContextMixin
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import AccessMixin
 from django.contrib.staticfiles.templatetags.staticfiles import static
+from django.contrib.auth.views import redirect_to_login
+from django.contrib.messages import add_message, ERROR
 from django.conf import settings as dj_settings
+from django.core.exceptions import ImproperlyConfigured
 from rest_framework_csv.renderers import CSVRenderer
 from rest_framework.renderers import JSONRenderer, BrowsableAPIRenderer
 from rest_framework_yaml.renderers import YAMLRenderer
@@ -13,7 +16,7 @@ from .renderers import NotNestedCSVRenderer, TSVRenderer, NotNestedTSVRenderer
 from settings.mixins import SettingsContextMixin
 
 
-class SidebarContextMixin(LoginRequiredMixin, SettingsContextMixin, ContextMixin):
+class SidebarContextMixin(SettingsContextMixin, ContextMixin):
     """Sidebar Context
 
     Inherit this mixin to automatically get the context required for
@@ -156,3 +159,39 @@ class PrefetchMixin(object):
         if hasattr(meta, "prefetch_related_fields"):
             queryset = queryset.prefetch_related(*meta.prefetch_related_fields)
         return queryset
+
+
+class PermissionClassesMixin(AccessMixin):
+    """Enables Django Rest-style permissions to be used
+    with regular django and verify that the current user
+    has all specified permissions.
+    """
+    permission_classes = []
+    permission_denied_message = 'Você não tem permissão para acessar essa página'
+
+    def get_permission_classes(self):
+        """
+        Override this method to override the permission_classes attribute.
+        Must return an iterable.
+        """
+        if self.permission_classes == []:
+            raise ImproperlyConfigured(
+                '{0} is missing the permission_classes attribute. Define {0}.permission_classes, or override '
+                '{0}.get_permission_classes().'.format(self.__class__.__name__)
+            )
+        if isinstance(self.permission_classes, str):
+            perms = (self.permission_classes,)
+        else:
+            perms = self.permission_classes
+
+        return [permission() for permission in perms]
+
+    def handle_no_permission(self):
+        add_message(self.request, ERROR, self.get_permission_denied_message())
+        return redirect_to_login(self.request.get_full_path(), self.get_login_url(), self.get_redirect_field_name())
+
+    def dispatch(self, request, *args, **kwargs):
+        for permission in self.get_permission_classes():
+            if not permission.has_permission(request, self):
+                return self.handle_no_permission()
+        return super().dispatch(request, *args, **kwargs)

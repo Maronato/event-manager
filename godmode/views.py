@@ -1,14 +1,16 @@
 from django.views.generic import TemplateView
-from .mixins import IsAdminMixin, AdminContextMixin
-from project.mixins import SidebarContextMixin, UserContextMixin
+from .permissions import IsAdmin
+from .mixins import AdminContextMixin
+from project.mixins import SidebarContextMixin, UserContextMixin, PermissionClassesMixin
 # Create your views here.
 
 
 class AdminView(
-        IsAdminMixin,
+        PermissionClassesMixin,
         SidebarContextMixin,
         AdminContextMixin,
         UserContextMixin,
         TemplateView):
     template_name = 'godmode/admin.html'
     active_tab = 'admin'
+    permission_classes = [IsAdmin]

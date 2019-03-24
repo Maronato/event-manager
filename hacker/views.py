@@ -2,19 +2,23 @@ from django.views.generic import RedirectView
 from django.conf import settings
 from django.contrib.messages import add_message, ERROR
 from django.utils.crypto import get_random_string
+from rest_condition import And
 from pagseguro.api import PagSeguroItem, PagSeguroApi
-from settings.mixins import CanConfirmMixin
+from hacker.permissions import IsUnpayed
+from project.mixins import PermissionClassesMixin
+from settings.permissions import CanConfirm
 from settings.models import Settings
 
 # Create your views here.
 
 
 class PaymentView(
-        CanConfirmMixin,
+        PermissionClassesMixin,
         RedirectView):
 
     http_method_names = ['get']
     permanent = False
+    permission_classes = [And(CanConfirm, IsUnpayed)]
 
     def get_redirect_url(self, *args, **kwargs):
         sett = Settings.get()

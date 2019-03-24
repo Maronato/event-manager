@@ -1,5 +1,4 @@
 from rest_framework import views, viewsets, response, mixins
-from rest_framework.permissions import IsAuthenticated
 from rest_condition import And, Or
 from project.mixins import PrefetchQuerysetModelMixin
 from project.permissions import IsReadyOnlyRequest
@@ -24,7 +23,7 @@ class EventViewset(
         Or(
             And(
                 CanAttendEvents,
-                And(IsAuthenticated, IsReadyOnlyRequest)
+                IsReadyOnlyRequest
             ),
             IsAdmin
         )

@@ -2,17 +2,20 @@ from django.views.generic import View
 from django.shortcuts import redirect
 from django.contrib.messages import add_message, ERROR, SUCCESS
 from django.contrib.auth import login
-from settings.mixins import RegistrationOpenMixin
+from project.mixins import PermissionClassesMixin
+from settings.permissions import RegistrationOpen
 from .models import Profile
 import time
 # Create your views here.
 
 
 class VerifyEmailView(
-        RegistrationOpenMixin,
+        PermissionClassesMixin,
         View):
 
     http_method_names = ['get']
+    permission_classes = [RegistrationOpen]
+    permission_denied_message = 'Estamos fora do período de registro'
 
     def get(self, request, *args, **kwargs):
         code = kwargs.get('code', 'invalid')

@@ -1,26 +1,6 @@
-from django.contrib.auth.mixins import UserPassesTestMixin, LoginRequiredMixin
 from django.views.generic.base import ContextMixin
 from django.shortcuts import reverse
 import json
-
-
-class CanAttendEvents(LoginRequiredMixin, UserPassesTestMixin):
-    access_level = 0
-
-    def test_func(self):
-        profile = self.request.user.profile
-        has_employee_access = profile.is_employee
-        if has_employee_access:
-            company_access = profile.employee.company.access_level
-            has_employee_access = company_access >= self.access_level
-        return (
-            profile.is_staff or
-            profile.is_mentor or
-            profile.is_admin or
-            has_employee_access or
-            profile.state == 'checkedin' or
-            profile.state == 'confirmed'
-        )
 
 
 class ScheduleContextMixin(ContextMixin):

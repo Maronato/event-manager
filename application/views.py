@@ -1,22 +1,36 @@
 from django.urls import reverse_lazy
 from django.views.generic import FormView
-from .forms import ApplicationForm
-from project.mixins import SidebarContextMixin, UserContextMixin
-from hacker.mixins import IsSubmittedOrIncompleteMixin
-from settings.mixins import RegistrationOpenMixin
 from django.contrib import messages
+from rest_condition import Or, And
+from project.mixins import SidebarContextMixin, UserContextMixin, PermissionClassesMixin
+from hacker.permissions import IsSubmitted, IsIncomplete, IsHacker
+from user_profile.permissions import IsVerified
+from settings.permissions import RegistrationOpen
+from .forms import ApplicationForm
 # Create your views here.
 
 
 class ApplicationView(
-        RegistrationOpenMixin,
-        IsSubmittedOrIncompleteMixin,
+        PermissionClassesMixin,
         SidebarContextMixin,
         UserContextMixin,
         FormView):
     template_name = 'application/application.html'
     form_class = ApplicationForm
     active_tab = 'application'
+    permission_classes = [
+        And(
+            Or(
+                IsSubmitted,
+                IsIncomplete,
+                And(
+                    IsHacker,
+                    IsVerified
+                )
+            ),
+            RegistrationOpen
+        )
+    ]
 
     def form_valid(self, form):
         form.save(hacker=self.request.user.profile.hacker)
@@ -39,10 +53,3 @@ class ApplicationView(
         initial['last_name'] = self.request.user.last_name
         initial['email'] = self.request.user.email
         return initial
-
-    def get_context_data(self, *args, **kwargs):
-        context = super().get_context_data(*args, **kwargs)
-        print("here")
-        print(context['form'].fields['education'])
-        print(context['form'].errors)
-        return context
