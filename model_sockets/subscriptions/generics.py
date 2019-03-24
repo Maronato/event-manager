@@ -41,6 +41,7 @@ class DeleteReceiver(BaseSubscriptionReceiver):
 class M2MAddReceiver(BaseSubscriptionReceiver):
 
     def receive(self, sender, **kwargs):
+        print('receiving add')
         super().receive(sender, **kwargs)
         action = kwargs['action']
         if action != 'post_add':
@@ -64,6 +65,7 @@ class M2MAddReceiver(BaseSubscriptionReceiver):
 class M2MRemoveReceiver(BaseSubscriptionReceiver):
 
     def receive(self, sender, **kwargs):
+        print('receiving remove')
         super().receive(sender, **kwargs)
         action = kwargs['action']
         if action != 'post_remove':

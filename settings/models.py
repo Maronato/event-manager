@@ -1,10 +1,12 @@
+import datetime
+import pytz
+from decimal import Decimal
 from django.db import models
 from django.utils import timezone
 from django.db.models.signals import post_save
 from django.db.models import Q
+from django.core.validators import MinValueValidator
 from django.core.cache import cache
-import datetime
-import pytz
 # Create your models here.
 
 
@@ -29,6 +31,8 @@ class Settings(models.Model):
         'ticket_expire',
         'ticket_queue_open',
         'verify_email',
+        'require_payment',
+        'ticket_price'
     ]
 
     # Whether new users (created with social login) are hackers by default
@@ -58,6 +62,10 @@ class Settings(models.Model):
     # Tickets
     ticket_expire = models.IntegerField(default=30)
     ticket_queue_open = models.BooleanField(default=False)
+
+    # Ticket Prices
+    require_payment = models.BooleanField(default=False)
+    ticket_price = models.DecimalField(default=10, decimal_places=2, max_digits=10, validators=[MinValueValidator(Decimal(0.01))])
 
     @staticmethod
     def get(settings=None):

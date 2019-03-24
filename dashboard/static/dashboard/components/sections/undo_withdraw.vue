@@ -9,7 +9,7 @@
             <b>Você ainda tem até {{ conf_close }} para reativar sua aplicação!</b>
         </div>
         <br>
-        <sui-button primary @click="undo_withdraw()" content="Mudei de ideia!" />
+        <sui-button primary @click="undo_withdraw()" :loading="loading" :disabled="loading" content="Mudei de ideia!" />
         <br>
     </div>
 </template>
@@ -36,7 +36,8 @@
                 user: this.user_context,
                 settings: this.settings_context,
                 dashboard: this.dashboard_context,
-                conf_close_raw: this.settings_context.confirmation_seconds
+                conf_close_raw: this.settings_context.confirmation_seconds,
+                loading: false
             }
         },
         computed: {
@@ -47,14 +48,17 @@
         methods: {
             undo_withdraw() {
                 self = this;
+                self.loading = true
                 axios.post(this.dashboard.api.undo_withdraw)
                 .then(function (data) {
                     toast('Ótimo!', data.data.message, 'success');
                     self.user.state = data.data.state;
+                    self.loading = false
                 })
                 .catch(function (error) {
                     console.log(error);
                     toast('Opa!', 'Algo de errado aconteceu :(', 'error');
+                    self.loading = false
                 });
             }
         }
