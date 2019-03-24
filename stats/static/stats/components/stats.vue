@@ -5,6 +5,7 @@
         </div>
 
         <div class="ui stackable centered page grid">
+            <LatestAnnouncement />
             <div class="row">
                 <div class="column">
                     <sui-menu :class="nTabs" class="stackable item">
@@ -40,9 +41,11 @@
     import ApplicationStats from './sections/application_stats.vue'
     import RawData from './sections/raw_data.vue'
 
+    import LatestAnnouncement from "announcement/components/latest_announcement.vue";
+
     export default {
         props: ["stats_context", "user_context"],
-        components: { RawData, HackerStats, ApplicationStats },
+        components: { RawData, HackerStats, ApplicationStats, LatestAnnouncement },
         data() {
             return {
                 user: this.user_context,

@@ -5,6 +5,7 @@
         </div>
 
         <div class="ui stackable centered page grid">
+            <LatestAnnouncement />
             <div class="row">
                 <div class="column">
                     <sui-menu v-bind:class="itemNumber" class="stackable item">
@@ -54,9 +55,11 @@
     import Create from './sections/create.vue'
     import My from './sections/my.vue'
 
+    import LatestAnnouncement from "announcement/components/latest_announcement.vue";
+
     export default {
         props: ["schedule_context", "user_context"],
-        components: { AllEvents, RegisteredEvents, AttendedEvents, CheckIn, Create, My },
+        components: { AllEvents, RegisteredEvents, AttendedEvents, CheckIn, Create, My, LatestAnnouncement },
         data() {
             return {
                 schedule: this.schedule_context,
