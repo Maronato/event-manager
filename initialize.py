@@ -88,7 +88,7 @@ env = [
         'ask': True
     },
     {
-        'name': 'EMAIL_ACCOUNT',
+        'name': 'EMAIL_HOST_USER',
         'title': 'Endereço de email para envio de logs de erro',
         'ask': True,
         'required': True

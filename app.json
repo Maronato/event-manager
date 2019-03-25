@@ -37,7 +37,7 @@
       "description": "String longa e aleatória usada como chave de encriptação das comunicações do site.",
       "generator": "secret"
     },
-    "EMAIL_ACCOUNT": {
+    "EMAIL_HOST_USER": {
       "description": "Conta de email de onde serão enviados os emails do site. Use uma existente.",
       "value": "",
       "required": false
