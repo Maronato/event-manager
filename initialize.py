@@ -94,7 +94,7 @@ env = [
         'required': True
     },
     {
-        'name': 'EMAIL_PASSWORD',
+        'name': 'EMAIL_HOST_PASSWORD',
         'title': 'Senha do endereço de email',
         'ask': True,
         'required': True
@@ -127,7 +127,7 @@ env = [
     {
         'name': 'ROOT_URL',
         'title': 'URL base do seu app',
-        'default': 'localhost:8000',
+        'default': 'http://localhost:8000',
         'ask': False,
         'required': True
     },

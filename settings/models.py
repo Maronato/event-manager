@@ -32,7 +32,8 @@ class Settings(models.Model):
         'ticket_queue_open',
         'verify_email',
         'require_payment',
-        'ticket_price'
+        'ticket_price',
+        'max_team_size'
     ]
 
     # Whether new users (created with social login) are hackers by default
@@ -66,6 +67,9 @@ class Settings(models.Model):
     # Ticket Prices
     require_payment = models.BooleanField(default=False)
     ticket_price = models.DecimalField(default=10, decimal_places=2, max_digits=10, validators=[MinValueValidator(Decimal(0.01))])
+
+    # Teams
+    max_team_size = models.IntegerField(default=5)
 
     @staticmethod
     def get(settings=None):

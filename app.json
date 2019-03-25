@@ -42,7 +42,7 @@
       "value": "",
       "required": false
     },
-    "EMAIL_PASSWORD": {
+    "EMAIL_HOST_PASSWORD": {
       "description": "Senha do email ai de cima, pra ser possível enviar emails.",
       "value": "",
       "required": false

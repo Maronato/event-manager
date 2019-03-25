@@ -40,7 +40,7 @@ class EMail(object):
         msg_plain = render_to_string('project/email/action/text.txt', context)
         msg_html = render_to_string('project/email/action/html.html', context)
         send_mail(
-            f'[{self.hack_name}] {self.subject}',
+            f'[{self.event_name}] {self.subject}',
             msg_plain,
             self.fr,
             self.to,
@@ -52,7 +52,7 @@ class EMail(object):
         msg_plain = render_to_string('project/email/basic/text.txt', context)
         msg_html = render_to_string('project/email/basic/html.html', context)
         send_mail(
-            f'[{self.hack_name}] {self.subject}',
+            f'[{self.event_name}] {self.subject}',
             msg_plain,
             self.fr,
             self.to,
