@@ -143,7 +143,7 @@ export default {
             this.showSidebar = !this.showSidebar;
         },
         sourcecode() {
-            window.location.href = "https://github.com/TalentoUnicamp/my";
+            window.location.href = "https://github.com/Maronato/event-manager";
         }
     }
 };
