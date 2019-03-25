@@ -46,12 +46,11 @@ O Event Manager vem com várias features prontas pra serem usadas. Algumas delas
     - Estatísticas linguísticas dos campos de texto do formulário
 - *Exportações*:
     - Todos os dados podem ser exportados em 8 formatos diferentes
-
-### Na próxima versão:
-
 - *Equipes*:
     - Participantes podem criar equipes entre si
     - Podem submeter seu código para avaliação dos jurados
+
+### Na próxima versão:
 - *Jurados*:
     - Jurados podem avaliar equipes
     - Mecanismo de avaliação segue um algoritmo de comparação entre pares, mais preciso e intuitivo que avaliações quantitativas
