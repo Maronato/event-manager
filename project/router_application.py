@@ -3,6 +3,7 @@ from channels.auth import AuthMiddlewareStack
 from channels.routing import ProtocolTypeRouter, URLRouter
 from model_sockets import routing as model_sockets_router
 from helper import routing as helper_router
+from team import routing as team_router
 
 
 def flatten(l):
@@ -20,7 +21,8 @@ application = ProtocolTypeRouter({
             URLRouter(
                 flatten([
                     model_sockets_router.websocket_urlpatterns,
-                    helper_router.websocket_urlpatterns
+                    helper_router.websocket_urlpatterns,
+                    team_router.websocket_urlpatterns
                 ])
             )
         ),

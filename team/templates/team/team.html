@@ -1,0 +1,20 @@
+{% extends 'project/base.html' %}
+{% load compress %}
+{% load staticfiles %}
+
+{% block title %}Equipe{% endblock title %}
+{% block appjs %}
+{% compress js %}
+<script type="module" src="{% static 'team/apps/team.js' %}"></script>
+{% endcompress %}
+{% endblock appjs %}
+
+{% block content %}
+
+
+<script type="text/javascript">
+    var team_context = JSON.parse('{{ team_context | escapejs }}');
+</script>
+
+<div id="team-app"></div>
+{% endblock content %}

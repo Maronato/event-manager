@@ -33,7 +33,7 @@
                     <sui-checkbox label="Exigir emails válidos" toggle v-model="verify_email"/>
                 </sui-form-field>
             </sui-form-fields>
-            <sui-form-fields fields="two">
+            <sui-form-fields fields="three">
                 <sui-form-field>
                     <label>Número máximo de participantes <small style="color: gray;">0 para sem limites</small></label>
                     <sui-input v-model="max_hackers" type='number' placeholder="Máximo de participantes" />
@@ -41,6 +41,10 @@
                 <sui-form-field>
                     <label>Minutos para tickets expirarem <small style="color: gray;">0 para não expirarem</small></label>
                     <sui-input v-model="ticket_expire" type='number' placeholder="30" />
+                </sui-form-field>
+                <sui-form-field>
+                    <label>Tamanho máximo de equipes <small style="color: gray;">0 para não ter limite</small></label>
+                    <sui-input v-model="max_team_size" type='number' placeholder="5" />
                 </sui-form-field>
             </sui-form-fields>
             <div class="divided title">Pagamentos</div>
@@ -128,7 +132,8 @@ export default {
             ticket_queue_open: this.settings_context["ticket_queue_open"],
             verify_email: this.settings_context["verify_email"],
             ticket_price: this.settings_context['ticket_price'],
-            require_payment: this.settings_context['require_payment']
+            require_payment: this.settings_context['require_payment'],
+            max_team_size: this.settings_context['max_team_size']
         };
     },
     watch: {
@@ -143,6 +148,7 @@ export default {
                 this.verify_email = data["verify_email"];
                 this.ticket_price = data["ticket_price"];
                 this.require_payment = data["require_payment"]
+                this.max_team_size = data["max_team_size"]
                 this.refreshCalendars(data);
             },
             deep: true
@@ -170,6 +176,7 @@ export default {
                 verify_email: this.verify_email,
                 ticket_price: this.ticket_price,
                 require_payment: this.require_payment,
+                max_team_size: this.max_team_size,
                 registration_open: moment(
                     $("#registration_open").calendar("get date")
                 ).format(),

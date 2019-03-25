@@ -92,6 +92,7 @@ INSTALLED_APPS = [
     'stats',
     'schedule',
     'helper',
+    'team',
 
     'pagseguro',
 ]
@@ -249,14 +250,14 @@ DATABASES['default'].update(db_from_env)
 # Honor the 'X-Forwarded-Proto' header for request.is_secure()
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
-DEFAULT_CONTACT_EMAIL = os.environ.get('EMAIL_ACCOUNT')
-DEFAULT_FROM_EMAIL = os.environ.get('EMAIL_ACCOUNT')
-EMAIL_HOST_USER = os.environ.get('EMAIL_ACCOUNT')
-EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_PASSWORD')
+EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
 EMAIL_USE_TLS = eval(os.environ.get('EMAIL_USE_TLS', 'True'))
 EMAIL_HOST = os.environ.get('EMAIL_HOST', 'smtp.gmail.com')
 EMAIL_PORT = int(os.environ.get('EMAIL_PORT', '587'))
-SERVER_EMAIL = os.environ.get('EMAIL_ACCOUNT')
+DEFAULT_FROM_EMAIL = os.environ.get('DEFAULT_FROM_EMAIL', EMAIL_HOST_USER)
+DEFAULT_CONTACT_EMAIL = os.environ.get('DEFAULT_CONTACT_EMAIL', EMAIL_HOST_USER)
+SERVER_EMAIL = os.environ.get('SERVER_EMAIL', EMAIL_HOST_USER)
 EMAIL_BACKEND = 'djcelery_email.backends.CeleryEmailBackend'
 
 ADMINS = [('Admin', os.environ.get('ADMIN_ACCOUNT')), ]

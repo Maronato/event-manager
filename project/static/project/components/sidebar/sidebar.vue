@@ -84,7 +84,7 @@ export default {
                     active_tab: this.sidebar.active_tab,
                     link: this.sidebar.redirect_urls["team"],
                     tab: "team",
-                    condition: false
+                    condition: this.user.is_hacker && this.user.state == 'checkedin'
                 },
                 {
                     title: "Eventos",

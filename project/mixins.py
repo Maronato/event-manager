@@ -37,7 +37,7 @@ class SidebarContextMixin(SettingsContextMixin, ContextMixin):
                 'dashboard': reverse('dashboard:index'),
                 'application': reverse('application:form'),
                 'company': reverse('company:index'),
-                'team': reverse('dashboard:index'),
+                'team': reverse('team:index'),
                 'admin': reverse('godmode:index'),
                 'staff': reverse('staff:index'),
                 'stats': reverse('stats:index'),

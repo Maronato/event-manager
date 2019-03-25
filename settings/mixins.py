@@ -41,6 +41,7 @@ class SettingsContextMixin(ContextMixin):
             'ticket_queue_open': settings.ticket_queue_open,
             'ticket_price': settings.ticket_price,
             'require_payment': settings.require_payment,
+            'max_team_size': settings.max_team_size,
             'api': {
                 'dashboard': reverse('dashboard:index'),
             }

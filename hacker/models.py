@@ -5,6 +5,7 @@ from pagseguro.signals import notificacao_recebida
 from pagseguro.api import PagSeguroApi
 from user_profile.models import Profile
 from settings.models import Settings
+from team.models import Team
 from . import tasks
 # Create your models here.
 
@@ -45,6 +46,14 @@ class Hacker(models.Model):
     # Payment status
     # Internal payment transaction referece
     transaction_reference = models.CharField(max_length=32, default='', blank=True)
+
+    # Team
+    team = models.ForeignKey(
+        Team,
+        on_delete=models.SET_NULL,
+        related_name='hackers',
+        null=True
+    )
 
     @property
     def payed(self):

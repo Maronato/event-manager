@@ -23,6 +23,7 @@ urlpatterns = [
     path('stats/', include('stats.urls')),
     path('schedule/', include('schedule.urls')),
     path('helper/', include('helper.urls')),
+    path('team/', include('team.urls')),
 ]
 
 if settings.SHOW_TOOLBAR_CALLBACK:
