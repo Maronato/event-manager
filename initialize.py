@@ -229,6 +229,12 @@ env = [
         'title': 'Se o pagseguro deve usar o modo sandbox ou não.',
         'ask': False,
         'default': True
+    },
+    {
+        'name': 'TOKEN_SIZE',
+        'title': 'Tamanho dos tokens de identificação',
+        'default': 5,
+        'ask': False
     }
 ]
 

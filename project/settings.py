@@ -266,6 +266,7 @@ ADMINS = [('Admin', os.environ.get('ADMIN_ACCOUNT')), ]
 # Event data
 EVENT_NAME = os.environ.get('EVENT_NAME', 'Meu evento')
 EVENT_DESCRIPTION = os.environ.get('EVENT_DESCRIPTION', '')
+TOKEN_SIZE = eval(os.environ.get('TOKEN_SIZE', '5'))
 
 
 # Model Sockets settings

@@ -109,6 +109,10 @@
         "description": "(Opcional) Pagseguro seller token for ticket payments",
         "value": "",
         "required": false
+    },
+    "TOKEN_SIZE" : {
+        "description": "Tamanho dos tokens de identificação",
+        "value": 5
     }
   }
 }
