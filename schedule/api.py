@@ -1,3 +1,4 @@
+from django.db.models import Q
 from rest_framework import views, viewsets, response, mixins
 from rest_condition import And, Or
 from project.mixins import PrefetchQuerysetModelMixin
@@ -244,11 +245,10 @@ class FetchCheckinAttendee(views.APIView):
     def post(self, request):
         event_id = request.data.get('event_id', None)
         unique_id = request.data.get('unique_id', None)
-        print(event_id, unique_id)
         event = Event.objects.filter(pk=event_id)
         if not event.exists():
             return response.Response({'status': 'error', 'title': 'Opa!', 'message': 'Evento inválido'})
-        attendee = Profile.objects.filter(unique_id=unique_id)
+        attendee = Profile.objects.filter(Q(unique_id=unique_id) | Q(user__email=unique_id))
         if not attendee.exists():
             return response.Response({'status': 'error', 'title': 'Opa!', 'message': 'Participante inválido'})
         event = event[0]
@@ -270,7 +270,7 @@ class CheckinAttendee(views.APIView):
         event = Event.objects.filter(pk=event_id)
         if not event.exists():
             return response.Response({'status': 'error', 'title': 'Opa!', 'message': 'Evento inválido'})
-        attendee = Profile.objects.filter(unique_id=unique_id)
+        attendee = Profile.objects.filter(Q(unique_id=unique_id) | Q(user__email=unique_id))
         if not attendee.exists():
             return response.Response({'status': 'error', 'title': 'Opa!', 'message': 'Participante inválido'})
         event = event[0]

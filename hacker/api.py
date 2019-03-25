@@ -1,4 +1,5 @@
 from django.shortcuts import get_object_or_404
+from django.db.models import Q
 from rest_framework import views
 from rest_condition import Or, And
 from settings.permissions import CanConfirm
@@ -98,7 +99,7 @@ class FetchCheckinHacker(views.APIView):
     def post(self, request):
         unique_id = request.data['unique_id']
         try:
-            profile = Profile.objects.get(unique_id=unique_id)
+            profile = Profile.objects.get(Q(unique_id=unique_id) | Q(user__email=unique_id))
         except Profile.DoesNotExist:
             return views.Response({
                 'title': 'Usuário não existe!',
@@ -136,7 +137,7 @@ class CheckinHacker(views.APIView):
 
     def post(self, request):
         unique_id = request.data['unique_id']
-        profile = get_object_or_404(Profile, unique_id=unique_id)
+        profile = get_object_or_404(Profile, Q(unique_id=unique_id) | Q(user__email=unique_id))
         if not profile.state == 'confirmed':
             return views.Response({'error': 'Invalid hacker ID'}, status=400)
         hacker = profile.hacker

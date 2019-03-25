@@ -43,12 +43,12 @@
             <h3 class="ui header">
                 <div class="content">
                     Não quer/pode usar a câmera?
-                    <div class="sub header">Basta digitar o ID do usuário abaixo</div>
+                    <div class="sub header">Basta digitar o email ou ID do usuário abaixo</div>
                 </div>
             </h3>
             <sui-form v-on:submit.prevent="onDecode(manualCode)">
                 <sui-form-field>
-                    <input v-model="manualCode" placeholder="AbCDe123..." >
+                    <input v-model="manualCode" placeholder="example@email.com" >
                 </sui-form-field>
                 <sui-button primary fluid content="Pesquisa manual" />
             </sui-form>
