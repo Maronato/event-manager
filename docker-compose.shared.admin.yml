@@ -1,0 +1,18 @@
+version: '3.7'
+services:
+  celeryworker:
+    command: celery -A project worker -l info
+  celerybeat:
+    command: celery -A project beat -l info --scheduler django_celery_beat.schedulers:DatabaseScheduler
+  redis-exporter:
+    ports:
+      - "9121"
+    command:
+      - '--redis.addr=redis://redis:6379'
+  exporter:
+    ports:
+     - "9100"
+networks:
+  traefik_default:
+    external:
+      name: traefik_default

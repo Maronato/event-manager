@@ -1,0 +1,8 @@
+version: '3.7'
+services:
+  backend:
+    image: 'localhost/event-manager-backend:dev'
+  celeryworker:
+    image: 'localhost/event-manager-worker:dev'
+  celerybeat:
+    image: 'localhost/event-manager-worker:dev'

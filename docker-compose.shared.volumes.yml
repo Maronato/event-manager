@@ -1,0 +1,32 @@
+version: '3.7'
+services:
+  db:
+    volumes:
+      - app-db-data:/var/lib/postgresql/data/pgdata
+  redis:
+    volumes:
+      - app-redis-data:/data
+  prometheus:
+    volumes:
+     - ./prometheus.yml:/etc/prometheus/prometheus.yml
+     - ./alerts:/etc/prometheus/alerts
+  proxy:
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - traefik_default
+  grafana:
+    volumes:
+      - grafana_data:/var/lib/grafana
+    networks:
+      - traefik_default
+  portainer:
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - portainer_data:/data
+volumes:
+  app-db-data:
+  app-redis-data:
+  prometheus_data:
+  grafana_data:
+  portainer_data:

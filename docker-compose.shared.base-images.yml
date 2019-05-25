@@ -1,0 +1,18 @@
+version: '3.7'
+services:
+  db:
+    image: postgres:alpine
+  redis:
+    image: redis:5.0.4-alpine
+  proxy:
+    image: traefik:v1.7
+  redis-exporter:
+    image: oliver006/redis_exporter
+  exporter:
+    image: prom/node-exporter:latest
+  prometheus:
+    image: prom/prometheus:v2.9.1
+  grafana:
+    image: grafana/grafana
+  portainer:
+    image: portainer/portainer

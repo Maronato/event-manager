@@ -1,0 +1,13 @@
+version: '3.7'
+services:
+  proxy:
+    command: --docker \
+      --docker.swarmmode \
+      --docker.watch \
+      --docker.exposedbydefault=false \
+      --constraints=tag==${TRAEFIK_TAG-localhost} \
+      --logLevel=INFO \
+      --accessLog \
+      --web
+  backend:
+    command: ["daphne", "project.asgi:application", "--port", "8000", "--bind", "0.0.0.0", "-v2"]

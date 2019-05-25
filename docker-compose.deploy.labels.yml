@@ -1,0 +1,39 @@
+version: '3.7'
+services:
+  proxy:
+    deploy:
+      labels:
+        - traefik.frontend.rule=Host:${DOMAIN-localhost}
+        - traefik.enable=true
+        - traefik.port=80
+  backend:
+    deploy:
+      labels:
+        - traefik.frontend.rule=api.${DOMAIN-localhost}
+        - traefik.enable=true
+        - traefik.port=8000
+        - traefik.tags=${TRAEFIK_TAG}
+        - traefik.backend=api
+  prometheus:
+    deploy:
+      labels:
+        - traefik.frontend.rule=Host:prom.${DOMAIN-localhost}
+        - traefik.enable=true
+        - traefik.port=9090
+        - traefik.tags=${TRAEFIK_TAG}
+        - traefik.backend=prometheus
+  exporter:
+    deploy:
+      labels:
+        - traefik.enable=true
+        - traefik.port=9100
+        - traefik.tags=${TRAEFIK_TAG}
+        - traefik.backend=prometheus-exporter
+  grafana:
+    deploy:
+      labels:
+        - traefik.frontend.rule=Host:grafana.${DOMAIN-localhost}
+        - traefik.enable=true
+        - traefik.port=2000
+        - traefik.tags=${TRAEFIK_TAG}
+        - traefik.backend=grafana

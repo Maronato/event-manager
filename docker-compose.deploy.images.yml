@@ -1,0 +1,8 @@
+version: '3.7'
+services:
+  backend:
+    image: '${IMAGE_DOMAIN-localhost}/event-manager-backend:${TAG-latest}'
+  celeryworker:
+    image: '${IMAGE_DOMAIN-localhost}/event-manager-worker:${TAG-latest}'
+  celerybeat:
+    image: '${IMAGE_DOMAIN-localhost}/event-manager-worker:${TAG-latest}'

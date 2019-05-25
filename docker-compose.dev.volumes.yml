@@ -1,0 +1,11 @@
+version: '3.7'
+services:
+  backend:
+    volumes:
+      - ./app:/app
+  celeryworker:
+    volumes:
+      - ./app:/app
+  celerybeat:
+    volumes:
+      - ./app:/app
