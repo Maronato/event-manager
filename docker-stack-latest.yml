@@ -1,5 +1,12 @@
+networks:
+  traefik_default:
+    external: true
+    name: traefik_default
 services:
   backend:
+    build:
+      context: /Users/Maronato/Documents/event-manager/app
+      dockerfile: backend.dockerfile
     command:
     - daphne
     - project.asgi:application
@@ -47,6 +54,9 @@ services:
     - published: 8000
       target: 8000
   celerybeat:
+    build:
+      context: /Users/Maronato/Documents/event-manager/app
+      dockerfile: worker.dockerfile
     command: celery -A project beat -l info --scheduler django_celery_beat.schedulers:DatabaseScheduler
     depends_on:
     - backend
@@ -73,6 +83,9 @@ services:
       SUPERUSER_PASSWORD: password
     image: maronato/event-manager-worker:latest
   celeryworker:
+    build:
+      context: /Users/Maronato/Documents/event-manager/app
+      dockerfile: worker.dockerfile
     command: celery -A project worker -l info
     depends_on:
     - backend
@@ -133,6 +146,8 @@ services:
     environment:
       GF_SECURITY_ADMIN_PASSWORD: pass
     image: grafana/grafana
+    networks:
+      traefik_default: null
     ports:
     - published: 2000
       target: 3000
@@ -173,6 +188,8 @@ services:
         constraints:
         - node.role == manager
     image: traefik:v1.7
+    networks:
+      traefik_default: null
     ports:
     - published: 80
       target: 80

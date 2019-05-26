@@ -11,9 +11,6 @@ curl -L "https://github.com/docker/compose/releases/download/1.24.0/docker-compo
 chmod +x /usr/local/bin/docker-compose
 docker-compose --version
 
-# Clone the app
-cd /home && git clone https://github.com/Maronato/event-manager.git
-
-cd event-manager
-
-source ./scripts/deploy.sh
+# Install LetsEncrypt
+wget https://dl.eff.org/certbot-auto -O /usr/sbin/certbot-auto
+chmod a+x /usr/sbin/certbot-auto

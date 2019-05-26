@@ -52,12 +52,6 @@ def process_questions(questions):
 
 env = [
     {
-        'name': 'DEBUG',
-        'title': 'Ativar modo de debug',
-        'default': True,
-        'ask': False
-    },
-    {
         'name': 'SECRET_KEY',
         'title': 'Chave privada de encriptação usada pelo Django',
         'default': get_random_string(32),
@@ -177,18 +171,6 @@ env = [
         'ask': True
     },
     {
-        'name': 'REDIS_URL',
-        'title': 'URI de acesso do Redis',
-        'ask': False,
-        'default': 'redis://localhost:6379/0'
-    },
-    {
-        'name': 'DATABASE_URL',
-        'title': 'URI de acesso do banco de dados',
-        'ask': False,
-        'default': ''
-    },
-    {
         'name': 'SHOW_TOOLBAR_CALLBACK',
         'title': 'Se a debug toolbar deve sempre ser mostrada para superusers',
         'ask': False,
@@ -199,12 +181,6 @@ env = [
         'title': 'ID do seu domínio para tracking com o Google Analytics',
         'ask': False,
         'default': ''
-    },
-    {
-        'name': 'HEROKU_ENV',
-        'title': 'Variável que define se o ambiente atual é o ambiente de build do Heroku',
-        'ask': False,
-        'default': False
     },
     {
         'name': 'SENTRY_DSN',
