@@ -2,9 +2,6 @@ version: '3.7'
 services:
   backend:
     networks:
-      default:
-        aliases:
-          - ${DOMAIN-localhost}
       - traefik_default
   proxy:
     networks:
@@ -18,5 +15,3 @@ services:
 
 networks:
   traefik_default:
-    external:
-      name: traefik_default
