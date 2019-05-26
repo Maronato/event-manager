@@ -1,3 +1,8 @@
+#! /usr/bin/env sh
+
+# Exit in case of error
+set -e
+
 OK=1
 LINES=0
 

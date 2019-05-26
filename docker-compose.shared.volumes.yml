@@ -13,13 +13,9 @@ services:
   proxy:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-    networks:
-      - traefik_default
   grafana:
     volumes:
       - grafana_data:/var/lib/grafana
-    networks:
-      - traefik_default
   portainer:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock

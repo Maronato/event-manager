@@ -5,6 +5,10 @@ services:
       placement:
         constraints:
           - node.role == manager
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./traefik.toml:/traefik.toml
+      - ./acme.json:/acme.json
   backend:
     volumes:
       - ./app/.env:/app/.env

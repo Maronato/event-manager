@@ -3,32 +3,24 @@ services:
   proxy:
     deploy:
       labels:
-        - traefik.frontend.rule=Host:${DOMAIN-localhost}
+        - "traefik.frontend.rule=Host:www.${DOMAIN},${DOMAIN}"
         - traefik.enable=true
         - traefik.port=80
+        - traefik.tags=${TRAEFIK_TAG}
+        - traefik.docker.network=traefik_default
+        - traefik.servicehttp.frontend.entryPoints=http
+        - traefik.servicehttp.frontend.redirect.entryPoint=https
+        - traefik.servicehttps.frontend.entryPoints=https
+        - "traefik.servicehttps.frontend.redirect.regex=^https?://(www.)?(${DOMAIN})/(.*)"
+        - "traefik.servicehttps.frontend.redirect.replacement=https://${DOMAIN}/$$3"
   backend:
     deploy:
       labels:
-        - traefik.frontend.rule=api.${DOMAIN-localhost}
+        - traefik.frontend.rule=PathPrefix:/
         - traefik.enable=true
         - traefik.port=8000
         - traefik.tags=${TRAEFIK_TAG}
-        - traefik.backend=api
-  prometheus:
-    deploy:
-      labels:
-        - traefik.frontend.rule=Host:prom.${DOMAIN-localhost}
-        - traefik.enable=true
-        - traefik.port=9090
-        - traefik.tags=${TRAEFIK_TAG}
-        - traefik.backend=prometheus
-  exporter:
-    deploy:
-      labels:
-        - traefik.enable=true
-        - traefik.port=9100
-        - traefik.tags=${TRAEFIK_TAG}
-        - traefik.backend=prometheus-exporter
+        - traefik.backend=backend
   grafana:
     deploy:
       labels:
@@ -37,3 +29,17 @@ services:
         - traefik.port=2000
         - traefik.tags=${TRAEFIK_TAG}
         - traefik.backend=grafana
+        - traefik.docker.network=traefik_default
+        # Traefik service that listens to HTTP
+        - traefik.redirectorservice.frontend.entryPoints=http
+        - traefik.redirectorservice.frontend.redirect.entryPoint=https
+        # Traefik service that listens to HTTPS
+        - traefik.webservice.frontend.entryPoints=https
+  portainer:
+    deploy:
+      labels:
+        - traefik.frontend.rule=Host:portainer.${DOMAIN-localhost}
+        - traefik.enable=true
+        - traefik.port=9000
+        - traefik.tags=${TRAEFIK_TAG}
+        - traefik.backend=portainer

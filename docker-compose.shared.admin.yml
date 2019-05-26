@@ -5,6 +5,7 @@ services:
   celerybeat:
     command: celery -A project beat -l info --scheduler django_celery_beat.schedulers:DatabaseScheduler
   redis-exporter:
+    restart: always
     ports:
       - "9121"
     command:
@@ -12,7 +13,16 @@ services:
   exporter:
     ports:
      - "9100"
-networks:
-  traefik_default:
-    external:
-      name: traefik_default
+  db:
+    restart: always
+  redis:
+    restart: always
+  prometheus:
+    restart: always
+  grafana:
+    restart: always
+  exporter:
+    restart: always
+  portainer:
+    restart: always
+

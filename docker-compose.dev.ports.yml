@@ -9,7 +9,7 @@ services:
       - '8000:8000'
   grafana:
     ports:
-     - "2000:3000"
+      - "2000:3000"
   prometheus:
     ports:
       - "9090:9090"
