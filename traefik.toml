@@ -3,6 +3,11 @@ debug = false
 logLevel = "ERROR"
 defaultEntryPoints = ["https","http"]
 
+[web]
+address = ":8080"
+  [web.auth.basic]
+  users = ["admin:$apr1$ruca84Hq$mbjdMZBAG.KWn7vfN/SNK/"]
+
 [entryPoints]
   [entryPoints.http]
   address = ":80"
@@ -12,19 +17,9 @@ defaultEntryPoints = ["https","http"]
   address = ":443"
   [entryPoints.https.tls]
 
-[retry]
-
-[docker]
-endpoint = "unix:///var/run/docker.sock"
-domain = "my-awesome-app.org"
-watch = true
-exposedByDefault = false
-
 [acme]
-email = "your-email-here@my-awesome-app.org"
+email = "your_email@example.com"
 storage = "acme.json"
 entryPoint = "https"
 onHostRule = true
-[acme.dnsChallenge]
-  provider = "digitalocean"
-  delayBeforeCheck = 0
+onDemand = false

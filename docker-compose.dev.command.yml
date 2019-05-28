@@ -1,11 +1,6 @@
 version: '3.7'
 services:
   proxy:
-    command: --docker \
-      --docker.watch \
-      --docker.exposedbydefault=false \
-      --constraints=tag==${TRAEFIK_TAG-localhost} \
-      --accessLog \
-      --web
+    command: --docker
   backend:
     command: python manage.py runserver 0.0.0.0:8000

@@ -3,43 +3,30 @@ services:
   proxy:
     deploy:
       labels:
-        - "traefik.frontend.rule=Host:www.${DOMAIN},${DOMAIN}"
+        - traefik.frontend.rule=Host:traefik.${DOMAIN-localhost}
+        - traefik.port=8080
         - traefik.enable=true
-        - traefik.port=80
-        - traefik.tags=${TRAEFIK_TAG}
-        - traefik.docker.network=traefik_default
-        - traefik.servicehttp.frontend.entryPoints=http
-        - traefik.servicehttp.frontend.redirect.entryPoint=https
-        - traefik.servicehttps.frontend.entryPoints=https
-        - "traefik.servicehttps.frontend.redirect.regex=^https?://(www.)?(${DOMAIN})/(.*)"
-        - "traefik.servicehttps.frontend.redirect.replacement=https://${DOMAIN}/$$3"
   backend:
     deploy:
       labels:
         - traefik.frontend.rule=PathPrefix:/
         - traefik.enable=true
         - traefik.port=8000
-        - traefik.tags=${TRAEFIK_TAG}
         - traefik.backend=backend
+        - traefik.docker.network=proxy
   grafana:
     deploy:
       labels:
         - traefik.frontend.rule=Host:grafana.${DOMAIN-localhost}
         - traefik.enable=true
-        - traefik.port=2000
-        - traefik.tags=${TRAEFIK_TAG}
+        - traefik.port=3000
         - traefik.backend=grafana
-        - traefik.docker.network=traefik_default
-        # Traefik service that listens to HTTP
-        - traefik.redirectorservice.frontend.entryPoints=http
-        - traefik.redirectorservice.frontend.redirect.entryPoint=https
-        # Traefik service that listens to HTTPS
-        - traefik.webservice.frontend.entryPoints=https
+        - traefik.docker.network=proxy
   portainer:
     deploy:
       labels:
         - traefik.frontend.rule=Host:portainer.${DOMAIN-localhost}
         - traefik.enable=true
         - traefik.port=9000
-        - traefik.tags=${TRAEFIK_TAG}
         - traefik.backend=portainer
+        - traefik.docker.network=proxy

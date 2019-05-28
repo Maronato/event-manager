@@ -1,17 +1,1 @@
 version: '3.7'
-services:
-  backend:
-    networks:
-      - traefik_default
-  proxy:
-    networks:
-      - traefik_default
-  grafana:
-    networks:
-      - traefik_default
-  portainer:
-    networks:
-      - traefik_default
-
-networks:
-  traefik_default:

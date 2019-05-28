@@ -5,7 +5,7 @@ services:
   redis:
     image: redis:5.0.4-alpine
   proxy:
-    image: traefik:v1.7
+    image: traefik:v1.7-alpine
   redis-exporter:
     image: oliver006/redis_exporter
   exporter:

@@ -9,6 +9,7 @@ IMAGE_DOMAIN=${IMAGE_DOMAIN:=maronato} \
 TAG=${TAG:=prod} \
 docker-compose \
 -f docker-compose.shared.admin.yml \
+-f docker-compose.shared.networks.yml \
 -f docker-compose.shared.base-images.yml \
 -f docker-compose.shared.depends.yml \
 -f docker-compose.shared.env.yml \
@@ -30,6 +31,7 @@ IMAGE_DOMAIN=${IMAGE_DOMAIN:=maronato} \
 TAG=latest \
 docker-compose \
 -f docker-compose.shared.admin.yml \
+-f docker-compose.shared.networks.yml \
 -f docker-compose.shared.base-images.yml \
 -f docker-compose.shared.depends.yml \
 -f docker-compose.shared.env.yml \

@@ -1,7 +1,9 @@
 networks:
-  traefik_default:
+  default:
+    external: false
+  proxy:
     external: true
-    name: traefik_default
+    name: proxy
 services:
   backend:
     build:
@@ -21,10 +23,10 @@ services:
     deploy:
       labels:
         traefik.backend: backend
+        traefik.docker.network: proxy
         traefik.enable: "true"
         traefik.frontend.rule: PathPrefix:/
         traefik.port: '8000'
-        traefik.tags: localhost
       replicas: 1
       restart_policy:
         condition: on-failure
@@ -48,7 +50,7 @@ services:
     image: maronato/event-manager-backend:latest
     networks:
       default: null
-      traefik_default: null
+      proxy: null
     ports:
     - target: 8000
     volumes:
@@ -82,6 +84,8 @@ services:
       SUPERUSER_NAME: admin
       SUPERUSER_PASSWORD: password
     image: maronato/event-manager-worker:latest
+    networks:
+      default: null
     volumes:
     - /Users/Maronato/Documents/event-manager/app/.env:/app/.env:rw
   celeryworker:
@@ -113,6 +117,8 @@ services:
       SUPERUSER_NAME: admin
       SUPERUSER_PASSWORD: password
     image: maronato/event-manager-worker:latest
+    networks:
+      default: null
     volumes:
     - /Users/Maronato/Documents/event-manager/app/.env:/app/.env:rw
   db:
@@ -123,6 +129,8 @@ services:
       POSTGRES_SERVER: db
       POSTGRES_USER: postgres
     image: postgres:alpine
+    networks:
+      default: null
     restart: always
     volumes:
     - app-db-data:/var/lib/postgresql/data/pgdata:rw
@@ -130,6 +138,8 @@ services:
     depends_on:
     - prometheus
     image: prom/node-exporter:latest
+    networks:
+      default: null
     restart: always
   grafana:
     depends_on:
@@ -137,19 +147,16 @@ services:
     deploy:
       labels:
         traefik.backend: grafana
-        traefik.docker.network: traefik_default
+        traefik.docker.network: proxy
         traefik.enable: "true"
         traefik.frontend.rule: Host:grafana.localhost
-        traefik.port: '2000'
-        traefik.redirectorservice.frontend.entryPoints: http
-        traefik.redirectorservice.frontend.redirect.entryPoint: https
-        traefik.tags: localhost
-        traefik.webservice.frontend.entryPoints: https
+        traefik.port: '3000'
     environment:
       GF_SECURITY_ADMIN_PASSWORD: pass
     image: grafana/grafana
     networks:
-      traefik_default: null
+      default: null
+      proxy: null
     ports:
     - target: 3000
     restart: always
@@ -159,16 +166,17 @@ services:
     deploy:
       labels:
         traefik.backend: portainer
+        traefik.docker.network: proxy
         traefik.enable: "true"
         traefik.frontend.rule: Host:portainer.localhost
         traefik.port: '9000'
-        traefik.tags: localhost
       replicas: 1
       restart_policy:
         condition: on-failure
     image: portainer/portainer
     networks:
-      traefik_default: null
+      default: null
+      proxy: null
     ports:
     - target: 9000
     restart: always
@@ -177,6 +185,8 @@ services:
     - /var/run/docker.sock:/var/run/docker.sock:rw
   prometheus:
     image: prom/prometheus:v2.9.1
+    networks:
+      default: null
     ports:
     - target: 9090
     restart: always
@@ -184,20 +194,12 @@ services:
     - /Users/Maronato/Documents/event-manager/alerts:/etc/prometheus/alerts:rw
     - /Users/Maronato/Documents/event-manager/prometheus.yml:/etc/prometheus/prometheus.yml:rw
   proxy:
-    command: --docker \ --docker.swarmmode \ --docker.watch \ --docker.exposedbydefault=false
-      \ --constraints=tag==localhost \ --logLevel=INFO \ --accessLog \ --web
+    command: --docker \ --docker.swarmmode
     deploy:
       labels:
-        traefik.docker.network: traefik_default
         traefik.enable: "true"
-        traefik.frontend.rule: Host:www.localhost,localhost
-        traefik.port: '80'
-        traefik.servicehttp.frontend.entryPoints: http
-        traefik.servicehttp.frontend.redirect.entryPoint: https
-        traefik.servicehttps.frontend.entryPoints: https
-        traefik.servicehttps.frontend.redirect.regex: ^https?://(www.)?(localhost)/(.*)
-        traefik.servicehttps.frontend.redirect.replacement: https://localhost/$$3
-        traefik.tags: localhost
+        traefik.frontend.rule: Host:traefik.localhost
+        traefik.port: '8080'
       placement:
         constraints:
         - node.role == manager
@@ -206,22 +208,23 @@ services:
         condition: on-failure
     environment:
       DO_AUTH_TOKEN: <yourtoken>
-    image: traefik:v1.7
+    image: traefik:v1.7-alpine
     networks:
-      traefik_default: null
+      default: null
+      proxy: null
     ports:
     - published: 80
       target: 80
     - published: 443
       target: 443
-    - published: 8090
-      target: 8080
     volumes:
     - /Users/Maronato/Documents/event-manager/acme.json:/acme.json:rw
     - /Users/Maronato/Documents/event-manager/traefik.toml:/traefik.toml:rw
     - /var/run/docker.sock:/var/run/docker.sock:rw
   redis:
     image: redis:5.0.4-alpine
+    networks:
+      default: null
     restart: always
     volumes:
     - app-redis-data:/data:rw
@@ -232,6 +235,8 @@ services:
     - prometheus
     - redis
     image: oliver006/redis_exporter
+    networks:
+      default: null
     ports:
     - target: 9121
     restart: always
