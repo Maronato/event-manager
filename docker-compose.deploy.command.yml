@@ -7,6 +7,8 @@ services:
       --docker.watch
       --docker.exposedbydefault=false
       --constraints=tag==traefik-public
+      --entrypoints='Name:http Address::80'
+      --entrypoints='Name:https Address::443 TLS'
       --acme
       --acme.email=${EMAIL}
       --acme.storage="traefik/acme/account"

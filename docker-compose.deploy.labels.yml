@@ -6,8 +6,8 @@ services:
         - traefik.frontend.rule=Host:traefik.${DOMAIN}
         - traefik.enable=true
         - traefik.port=8080
-        - traefik.tags=traefik-public
-        - traefik.docker.network=traefik-public
+        - traefik.tags=${TRAEFIK_PUBLIC_TAG:-traefik-public}
+        - traefik.docker.network=proxy
         # Traefik service that listens to HTTP
         - traefik.redirectorservice.frontend.entryPoints=http
         - traefik.redirectorservice.frontend.redirect.entryPoint=https
