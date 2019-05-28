@@ -5,12 +5,3 @@ services:
       placement:
         constraints:
           - node.role == manager
-  backend:
-    volumes:
-      - ./app/.env:/app/.env
-  celeryworker:
-    volumes:
-      - ./app/.env:/app/.env
-  celerybeat:
-    volumes:
-      - ./app/.env:/app/.env
