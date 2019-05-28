@@ -25,8 +25,12 @@ services:
         traefik.backend: backend
         traefik.docker.network: proxy
         traefik.enable: "true"
-        traefik.frontend.rule: PathPrefix:/
+        traefik.frontend.rule: Host:localhost
         traefik.port: '8000'
+        traefik.redirectorservice.frontend.entryPoints: http
+        traefik.redirectorservice.frontend.redirect.entryPoint: https
+        traefik.tags: traefik-public
+        traefik.webservice.frontend.entryPoints: https
       replicas: 1
       restart_policy:
         condition: on-failure
@@ -151,6 +155,10 @@ services:
         traefik.enable: "true"
         traefik.frontend.rule: Host:grafana.localhost
         traefik.port: '3000'
+        traefik.redirectorservice.frontend.entryPoints: http
+        traefik.redirectorservice.frontend.redirect.entryPoint: https
+        traefik.tags: traefik-public
+        traefik.webservice.frontend.entryPoints: https
     environment:
       GF_SECURITY_ADMIN_PASSWORD: pass
     image: grafana/grafana
@@ -170,6 +178,10 @@ services:
         traefik.enable: "true"
         traefik.frontend.rule: Host:portainer.localhost
         traefik.port: '9000'
+        traefik.redirectorservice.frontend.entryPoints: http
+        traefik.redirectorservice.frontend.redirect.entryPoint: https
+        traefik.tags: traefik-public
+        traefik.webservice.frontend.entryPoints: https
       replicas: 1
       restart_policy:
         condition: on-failure
@@ -194,12 +206,23 @@ services:
     - /Users/Maronato/Documents/event-manager/alerts:/etc/prometheus/alerts:rw
     - /Users/Maronato/Documents/event-manager/prometheus.yml:/etc/prometheus/prometheus.yml:rw
   proxy:
-    command: --docker \ --docker.swarmmode
+    command: '--docker --docker.swarmmode --docker.watch --docker.exposedbydefault=false
+      --constraints=tag==traefik-public --acme --acme.email= --acme.storage="traefik/acme/account"
+      --acme.entryPoint=https --acme.httpChallenge.entryPoint=http --acme.onhostrule=true
+      --acme.acmelogging=true --logLevel=INFO --accessLog --api
+
+      '
     deploy:
       labels:
+        traefik.docker.network: traefik-public
         traefik.enable: "true"
+        traefik.frontend.auth.basic.users: ':'
         traefik.frontend.rule: Host:traefik.localhost
         traefik.port: '8080'
+        traefik.redirectorservice.frontend.entryPoints: http
+        traefik.redirectorservice.frontend.redirect.entryPoint: https
+        traefik.tags: traefik-public
+        traefik.webservice.frontend.entryPoints: https
       placement:
         constraints:
         - node.role == manager
