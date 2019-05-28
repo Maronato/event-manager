@@ -1,7 +1,21 @@
 version: '3.7'
 services:
   proxy:
-    command: --docker \
+    command: >
+      --docker
       --docker.swarmmode
+      --docker.watch
+      --docker.exposedbydefault=false
+      --constraints=tag==traefik-public
+      --acme
+      --acme.email=${EMAIL}
+      --acme.storage="traefik/acme/account"
+      --acme.entryPoint=https
+      --acme.httpChallenge.entryPoint=http
+      --acme.onhostrule=true
+      --acme.acmelogging=true
+      --logLevel=INFO
+      --accessLog
+      --api
   backend:
     command: ["daphne", "project.asgi:application", "--port", "8000", "--bind", "0.0.0.0", "-v2"]
