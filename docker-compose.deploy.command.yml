@@ -11,7 +11,7 @@ services:
       --entrypoints='Name:https Address::443 TLS'
       --acme
       --acme.email=${EMAIL}
-      --acme.storage="traefik/acme/account"
+      --acme.storage="acme.json"
       --acme.entryPoint=https
       --acme.httpChallenge.entryPoint=http
       --acme.onhostrule=true
