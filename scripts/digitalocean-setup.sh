@@ -9,6 +9,7 @@ add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(
 apt-get update
 apt-cache policy docker-ce
 apt-get install -y docker-ce
+apt install -y apache2-utils
 
 # Install compose
 curl -L "https://github.com/docker/compose/releases/download/1.24.0/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
@@ -17,6 +18,7 @@ docker-compose --version
 
 # Initialize app's variables
 python3 app/initialize.py
+mv .env app
 
 # Get env vars
 echo "Qual o domínio?"
@@ -29,7 +31,7 @@ echo "Qual seu email?"
 read EMAIL
 echo "Qual senha pro traefik?"
 read PASS
-HASHED_PASSWORD=$(openssl passwd -1 $PASS)
+htpasswd -nb admin "$PASS" > .htpasswd
 
 DOMAIN=$DOMAIN \
     IMAGE_DOMAIN=$IMAGE_DOMAIN \

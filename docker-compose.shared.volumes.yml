@@ -15,6 +15,7 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - ./acme.json:/acme.json
+      - ./.htpasswd:/.htpasswd
   grafana:
     volumes:
       - grafana_data:/var/lib/grafana
