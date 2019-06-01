@@ -12,7 +12,7 @@ source ./scripts/generate-stack.sh
 TAG=${TAG} \
 DOCKER_BUILDKIT=1 \
 IMAGE_DOMAIN=${IMAGE_DOMAIN} \
-docker build app/ -f app/backend.dockerfile -t ${IMAGE_DOMAIN}/event-manager-backend:${TAG} -t ${IMAGE_DOMAIN}/event-manager-backend:latest --build-arg APP_ENV=prod
+docker build app/ --no-cache -f app/backend.dockerfile -t ${IMAGE_DOMAIN}/event-manager-backend:${TAG} -t ${IMAGE_DOMAIN}/event-manager-backend:latest --build-arg APP_ENV=prod
 
 TAG=${TAG} \
 DOCKER_BUILDKIT=1 \

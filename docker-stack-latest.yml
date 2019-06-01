@@ -1,0 +1,260 @@
+networks:
+  default:
+    external: false
+  proxy:
+    external: true
+    name: proxy
+services:
+  backend:
+    build:
+      context: /Users/Maronato/Documents/event-manager/app
+      dockerfile: backend.dockerfile
+    command:
+    - daphne
+    - project.asgi:application
+    - --port
+    - '8000'
+    - --bind
+    - 0.0.0.0
+    - -v2
+    depends_on:
+    - db
+    - redis
+    deploy:
+      labels:
+        traefik.backend: backend
+        traefik.docker.network: proxy
+        traefik.enable: "true"
+        traefik.frontend.rule: Host:localhost
+        traefik.port: '8000'
+        traefik.redirectorservice.frontend.entryPoints: http
+        traefik.redirectorservice.frontend.redirect.entryPoint: https
+        traefik.tags: traefik-public
+        traefik.webservice.frontend.entryPoints: https
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+    environment:
+      APP_ENV: prod
+      CELERY_BROKER_URL: redis://redis:6379/0
+      CELERY_RESULT_BACKEND: redis://redis:6379/0
+      DEBUG: "False"
+      DJANGO_SETTINGS_MODULE: project.settings
+      NODE_ENV: production
+      POSTGRES_DB: app
+      POSTGRES_PASSWORD: pass
+      POSTGRES_SERVER: db
+      POSTGRES_USER: postgres
+      REDIS_URL: redis://redis:6379/0
+      SERVER_HOST: http://localhost
+      SERVER_NAME: localhost
+      SUPERUSER_EMAIL: gustavomaronato@gmail.com
+      SUPERUSER_NAME: admin
+      SUPERUSER_PASSWORD: password
+    image: maronato/event-manager-backend:latest
+    networks:
+      default: null
+      proxy: null
+  celerybeat:
+    build:
+      context: /Users/Maronato/Documents/event-manager/app
+      dockerfile: worker.dockerfile
+    command: celery -A project beat -l info --scheduler django_celery_beat.schedulers:DatabaseScheduler
+    depends_on:
+    - backend
+    - db
+    - redis
+    deploy:
+      replicas: 0
+      restart_policy:
+        condition: on-failure
+    environment:
+      APP_ENV: prod
+      CELERY_BROKER_URL: redis://redis:6379/0
+      CELERY_RESULT_BACKEND: redis://redis:6379/0
+      DEBUG: "False"
+      DJANGO_SETTINGS_MODULE: project.settings
+      POSTGRES_DB: app
+      POSTGRES_PASSWORD: pass
+      POSTGRES_SERVER: db
+      POSTGRES_USER: postgres
+      REDIS_URL: redis://redis:6379/0
+      SERVER_HOST: http://localhost
+      SUPERUSER_EMAIL: gustavomaronato@gmail.com
+      SUPERUSER_NAME: admin
+      SUPERUSER_PASSWORD: password
+    image: maronato/event-manager-worker:latest
+    networks:
+      default: null
+  celeryworker:
+    build:
+      context: /Users/Maronato/Documents/event-manager/app
+      dockerfile: worker.dockerfile
+    command: celery -A project worker -l info
+    depends_on:
+    - backend
+    - db
+    - redis
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+    environment:
+      APP_ENV: prod
+      CELERY_BROKER_URL: redis://redis:6379/0
+      CELERY_RESULT_BACKEND: redis://redis:6379/0
+      DEBUG: "False"
+      DJANGO_SETTINGS_MODULE: project.settings
+      POSTGRES_DB: app
+      POSTGRES_PASSWORD: pass
+      POSTGRES_SERVER: db
+      POSTGRES_USER: postgres
+      REDIS_URL: redis://redis:6379/0
+      SERVER_HOST: http://localhost
+      SUPERUSER_EMAIL: gustavomaronato@gmail.com
+      SUPERUSER_NAME: admin
+      SUPERUSER_PASSWORD: password
+    image: maronato/event-manager-worker:latest
+    networks:
+      default: null
+  db:
+    environment:
+      PGDATA: /var/lib/postgresql/data/pgdata
+      POSTGRES_DB: app
+      POSTGRES_PASSWORD: pass
+      POSTGRES_SERVER: db
+      POSTGRES_USER: postgres
+    image: postgres:alpine
+    networks:
+      default: null
+    restart: always
+    volumes:
+    - app-db-data:/var/lib/postgresql/data/pgdata:rw
+  exporter:
+    depends_on:
+    - prometheus
+    image: prom/node-exporter:latest
+    networks:
+      default: null
+    restart: always
+  grafana:
+    depends_on:
+    - prometheus
+    deploy:
+      labels:
+        traefik.backend: grafana
+        traefik.docker.network: proxy
+        traefik.enable: "true"
+        traefik.frontend.rule: Host:grafana.localhost
+        traefik.port: '3000'
+        traefik.redirectorservice.frontend.entryPoints: http
+        traefik.redirectorservice.frontend.redirect.entryPoint: https
+        traefik.tags: traefik-public
+        traefik.webservice.frontend.entryPoints: https
+    environment:
+      GF_SECURITY_ADMIN_PASSWORD: pass
+    image: grafana/grafana
+    networks:
+      default: null
+      proxy: null
+    restart: always
+    volumes:
+    - grafana_data:/var/lib/grafana:rw
+  portainer:
+    deploy:
+      labels:
+        traefik.backend: portainer
+        traefik.docker.network: proxy
+        traefik.enable: "true"
+        traefik.frontend.rule: Host:portainer.localhost
+        traefik.port: '9000'
+        traefik.redirectorservice.frontend.entryPoints: http
+        traefik.redirectorservice.frontend.redirect.entryPoint: https
+        traefik.tags: traefik-public
+        traefik.webservice.frontend.entryPoints: https
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+    image: portainer/portainer
+    networks:
+      default: null
+      proxy: null
+    restart: always
+    volumes:
+    - portainer_data:/data:rw
+    - /var/run/docker.sock:/var/run/docker.sock:rw
+  prometheus:
+    image: prom/prometheus:v2.9.1
+    networks:
+      default: null
+    restart: always
+    volumes:
+    - /Users/Maronato/Documents/event-manager/alerts:/etc/prometheus/alerts:rw
+    - /Users/Maronato/Documents/event-manager/prometheus.yml:/etc/prometheus/prometheus.yml:rw
+    - prometheus_data:/prometheus:rw
+  proxy:
+    command: '--docker --docker.swarmmode --docker.watch --docker.exposedbydefault=false
+      --constraints=tag==traefik-public --entrypoints=''Name:http Address::80'' --entrypoints=''Name:https
+      Address::443 TLS'' --acme --acme.email=gustavomaronato@gmail.com --acme.storage="acme.json"
+      --acme.entryPoint=https --acme.httpChallenge.entryPoint=http --acme.onhostrule=true
+      --acme.acmelogging=true --logLevel=INFO --accessLog --api
+
+      '
+    deploy:
+      labels:
+        traefik.docker.network: proxy
+        traefik.enable: "true"
+        traefik.frontend.auth.basic.users: admin:.
+        traefik.frontend.rule: Host:traefik.localhost
+        traefik.port: '8080'
+        traefik.redirectorservice.frontend.entryPoints: http
+        traefik.redirectorservice.frontend.redirect.entryPoint: https
+        traefik.tags: traefik-public
+        traefik.webservice.frontend.entryPoints: https
+      placement:
+        constraints:
+        - node.role == manager
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+    environment:
+      DO_AUTH_TOKEN: <yourtoken>
+    image: traefik:v1.7-alpine
+    networks:
+      default: null
+      proxy: null
+    ports:
+    - published: 80
+      target: 80
+    - published: 443
+      target: 443
+    volumes:
+    - /Users/Maronato/Documents/event-manager/acme.json:/acme.json:rw
+    - /var/run/docker.sock:/var/run/docker.sock:rw
+  redis:
+    image: redis:5.0.4-alpine
+    networks:
+      default: null
+    restart: always
+    volumes:
+    - app-redis-data:/data:rw
+  redis-exporter:
+    command:
+    - --redis.addr=redis://redis:6379
+    depends_on:
+    - prometheus
+    - redis
+    image: oliver006/redis_exporter
+    networks:
+      default: null
+    ports:
+    - target: 9121
+    restart: always
+version: '3.7'
+volumes:
+  app-db-data: {}
+  app-redis-data: {}
+  grafana_data: {}
+  portainer_data: {}
+  prometheus_data: {}
+
