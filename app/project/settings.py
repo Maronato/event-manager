@@ -56,8 +56,6 @@ INSTALLED_APPS = [
 
     'pwa',
 
-    # 'debug_toolbar',
-    # 'debug_panel',
     'compressor',
     'compressor_toolkit',
     'storages',
@@ -102,7 +100,6 @@ MIDDLEWARE = [
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    # 'debug_toolbar.middleware.DebugToolbarMiddleware',
     'maintenance_mode.middleware.MaintenanceModeMiddleware',
     'django_prometheus.middleware.PrometheusAfterMiddleware',
 ]
@@ -233,7 +230,7 @@ STATICFILES_DIRS = (
 )
 
 
-if not DEBUG:
+if not DEBUG and eval(os.environ.get("USE_SSL", "False")):
     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
     SECURE_SSL_REDIRECT = False
     SESSION_COOKIE_SECURE = True

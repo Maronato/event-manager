@@ -1,10 +1,7 @@
 from django.urls import path, include
 from django.contrib import admin
-from django.conf import settings
-# import debug_toolbar
 from .views import LoginView
 admin.autodiscover()
-# from app import views
 
 urlpatterns = [
     path('', LoginView.as_view(), name='login'),
@@ -26,9 +23,3 @@ urlpatterns = [
     path('helper/', include('helper.urls')),
     path('team/', include('team.urls')),
 ]
-
-# if settings.SHOW_TOOLBAR_CALLBACK:
-
-#     urlpatterns = [
-#         path('__debug__/', include(debug_toolbar.urls)),
-#     ] + urlpatterns

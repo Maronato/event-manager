@@ -17,5 +17,5 @@ docker build app/ --no-cache -f app/backend.dockerfile -t ${IMAGE_DOMAIN}/event-
 TAG=${TAG} \
 DOCKER_BUILDKIT=1 \
 IMAGE_DOMAIN=${IMAGE_DOMAIN} \
-docker build app/ -f app/worker.dockerfile -t ${IMAGE_DOMAIN}/event-manager-worker:${TAG} -t ${IMAGE_DOMAIN}/event-manager-worker:latest --build-arg APP_ENV=prod
+docker build app/ --no-cache -f app/worker.dockerfile -t ${IMAGE_DOMAIN}/event-manager-worker:${TAG} -t ${IMAGE_DOMAIN}/event-manager-worker:latest --build-arg APP_ENV=prod
 
