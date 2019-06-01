@@ -46,4 +46,8 @@ docker swarm init --advertise-addr $IP || true
 # Create the proxy network
 docker network create -d overlay --attachable proxy || true
 
+# Create acme file
+touch acme.json
+chmod 600 acme.json
+
 ./scripts/deploy.sh
