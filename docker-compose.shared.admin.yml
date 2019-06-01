@@ -6,13 +6,8 @@ services:
     command: celery -A project beat -l info --scheduler django_celery_beat.schedulers:DatabaseScheduler
   redis-exporter:
     restart: always
-    ports:
-      - "9121"
     command:
       - '--redis.addr=redis://redis:6379'
-  exporter:
-    ports:
-     - "9100"
   db:
     restart: always
   redis:

@@ -4,12 +4,11 @@
 set -e
 
 DOMAIN=${DOMAIN:=localhost} \
-TRAEFIK_TAG=${TRAEFIK_TAG=localhost} \
 IMAGE_DOMAIN=${IMAGE_DOMAIN:=maronato} \
 TAG=${TAG:=prod} \
 EMAIL=${EMAIL:=gustavomaronato@gmail.com} \
 USERNAME=${USENAME:=admin} \
-HASHED_PASSWORD=${HASHED_PASSWORD:=$apr1$kbyKlDk8$JiUTxXytJQl1OBoqtrY0t.} \
+HASHED_PASSWORD=${HASHED_PASSWORD:='$apr1$kbyKlDk8$JiUTxXytJQl1OBoqtrY0t.'} \
 docker-compose \
 -f docker-compose.shared.admin.yml \
 -f docker-compose.shared.networks.yml \
@@ -29,7 +28,6 @@ docker-compose \
 config > docker-stack-${TAG}.yml
 
 DOMAIN=${DOMAIN:=localhost} \
-TRAEFIK_TAG=${TRAEFIK_TAG=localhost} \
 IMAGE_DOMAIN=${IMAGE_DOMAIN:=maronato} \
 TAG=latest \
 EMAIL=${EMAIL:=gustavomaronato@gmail.com} \
