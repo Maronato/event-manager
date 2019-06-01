@@ -243,6 +243,3 @@ if __name__ == "__main__":
         os.remove('.env-temp')
         exit()
     os.remove('.env-temp')
-    print()
-    print('Migrando banco de dados...')
-    print(subprocess.check_output(['python', 'manage.py', 'migrate']).decode("utf-8"))
