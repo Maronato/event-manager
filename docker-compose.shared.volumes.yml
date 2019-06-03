@@ -3,6 +3,7 @@ services:
   db:
     volumes:
       - db_data:/var/lib/postgresql/data/pgdata
+      - db_backups:/backups
   redis:
     volumes:
       - redis_data:/data
@@ -25,6 +26,7 @@ services:
       - portainer_data:/data
 volumes:
   db_data:
+  db_backups:
   redis_data:
   prometheus_data:
   grafana_data:
