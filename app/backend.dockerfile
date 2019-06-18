@@ -22,7 +22,7 @@ RUN \
 
 RUN \
  apk add --no-cache postgresql-libs && \
- apk add --no-cache --virtual .build-deps gcc musl-dev postgresql-dev linux-headers
+ apk add --no-cache --virtual .build-deps gcc musl-dev postgresql-dev linux-headers libffi-dev openssl-dev python3-dev
 
 # Dev preinstall commands
 FROM base as dev-preinstall
@@ -30,7 +30,7 @@ RUN echo "Running dev preinstall"
 
 RUN \
  apk add --no-cache postgresql-libs && \
- apk add --no-cache --virtual .build-deps gcc musl-dev postgresql-dev linux-headers
+ apk add --no-cache --virtual .build-deps gcc musl-dev postgresql-dev linux-headers libffi-dev openssl-dev python3-dev
 
 # Running global install
 FROM ${APP_ENV}-preinstall as install
@@ -81,6 +81,10 @@ RUN touch .env
 # Final stage
 FROM ${APP_ENV}-prefinal as final
 RUN echo "Running final stage"
+
+# Configure environment
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONUNBUFFERED 1
 
 WORKDIR /app
 COPY --from=cleanup /opt/venv /opt/venv

@@ -62,6 +62,7 @@ INSTALLED_APPS = [
     'djcelery_email',
     'analytical',
     'django_prometheus',
+    'django_celery_beat',
 
     'rest_framework',
 
@@ -143,7 +144,7 @@ else:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': 'devdatabase',
+            'NAME': 'db.sqlite3',
         }
     }
 
@@ -263,9 +264,6 @@ if not DEBUG:
 
 # Celery stuff
 CELERY_BROKER_URL = os.environ.get('CELERY_BROKER_URL')
-
-# Honor the 'X-Forwarded-Proto' header for request.is_secure()
-SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')

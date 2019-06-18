@@ -22,6 +22,6 @@ services:
         condition: on-failure
   celerybeat:
     deploy:
-      replicas: 0
+      replicas: 1
       restart_policy:
         condition: on-failure

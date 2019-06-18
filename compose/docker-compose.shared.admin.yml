@@ -8,7 +8,7 @@ services:
     restart: always
     command:
       - '--redis.addr=redis://redis:6379'
-  db:
+  postgres:
     restart: always
   redis:
     restart: always

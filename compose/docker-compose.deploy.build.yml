@@ -2,13 +2,19 @@ version: '3.7'
 services:
   backend:
     build:
-      context: ./app
+      context: ../app
       dockerfile: backend.dockerfile
   celeryworker:
     build:
-      context: ./app
+      context: ../app
       dockerfile: worker.dockerfile
   celerybeat:
     build:
-      context: ./app
+      context: ../app
       dockerfile: worker.dockerfile
+  grafana:
+    build:
+      context: ../grafana
+  prometheus:
+    build:
+      context: ../prometheus

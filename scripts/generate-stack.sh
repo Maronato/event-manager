@@ -10,21 +10,21 @@ EMAIL=${EMAIL:=gustavomaronato@gmail.com} \
 USERNAME=${USENAME:=admin} \
 HASHED_PASSWORD=${HASHED_PASSWORD:='$apr1$kbyKlDk8$JiUTxXytJQl1OBoqtrY0t.'} \
 docker-compose \
--f docker-compose.shared.admin.yml \
--f docker-compose.shared.networks.yml \
--f docker-compose.shared.base-images.yml \
--f docker-compose.shared.depends.yml \
--f docker-compose.shared.env.yml \
--f docker-compose.shared.volumes.yml \
--f docker-compose.deploy.command.yml \
--f docker-compose.deploy.images.yml \
--f docker-compose.deploy.build.yml \
--f docker-compose.deploy.labels.yml \
--f docker-compose.deploy.networks.yml \
--f docker-compose.deploy.ports.yml \
--f docker-compose.deploy.volumes-placement.yml \
--f docker-compose.deploy.stack.yml \
--f docker-compose.deploy.env.yml \
+-f compose/docker-compose.shared.admin.yml \
+-f compose/docker-compose.shared.networks.yml \
+-f compose/docker-compose.shared.base-images.yml \
+-f compose/docker-compose.shared.depends.yml \
+-f compose/docker-compose.shared.env.yml \
+-f compose/docker-compose.shared.volumes.yml \
+-f compose/docker-compose.deploy.command.yml \
+-f compose/docker-compose.deploy.images.yml \
+-f compose/docker-compose.deploy.build.yml \
+-f compose/docker-compose.deploy.labels.yml \
+-f compose/docker-compose.deploy.networks.yml \
+-f compose/docker-compose.deploy.ports.yml \
+-f compose/docker-compose.deploy.volumes-placement.yml \
+-f compose/docker-compose.deploy.stack.yml \
+-f compose/docker-compose.deploy.env.yml \
 config > docker-stack-${TAG}.yml
 
 DOMAIN=${DOMAIN:=localhost} \
@@ -34,19 +34,19 @@ EMAIL=${EMAIL:=gustavomaronato@gmail.com} \
 USERNAME=${USENAME:=admin} \
 HASHED_PASSWORD=${HASHED_PASSWORD:=$apr1$kbyKlDk8$JiUTxXytJQl1OBoqtrY0t.} \
 docker-compose \
--f docker-compose.shared.admin.yml \
--f docker-compose.shared.networks.yml \
--f docker-compose.shared.base-images.yml \
--f docker-compose.shared.depends.yml \
--f docker-compose.shared.env.yml \
--f docker-compose.shared.volumes.yml \
--f docker-compose.deploy.command.yml \
--f docker-compose.deploy.images.yml \
--f docker-compose.deploy.build.yml \
--f docker-compose.deploy.labels.yml \
--f docker-compose.deploy.networks.yml \
--f docker-compose.deploy.ports.yml \
--f docker-compose.deploy.volumes-placement.yml \
--f docker-compose.deploy.stack.yml \
--f docker-compose.deploy.env.yml \
+-f compose/docker-compose.shared.admin.yml \
+-f compose/docker-compose.shared.networks.yml \
+-f compose/docker-compose.shared.base-images.yml \
+-f compose/docker-compose.shared.depends.yml \
+-f compose/docker-compose.shared.env.yml \
+-f compose/docker-compose.shared.volumes.yml \
+-f compose/docker-compose.deploy.command.yml \
+-f compose/docker-compose.deploy.images.yml \
+-f compose/docker-compose.deploy.build.yml \
+-f compose/docker-compose.deploy.labels.yml \
+-f compose/docker-compose.deploy.networks.yml \
+-f compose/docker-compose.deploy.ports.yml \
+-f compose/docker-compose.deploy.volumes-placement.yml \
+-f compose/docker-compose.deploy.stack.yml \
+-f compose/docker-compose.deploy.env.yml \
 config > docker-stack-latest.yml

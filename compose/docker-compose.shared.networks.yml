@@ -22,7 +22,7 @@ services:
   celerybeat:
     networks:
       - default
-  db:
+  postgres:
     networks:
       - default
   redis:
@@ -40,6 +40,5 @@ services:
 
 networks:
   default:
-    external: false
   proxy:
     external: true

@@ -2,10 +2,10 @@ version: '3.7'
 services:
   backend:
     volumes:
-      - ./app:/app
+      - ../app:/app
   celeryworker:
     volumes:
-      - ./app:/app
+      - ../app:/app
   celerybeat:
     volumes:
-      - ./app:/app
+      - ../app:/app

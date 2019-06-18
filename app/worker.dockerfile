@@ -17,7 +17,7 @@ RUN echo "Running preinstall"
 
 RUN \
  apk add --no-cache postgresql-libs && \
- apk add --no-cache --virtual .build-deps gcc musl-dev postgresql-dev linux-headers
+ apk add --no-cache --virtual .build-deps gcc musl-dev postgresql-dev linux-headers libffi-dev openssl-dev python3-dev
 
 # Running global install
 FROM preinstall as install
@@ -61,6 +61,10 @@ COPY --from=cleanup /app/ /app/
 FROM ${APP_ENV}-prefinal as final
 RUN echo "Running final stage"
 
+# Configure environment
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONUNBUFFERED 1
+
 WORKDIR /app
 COPY --from=cleanup /opt/venv /opt/venv
 ENV PATH="/opt/venv/bin:$PATH"
@@ -68,7 +72,7 @@ ENV PATH="/opt/venv/bin:$PATH"
 RUN apk add --no-cache postgresql-libs
 
 # Prepare entrypoint
-COPY docker-entrypoint-worker.sh /app/docker-entrypoint.sh
+COPY worker-entrypoint.sh /app/docker-entrypoint.sh
 RUN chmod a+x docker-entrypoint.sh
 
 ENTRYPOINT ["./docker-entrypoint.sh"]
