@@ -12,6 +12,7 @@ services:
     restart: always
   redis:
     restart: always
+    command: "--maxmemory 50mb"
   prometheus:
     restart: always
   grafana:
