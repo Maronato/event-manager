@@ -13,6 +13,7 @@ subscribed_instances = []
 class BaseSubscriptionReceiver:
 
     sub_type = 'publish.subscription'
+    signal_name = 'universal'
 
     def __init__(self, signal, *args):
         self.args = args
@@ -66,6 +67,7 @@ class BaseSubscriptionReceiver:
         response = {}
         response['data'] = self.get_allowed_data()
         response['type'] = self.sub_type
+        response['signal_name'] = self.signal_name
         response = serializer.filter_json(response)
         async_to_sync(get_channel_layer().group_send)(
             self.group_name,
@@ -116,6 +118,8 @@ class BaseInstanceUpdateReceiver(BaseSubscriptionReceiver):
     """Allows subscription of individual instances.
 
     like subscriptions of a specific user"""
+
+    signal_name = 'update'
 
     def receive(self, sender, **kwargs):
         super().receive(sender, **kwargs)

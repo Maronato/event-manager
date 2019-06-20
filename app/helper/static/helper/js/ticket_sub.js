@@ -1,15 +1,12 @@
-import { BaseSubscription } from 'model_sockets/js/subscription';
+import { SubscriptionManager } from 'model_sockets/js/subscription';
 
-export default class TicketSubscription extends BaseSubscription {
+export default class TicketSubscription extends SubscriptionManager {
     constructor(unique_id, signal, debug) {
-        super(debug);
-        this.unique_id = unique_id;
-        this.signal = signal;
-        this.url =
+        const url =
             "/ws/subscriptions/tickets/" +
             unique_id +
-            "/" +
-            signal +
-            "/";
+            "/universal/";
+        super(url, debug, true, signal);
+        this.unique_id = unique_id;
     }
 }

@@ -9,6 +9,8 @@ SpottedBot.sublime-workspace
 maintenance_mode_state.txt
 docker-stack-*.yml
 # C extensions
+#
+*.icloud
 
 
 # Distribution / packaging

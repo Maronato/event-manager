@@ -12,7 +12,7 @@ class BaseTicketSubscription(base.BaseSubscriptionReceiver):
     sub_type = 'publish.subscription'
 
     def get_group_name(self):
-        return f'ticket_sub_{self.instance.creator.unique_id}{"".join([f"_{arg}" for arg in self.volatile_args])}'
+        return f'ticket_sub_{self.instance.creator.unique_id}_universal'
 
     def is_valid(self):
         """Whether or not the update
@@ -33,6 +33,8 @@ class BaseTicketSubscription(base.BaseSubscriptionReceiver):
 
 class CreateTicketSubscription(BaseTicketSubscription):
 
+    signal_name = 'create'
+
     def receive(self, sender, **kwargs):
         super().receive(sender, **kwargs)
         # Only accept created signals
@@ -46,6 +48,8 @@ class CreateTicketSubscription(BaseTicketSubscription):
 
 class UpdateTicketSubscription(BaseTicketSubscription):
 
+    signal_name = 'update'
+
     def receive(self, sender, **kwargs):
         super().receive(sender, **kwargs)
         # Only accept created signals
@@ -57,6 +61,8 @@ class UpdateTicketSubscription(BaseTicketSubscription):
 
 
 class DeleteTicketSubscription(BaseTicketSubscription):
+
+    signal_name = 'delete'
 
     def receive(self, sender, **kwargs):
         super().receive(sender, **kwargs)

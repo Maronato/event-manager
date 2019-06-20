@@ -2,7 +2,16 @@ from .base import BaseSubscriptionReceiver, BaseInstanceUpdateReceiver
 from django.conf import settings
 
 
-class CreateReceiver(BaseSubscriptionReceiver):
+class UniversalReceiver(BaseSubscriptionReceiver):
+
+    def get_group_name(self, *args, **kwargs):
+        # Get group name used to dispatch messages
+        return f'sub_{self.sender._meta.app_label}_{self.sender.__name__}_universal'
+
+
+class CreateReceiver(UniversalReceiver):
+
+    signal_name = 'create'
 
     def receive(self, sender, **kwargs):
         super().receive(sender, **kwargs)
@@ -15,7 +24,9 @@ class CreateReceiver(BaseSubscriptionReceiver):
         self.dispatch()
 
 
-class UpdateReceiver(BaseSubscriptionReceiver):
+class UpdateReceiver(UniversalReceiver):
+
+    signal_name = 'update'
 
     def receive(self, sender, **kwargs):
         super().receive(sender, **kwargs)
@@ -27,7 +38,9 @@ class UpdateReceiver(BaseSubscriptionReceiver):
         self.dispatch()
 
 
-class DeleteReceiver(BaseSubscriptionReceiver):
+class DeleteReceiver(UniversalReceiver):
+
+    signal_name = 'delete'
 
     def receive(self, sender, **kwargs):
         super().receive(sender, **kwargs)
@@ -38,7 +51,9 @@ class DeleteReceiver(BaseSubscriptionReceiver):
         self.dispatch()
 
 
-class M2MAddReceiver(BaseSubscriptionReceiver):
+class M2MAddReceiver(UniversalReceiver):
+
+    signal_name = 'm2m_add'
 
     def receive(self, sender, **kwargs):
         print('receiving add')
@@ -59,10 +74,12 @@ class M2MAddReceiver(BaseSubscriptionReceiver):
 
     @property
     def group_name(self):
-        return f'sub_{self.sender._meta.app_label}_{self.instance.__class__.__name__}{"".join([f"_{arg}" for arg in self.volatile_args])}'
+        return f'sub_{self.sender._meta.app_label}_{self.instance.__class__.__name__}_universal'
 
 
-class M2MRemoveReceiver(BaseSubscriptionReceiver):
+class M2MRemoveReceiver(UniversalReceiver):
+
+    signal_name = 'm2m_remove'
 
     def receive(self, sender, **kwargs):
         print('receiving remove')
@@ -85,10 +102,12 @@ class M2MRemoveReceiver(BaseSubscriptionReceiver):
 
     @property
     def group_name(self):
-        return f'sub_{self.sender._meta.app_label}_{self.instance.__class__.__name__}{"".join([f"_{arg}" for arg in self.volatile_args])}'
+        return f'sub_{self.sender._meta.app_label}_{self.instance.__class__.__name__}_universal'
 
 
-class M2MClearReceiver(BaseSubscriptionReceiver):
+class M2MClearReceiver(UniversalReceiver):
+
+    signal_name = 'm2m_clear'
 
     def receive(self, sender, **kwargs):
         super().receive(sender, **kwargs)
@@ -109,7 +128,7 @@ class M2MClearReceiver(BaseSubscriptionReceiver):
 
     @property
     def group_name(self):
-        return f'sub_{self.sender._meta.app_label}_{self.instance.__class__.__name__}{"".join([f"_{arg}" for arg in self.volatile_args])}'
+        return f'sub_{self.sender._meta.app_label}_{self.instance.__class__.__name__}_universal'
 
 
 class SelfUserUpdateReceiver(BaseInstanceUpdateReceiver):

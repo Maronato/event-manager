@@ -24,8 +24,7 @@ class TicketSignalConsumer(ModelSignalConsumer):
 
     async def get_signal_group_name(self):
         unique_id = await self.get_creator_unique_id()
-        signal = await self.get_signal_type()
-        return f'ticket_sub_{unique_id}_{signal}'
+        return f'ticket_sub_{unique_id}_universal'
 
 
 class OnlineMentorConsumer(AsyncJsonWebsocketConsumer):

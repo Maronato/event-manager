@@ -75,10 +75,10 @@ function get_or_create(url, debug) {
 }
 
 export class SubscriptionManager {
-    constructor(url, debug, allow_send) {
+    constructor(url, debug, allow_send, signal) {
         this.listeners = [];
-        this.debug = false;
-        if (debug !== "undefined") this.debug = debug;
+        this.signal = signal || 'universal';
+        this.debug = debug || false;
         this.url = url;
         this.socketConnection = get_or_create(url, debug);
         this.connected = false;
@@ -99,7 +99,9 @@ export class SubscriptionManager {
     onmessage(action) {
         if (this.debug) console.debug("Message received. Passing to socket");
         for (let listener in this.listeners) {
-            this.listeners[listener](action);
+            if (action.signal_name === this.signal) {
+                this.listeners[listener](action.data);
+            }
         }
     }
     subscribe(callback) {
@@ -142,17 +144,15 @@ export class ModelSubscription extends SubscriptionManager {
             app +
             "/" +
             model +
-            "/" +
-            signal +
-            "/";
-        super(url, debug);
+            "/universal/";
+        super(url, debug, false, signal);
     }
 }
 
 export class SelfSubscription extends SubscriptionManager {
     constructor(signal, debug) {
         var url = "/ws/subscriptions/instances/me/" + signal + "/";
-        super(url, debug);
+        super(url, debug, false, signal);
     }
 }
 

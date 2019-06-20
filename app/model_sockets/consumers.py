@@ -37,11 +37,13 @@ class ModelSignalConsumer(AsyncJsonWebsocketConsumer):
         return user.is_authenticated
 
     async def connect(self):
+        print("Connecting")
         # Assert user is allowed
         user_is_allowed = await self.get_user_is_allowed(await get_user(self.scope))
         if not user_is_allowed:
             return await self.close()
         self.signal_group_name = await self.get_signal_group_name()
+        print("Group name", self.signal_group_name)
 
         try:
             model_class = await self.get_app_model()
@@ -71,7 +73,10 @@ class ModelSignalConsumer(AsyncJsonWebsocketConsumer):
 
     async def publish_subscription(self, event):
         data = event['data']
-        await self.send_json(content=data)
+        signal_name = event.get('signal_name', 'universal')
+        response = {"data": data, "signal_name": signal_name}
+        print('publishing', response)
+        await self.send_json(content=response)
 
     @classmethod
     async def encode_json(cls, content):

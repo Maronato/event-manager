@@ -1,9 +1,9 @@
-import { BaseSubscription } from 'model_sockets/js/subscription';
+import { SubscriptionManager } from 'model_sockets/js/subscription';
 
-export default class MentorSubscription extends BaseSubscription {
+export default class MentorSubscription extends SubscriptionManager {
     constructor(debug) {
-        super(debug);
-        this.url =
+        const url =
             "/ws/subscriptions/online_mentor/";
+        super(url, debug, true);
     }
 }
