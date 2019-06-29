@@ -8,6 +8,7 @@ services:
   backend:
     ports:
       - '8000:8000'
+      - '7913:7913'
   grafana:
     ports:
       - "3000:3000"

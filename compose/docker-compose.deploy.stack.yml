@@ -12,7 +12,7 @@ services:
         condition: on-failure
   backend:
     deploy:
-      replicas: 1
+      replicas: 2
       restart_policy:
         condition: on-failure
   celeryworker:
@@ -22,6 +22,6 @@ services:
         condition: on-failure
   celerybeat:
     deploy:
-      replicas: 1
+      replicas: 0
       restart_policy:
         condition: on-failure

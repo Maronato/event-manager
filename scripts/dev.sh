@@ -10,4 +10,3 @@ DOCKER_BUILDKIT=1 docker build app/ -f app/worker.dockerfile -t localhost/em-wor
 docker network rm proxy || true
 docker network create proxy || true
 docker-compose -p em up
-docker-compose -p em down -v --remove-orphans

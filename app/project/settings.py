@@ -343,3 +343,8 @@ PAGSEGURO_LOG_IN_MODEL = True
 
 # Django Prometheus
 PROMETHEUS_EXPORT_MIGRATIONS = False
+
+# Shell plus settings
+SHELL_PLUS_PRINT_SQL = True
+SHELL_PLUS = "ptipython"
+SHELL_PLUS_SQLPARSE_FORMAT_KWARGS = dict(reindent_aligned=True, truncate_strings=500)
