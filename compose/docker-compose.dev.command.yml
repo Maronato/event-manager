@@ -1,0 +1,6 @@
+version: '3.7'
+services:
+  proxy:
+    command: --docker
+  backend:
+    command: python manage.py runserver 0.0.0.0:8000

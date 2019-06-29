@@ -1,0 +1,24 @@
+version: '3.7'
+services:
+  celeryworker:
+    command: celery -A project worker -l info
+  celerybeat:
+    command: celery -A project beat -l info --scheduler django_celery_beat.schedulers:DatabaseScheduler
+  redis-exporter:
+    restart: always
+    command:
+      - '--redis.addr=redis://redis:6379'
+  postgres:
+    restart: always
+  redis:
+    restart: always
+    command: "--maxmemory 50mb"
+  prometheus:
+    restart: always
+  grafana:
+    restart: always
+  exporter:
+    restart: always
+  portainer:
+    restart: always
+

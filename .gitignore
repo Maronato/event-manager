@@ -1,3 +1,5 @@
+.htpasswd
+acme.json
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -7,9 +9,10 @@ __pycache__/
 *.sublime-workspace
 SpottedBot.sublime-workspace
 maintenance_mode_state.txt
-.vscode
-CACHE
+docker-stack-*.yml
 # C extensions
+#
+*.icloud
 
 
 # Distribution / packaging
@@ -85,10 +88,6 @@ target/
 # celery beat schedule file
 celerybeat-schedule
 
-# dotenv
-.env
-*.env*
-
 # virtualenv
 venv/
 ENV/
@@ -137,6 +136,7 @@ build/Release
 
 # Dependency directories
 node_modules/
+node_modules_cache/
 jspm_packages/
 
 # TypeScript v1 declaration files
@@ -157,9 +157,6 @@ typings/
 # Yarn Integrity file
 .yarn-integrity
 
-# dotenv environment variables file
-.env
-
 # parcel-bundler cache (https://parceljs.org/)
 .cache
 
@@ -174,3 +171,6 @@ typings/
 
 # Serverless directories
 .serverless
+
+# VScode
+.vscode

@@ -1,0 +1,20 @@
+version: '3.7'
+services:
+  proxy:
+    ports:
+      - '80:80'
+      - '443:443'
+      - '8080:8080'
+  backend:
+    ports:
+      - '8000:8000'
+      - '7913:7913'
+  grafana:
+    ports:
+      - "3000:3000"
+  prometheus:
+    ports:
+      - "9090:9090"
+  portainer:
+    ports:
+      - "9000:9000"

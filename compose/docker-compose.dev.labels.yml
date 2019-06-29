@@ -1,0 +1,28 @@
+version: '3.7'
+services:
+  proxy:
+    labels:
+      - traefik.frontend.rule=Host:traefik.${DOMAIN-localhost}
+      - traefik.port=8080
+      - traefik.enable=true
+  backend:
+    labels:
+      - traefik.frontend.rule=PathPrefix:/
+      - traefik.enable=true
+      - traefik.port=8000
+      - traefik.backend=backend
+      - traefik.docker.network=proxy
+  grafana:
+    labels:
+      - traefik.frontend.rule=Host:grafana.${DOMAIN-localhost}
+      - traefik.enable=true
+      - traefik.port=3000
+      - traefik.backend=grafana
+      - traefik.docker.network=proxy
+  portainer:
+    labels:
+      - traefik.frontend.rule=Host:portainer.${DOMAIN-localhost}
+      - traefik.enable=true
+      - traefik.port=9000
+      - traefik.backend=portainer
+      - traefik.docker.network=proxy

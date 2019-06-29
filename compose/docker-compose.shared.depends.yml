@@ -1,0 +1,26 @@
+version: '3.7'
+services:
+  backend:
+    depends_on:
+      - postgres
+      - redis
+  celeryworker:
+    depends_on:
+      - postgres
+      - redis
+      - backend
+  celerybeat:
+    depends_on:
+      - postgres
+      - redis
+      - backend
+  redis-exporter:
+    depends_on:
+      - redis
+      - prometheus
+  exporter:
+    depends_on:
+      - prometheus
+  grafana:
+    depends_on:
+      - prometheus

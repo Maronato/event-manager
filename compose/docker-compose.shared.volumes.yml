@@ -1,0 +1,31 @@
+version: '3.7'
+services:
+  postgres:
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/pgdata
+      - postgres_backups:/backups
+  redis:
+    volumes:
+      - redis_data:/data
+  prometheus:
+    volumes:
+     - prometheus_data:/prometheus
+  proxy:
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ../acme.json:/acme.json
+      - ../.htpasswd:/.htpasswd
+  grafana:
+    volumes:
+      - grafana_data:/data
+  portainer:
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - portainer_data:/data
+volumes:
+  postgres_data:
+  postgres_backups:
+  redis_data:
+  prometheus_data:
+  grafana_data:
+  portainer_data:

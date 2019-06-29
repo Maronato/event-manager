@@ -1,0 +1,8 @@
+version: '3.7'
+services:
+  backend:
+    image: localhost/em-backend:dev
+  celeryworker:
+    image: localhost/em-worker:dev
+  celerybeat:
+    image: localhost/em-worker:dev

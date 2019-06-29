@@ -1,0 +1,23 @@
+version: '3.7'
+services:
+  proxy:
+    command: >
+      --docker
+      --docker.swarmmode
+      --docker.watch
+      --docker.exposedbydefault=false
+      --constraints=tag==traefik-public
+      --entrypoints='Name:http Address::80'
+      --entrypoints='Name:https Address::443 TLS'
+      --acme
+      --acme.email=${EMAIL}
+      --acme.storage="acme.json"
+      --acme.entryPoint=https
+      --acme.httpChallenge.entryPoint=http
+      --acme.onhostrule=true
+      --acme.acmelogging=true
+      --logLevel=INFO
+      --accessLog
+      --api
+  backend:
+    command: ["daphne", "project.asgi:application", "--port", "8000", "--bind", "0.0.0.0", "-v2"]
