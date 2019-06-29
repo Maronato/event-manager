@@ -7,6 +7,8 @@ __pycache__/
 *.sublime-workspace
 SpottedBot.sublime-workspace
 maintenance_mode_state.txt
+.vscode
+CACHE
 # C extensions
 
 
