@@ -18,9 +18,23 @@ services:
     deploy:
       labels:
         - traefik.backend=backend
-        - traefik.frontend.rule=Host:${DOMAIN}
+        - traefik.frontend.rule=Host:backend.${DOMAIN}
         - traefik.enable=true
         - traefik.port=8000
+        - traefik.tags=${TRAEFIK_PUBLIC_TAG:-traefik-public}
+        - traefik.docker.network=proxy
+        # Traefik service that listens to HTTP
+        - traefik.redirectorservice.frontend.entryPoints=http
+        - traefik.redirectorservice.frontend.redirect.entryPoint=https
+        # Traefik service that listens to HTTPS
+        - traefik.webservice.frontend.entryPoints=https
+  frontend:
+    deploy:
+      labels:
+        - traefik.backend=frontend
+        - traefik.frontend.rule=Host:${DOMAIN}
+        - traefik.enable=true
+        - traefik.port=3000
         - traefik.tags=${TRAEFIK_PUBLIC_TAG:-traefik-public}
         - traefik.docker.network=proxy
         # Traefik service that listens to HTTP

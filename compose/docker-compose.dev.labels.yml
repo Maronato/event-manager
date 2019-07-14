@@ -12,6 +12,13 @@ services:
       - traefik.port=8000
       - traefik.backend=backend
       - traefik.docker.network=proxy
+  frontend:
+    labels:
+      - traefik.frontend.rule=PathPrefix:/
+      - traefik.enable=true
+      - traefik.port=3000
+      - traefik.backend=backend
+      - traefik.docker.network=proxy
   grafana:
     labels:
       - traefik.frontend.rule=Host:grafana.${DOMAIN-localhost}

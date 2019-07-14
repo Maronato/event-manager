@@ -9,9 +9,12 @@ services:
     ports:
       - '8000:8000'
       - '7913:7913'
+  frontend:
+    ports:
+      - '3000:3000'
   grafana:
     ports:
-      - "3000:3000"
+      - "3030:3000"
   prometheus:
     ports:
       - "9090:9090"

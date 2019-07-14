@@ -4,6 +4,9 @@ services:
     depends_on:
       - postgres
       - redis
+  frontend:
+    depends_on:
+      - backend
   celeryworker:
     depends_on:
       - postgres

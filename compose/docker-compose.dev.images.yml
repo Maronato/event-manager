@@ -2,6 +2,8 @@ version: '3.7'
 services:
   backend:
     image: localhost/em-backend:dev
+  frontend:
+    image: localhost/em-frontend:dev
   celeryworker:
     image: localhost/em-worker:dev
   celerybeat:

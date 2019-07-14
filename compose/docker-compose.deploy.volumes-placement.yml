@@ -2,13 +2,13 @@ version: '3.7'
 services:
   backend:
     volumes:
-      - ../app/.env:/app/.env
+      - ../backend/.env:/app/.env
   celeryworker:
     volumes:
-      - ../app/.env:/app/.env
+      - ../backend/.env:/app/.env
   celerybeat:
     volumes:
-      - ../app/.env:/app/.env
+      - ../backend/.env:/app/.env
   proxy:
     deploy:
       placement:

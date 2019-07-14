@@ -2,19 +2,25 @@ version: '3.7'
 services:
   backend:
     build:
-      context: ../app
+      context: ../backend
+      dockerfile: backend.dockerfile
+      args:
+        env: dev
+  frontend:
+    build:
+      context: ../frontend
       dockerfile: backend.dockerfile
       args:
         env: dev
   celeryworker:
     build:
-      context: ../app
+      context: ../backend
       dockerfile: worker.dockerfile
       args:
         env: dev
   celerybeat:
     build:
-      context: ../app
+      context: ../backend
       dockerfile: worker.dockerfile
       args:
         env: dev
