@@ -1,23 +1,22 @@
 dj-database-url==0.5.0
-Django==2.2.1
-psycopg2
-whitenoise==4.1.2
-django-extensions==2.1.7
-Werkzeug
+Django==2.2.3
+psycopg2==2.8.3
+whitenoise==4.1.3
+django-extensions==2.1.9
+Werkzeug==0.15.4
 requests==2.22.0
-django-debug-toolbar
-django-debug-panel
+django-debug-toolbar==2.0
 pycpfcnpj==1.5.1
-django-maintenance-mode==0.13.1
-django-celery-email==2.0.1
-ptipython
-ptvsd
+django-maintenance-mode==0.13.3
+django-celery-email==2.0.2
+ptipython==1.0.1
+ptvsd==4.2.10
 
 # Async
 celery==4.3.0
 django-celery-beat==1.5.0
 redis==3.2.1
-django-redis==4.5.0
+django-redis==4.10.0
 
 # Channels
 channels==2.2.0
@@ -28,7 +27,7 @@ daphne==2.3.0
 django-appconf==1.0.3
 
 # REST
-djangorestframework==3.9.4
+djangorestframework==3.10.0
 django-filter==2.1.0
 Markdown==3.1.1
 djangorestframework-csv==2.1.0
@@ -44,14 +43,14 @@ facebook-sdk==3.1.0
 
 # Storages
 django-storages==1.7.1
-boto3==1.9.112
+boto3==1.9.188
 
 # Monitoring and error handling
-scout-apm==2.0.4
-sentry-sdk==0.8.0
+scout-apm==2.1.0
+sentry-sdk==0.10.2
 django-prometheus==1.0.15
 
 # Payments
-six
-python-dateutil
-xmltodict
+six==1.12.0
+python-dateutil==2.8.0
+xmltodict==0.12.0

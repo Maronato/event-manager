@@ -7,6 +7,7 @@ from user_profile.models import Profile
 from settings.models import Settings
 from team.models import Team
 from . import tasks
+
 # Create your models here.
 
 
@@ -14,12 +15,9 @@ class Hacker(models.Model):
 
     # Subscription fields
     msocks_allow = True
-    msocks_serializer = 'hacker.serializers.HackerSubscriptionSerializer'
+    msocks_serializer = "hacker.serializers.HackerSubscriptionSerializer"
 
-    profile = models.OneToOneField(
-        Profile,
-        on_delete=models.CASCADE
-    )
+    profile = models.OneToOneField(Profile, on_delete=models.CASCADE)
 
     # Admitted by an admin
     admitted = models.BooleanField(default=False)
@@ -39,31 +37,42 @@ class Hacker(models.Model):
 
     # Payment status
     # Internal payment transaction referece
-    transaction_reference = models.CharField(max_length=32, default='', blank=True)
+    transaction_reference = models.CharField(max_length=32, default="", blank=True)
 
     # Team
     team = models.ForeignKey(
-        Team,
-        on_delete=models.SET_NULL,
-        related_name='hackers',
-        null=True
+        Team, on_delete=models.SET_NULL, related_name="hackers", null=True
     )
 
     @property
     def payed(self):
-        return self.transactions.filter(status__in=['pago', 'disponivel']).filter(reference=self.transaction_reference).exists()
+        return (
+            self.transactions.filter(status__in=["pago", "disponivel"])
+            .filter(reference=self.transaction_reference)
+            .exists()
+        )
 
     @property
     def transaction_status(self):
-        return self.transactions.get(reference=self.transaction_reference).get_status_display() if self.transactions.filter(reference=self.transaction_reference).exists() else 'Não pago'
+        return (
+            self.transactions.get(
+                reference=self.transaction_reference
+            ).get_status_display()
+            if self.transactions.filter(reference=self.transaction_reference).exists()
+            else "Não pago"
+        )
 
     @property
     def hacker_state(self):
         # If the user submitted an application but didn't pay (i.e. asked for a refund or something)
-        if Settings.get().require_payment and not self.payed and hasattr(self, 'application'):
-            return 'unpaid'
+        if (
+            Settings.get().require_payment
+            and not self.payed
+            and hasattr(self, "application")
+        ):
+            return "unpaid"
         if self.checked_in:
-            return 'checkedin'
+            return "checkedin"
         if self.confirmed:
             return "confirmed"
         if not Settings.can_confirm(self.waitlist):
@@ -76,7 +85,7 @@ class Hacker(models.Model):
             return "admitted"
         if self.declined:
             return "declined"
-        if hasattr(self, 'application'):
+        if hasattr(self, "application"):
             return "submitted"
         if not Settings.registration_is_open():
             return "late"
@@ -111,7 +120,7 @@ class Hacker(models.Model):
         tasks.send_notify_decline.delay(self.id)
         Hacker.cycle_waitlist()
 
-        for transaction in self.transactions.filter(status__in=['pago', 'disponivel']):
+        for transaction in self.transactions.filter(status__in=["pago", "disponivel"]):
             PagSeguroApi().refund_transaction(transaction.code)
 
     def put_on_waitlist(self, send_email=True):
@@ -141,7 +150,7 @@ class Hacker(models.Model):
         self.save()
         Hacker.cycle_waitlist()
 
-        for transaction in self.transactions.filter(status__in=['pago', 'disponivel']):
+        for transaction in self.transactions.filter(status__in=["pago", "disponivel"]):
             PagSeguroApi().refund_transaction(transaction.code)
 
     def confirm(self):
@@ -156,25 +165,26 @@ class Hacker(models.Model):
     @classmethod
     def cycle_waitlist(cls):
         # get the current waitlist
-        waitlist = list(cls.objects.filter(waitlist=True).order_by('waitlist_date'))
+        waitlist = list(cls.objects.filter(waitlist=True).order_by("waitlist_date"))
         # while the event is not full and there are waitlisted hackers
         while not Settings.is_full() and len(waitlist) > 0:
             hacker = waitlist.pop(0)
             # Hacker can be waitlisted but not in waitlist(e.g late)
-            if hacker.profile.state == 'waitlist':
+            if hacker.profile.state == "waitlist":
                 hacker.unwaitlist()
 
     @classmethod
     def handle_payment_notification(cls, sender, transaction, **kwargs):
         from pagseguro.models import Transaction
-        reference = transaction['reference']
+
+        reference = transaction["reference"]
         hacker = cls.objects.filter(transaction_reference=reference)
         trans = Transaction.objects.filter(reference=reference)
         if hacker.exists() and trans.exists():
             hacker = hacker.first()
             trans = trans.first()
             hacker.transactions.add(trans)
-            if transaction['status'] not in ['3', '4']:
+            if transaction["status"] not in ["3", "4"]:
                 hacker.checked_in = False
                 hacker.confirmed = False
                 hacker.save()
@@ -182,19 +192,19 @@ class Hacker(models.Model):
             hacker.profile.trigger_update()
 
     def __str__(self):
-        return f'Hacker {self.profile}'
+        return f"Hacker {self.profile}"
 
 
 def update_hacker(sender, **kwargs):
     # Updates profile
-    kwargs['instance'].profile.trigger_update()
+    kwargs["instance"].profile.trigger_update()
 
 
 def delete_hacker(sender, **kwargs):
-    profile = kwargs['instance'].profile
+    profile = kwargs["instance"].profile
     profile.hacker = None
     profile.trigger_update()
-    profile.hacker = kwargs['instance']
+    profile.hacker = kwargs["instance"]
 
 
 post_save.connect(update_hacker, sender=Hacker)

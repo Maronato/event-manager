@@ -7,29 +7,18 @@ from hacker.permissions import IsSubmitted, IsIncomplete, IsHacker
 from user_profile.permissions import IsVerified
 from settings.permissions import RegistrationOpen
 from .forms import ApplicationForm
+
 # Create your views here.
 
 
 class ApplicationView(
-        PermissionClassesMixin,
-        SidebarContextMixin,
-        UserContextMixin,
-        FormView):
-    template_name = 'application/application.html'
+    PermissionClassesMixin, SidebarContextMixin, UserContextMixin, FormView
+):
+    template_name = "application/application.html"
     form_class = ApplicationForm
-    active_tab = 'application'
+    active_tab = "application"
     permission_classes = [
-        And(
-            Or(
-                IsSubmitted,
-                IsIncomplete,
-                And(
-                    IsHacker,
-                    IsVerified
-                )
-            ),
-            RegistrationOpen
-        )
+        And(Or(IsSubmitted, IsIncomplete, And(IsHacker, IsVerified)), RegistrationOpen)
     ]
 
     def form_valid(self, form):
@@ -38,18 +27,18 @@ class ApplicationView(
 
     def get_success_url(self):
         messages.add_message(self.request, messages.SUCCESS, "Aplicação enviada!")
-        return reverse_lazy('dashboard:index')
+        return reverse_lazy("dashboard:index")
 
     def get_form_kwargs(self):
         """Return the keyword arguments for instantiating the form."""
         kwargs = super().get_form_kwargs()
         hacker = self.request.user.profile.hacker
-        kwargs['instance'] = getattr(hacker, 'application', None)
+        kwargs["instance"] = getattr(hacker, "application", None)
         return kwargs
 
     def get_initial(self):
         initial = super().get_initial()
-        initial['first_name'] = self.request.user.first_name
-        initial['last_name'] = self.request.user.last_name
-        initial['email'] = self.request.user.email
+        initial["first_name"] = self.request.user.first_name
+        initial["last_name"] = self.request.user.last_name
+        initial["email"] = self.request.user.email
         return initial

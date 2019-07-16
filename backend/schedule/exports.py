@@ -13,7 +13,7 @@ class ExportFeedback(ExportMixin, PrefetchListAPIView):
     permission_classes = [CanAttendEvents]
 
     def get_queryset(self):
-        event_id = self.kwargs.get('event_id', None)
+        event_id = self.kwargs.get("event_id", None)
         event = get_object_or_404(Event, id=event_id)
         if event.speaker != self.request.user.profile:
             return Feedback.objects.none()
@@ -22,9 +22,8 @@ class ExportFeedback(ExportMixin, PrefetchListAPIView):
 
 
 class ExportEventsViewset(
-        ExportMixin,
-        PrefetchQuerysetModelMixin,
-        ReadOnlyModelViewSet):
+    ExportMixin, PrefetchQuerysetModelMixin, ReadOnlyModelViewSet
+):
     serializer_class = ExportEventSerializer
     permission_classes = [IsAdmin]
     queryset = Event.objects.all()

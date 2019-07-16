@@ -3,7 +3,6 @@ from .models import Settings
 
 
 class RegistrationOpen(permissions.BasePermission):
-
     def has_permission(self, request, view):
         return Settings.get().registration_is_open()
 
@@ -17,12 +16,10 @@ class CanConfirm(permissions.BasePermission):
 
 
 class EventNotFull(permissions.BasePermission):
-
     def has_permission(self, request, view):
         return not Settings.get().is_full()
 
 
 class EventIsHappening(permissions.BasePermission):
-
     def has_permission(self, request, view):
         return Settings.get().hackathon_is_happening()

@@ -7,7 +7,7 @@ class BaseTeamSubscription(base.BaseSubscriptionReceiver):
     Teams are fetched with relation to its id
     """
 
-    sub_type = 'publish.subscription'
+    sub_type = "publish.subscription"
 
     def get_group_name(self):
         return f'team_sub_{self.instance.id}{"".join([f"_{arg}" for arg in self.volatile_args])}'
@@ -22,36 +22,31 @@ class BaseTeamSubscription(base.BaseSubscriptionReceiver):
 
 
 class CreateTeamSubscription(BaseTeamSubscription):
-
     def receive(self, sender, **kwargs):
         super().receive(sender, **kwargs)
         # Only accept created signals
-        if not kwargs['created']:
+        if not kwargs["created"]:
             return
 
-        instance = kwargs['instance']
+        instance = kwargs["instance"]
         self.data = self.get_instance_fields(sender, instance)
         self.dispatch()
 
 
 class UpdateTeamSubscription(BaseTeamSubscription):
-
     def receive(self, sender, **kwargs):
         super().receive(sender, **kwargs)
         # Only accept updated signals
-        if kwargs['created']:
+        if kwargs["created"]:
             return
-        instance = kwargs['instance']
+        instance = kwargs["instance"]
         self.data = self.get_instance_fields(sender, instance)
         self.dispatch()
 
 
 class DeleteTeamSubscription(BaseTeamSubscription):
-
     def receive(self, sender, **kwargs):
         super().receive(sender, **kwargs)
-        instance = kwargs['instance']
-        self.data = {
-            'id': getattr(instance, 'id', None)
-        }
+        instance = kwargs["instance"]
+        self.data = {"id": getattr(instance, "id", None)}
         self.dispatch()

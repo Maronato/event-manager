@@ -6,11 +6,11 @@ from user_profile.models import Profile
 from .models import Event, Feedback
 
 
-class EventSerializer(
-        PrefetchMixin,
-        serializers.ModelSerializer):
+class EventSerializer(PrefetchMixin, serializers.ModelSerializer):
 
-    speaker_unique_id = serializers.CharField(write_only=True, required=False, allow_null=True, allow_blank=True)
+    speaker_unique_id = serializers.CharField(
+        write_only=True, required=False, allow_null=True, allow_blank=True
+    )
     speaker = SimpleProfileSerializer(read_only=True)
     n_attendees = serializers.IntegerField(read_only=True)
     n_attended = serializers.IntegerField(read_only=True)
@@ -24,8 +24,8 @@ class EventSerializer(
             queryset = queryset.prefetch_related(*meta.prefetch_related_fields)
 
         queryset = queryset.annotate(
-            n_attendees=Count('attendees', distinct=True),
-            n_attended=Count('attended', distinct=True),
+            n_attendees=Count("attendees", distinct=True),
+            n_attended=Count("attended", distinct=True),
         )
         return queryset
 
@@ -33,61 +33,63 @@ class EventSerializer(
         if not value:
             return None
         if not Profile.objects.filter(unique_id=value).exists():
-            raise serializers.ValidationError('Invalid speaker unique id')
+            raise serializers.ValidationError("Invalid speaker unique id")
         return value
 
     def create(self, validated_data):
-        unique_id = validated_data.pop('speaker_unique_id', None)
+        unique_id = validated_data.pop("speaker_unique_id", None)
         if unique_id:
-            validated_data['speaker'] = Profile.objects.get(unique_id=unique_id)
+            validated_data["speaker"] = Profile.objects.get(unique_id=unique_id)
         return super().create(validated_data)
 
     def update(self, instance, validated_data):
         # If switching from requiring register to not, clear relations
-        require_register = validated_data.get('require_register', None)
-        if require_register is not None and not require_register and instance.require_register:
+        require_register = validated_data.get("require_register", None)
+        if (
+            require_register is not None
+            and not require_register
+            and instance.require_register
+        ):
             print("NONNONNONONO")
             instance.attendees.clear()
             instance.attended.clear()
             instance.feedbacks.all().delete()
-        unique_id = validated_data.pop('speaker_unique_id', False)
+        unique_id = validated_data.pop("speaker_unique_id", False)
         if unique_id or unique_id is None:
             if unique_id is None:
-                validated_data['speaker'] = None
+                validated_data["speaker"] = None
             else:
-                validated_data['speaker'] = Profile.objects.get(unique_id=unique_id)
+                validated_data["speaker"] = Profile.objects.get(unique_id=unique_id)
         return super().update(instance, validated_data)
 
     class Meta:
-        exclude = ['attendees', 'attended']
-        read_only_fields = ['id']
+        exclude = ["attendees", "attended"]
+        read_only_fields = ["id"]
         model = Event
-        select_related_fields = ['speaker__shortcuts', 'speaker__user']
+        select_related_fields = ["speaker__shortcuts", "speaker__user"]
 
 
 class EventSubscriptionSerializer(SingleInstancePrefetchMixin, EventSerializer):
     """Allow single instance prefetching"""
 
 
-class FeedbackSerializer(
-        PrefetchMixin,
-        serializers.ModelSerializer):
+class FeedbackSerializer(PrefetchMixin, serializers.ModelSerializer):
 
-    event_id = serializers.IntegerField(source='event.id', required=False)
+    event_id = serializers.IntegerField(source="event.id", required=False)
 
     def validate_event_id(self, value):
         if not Event.objects.filter(id=value):
-            raise serializers.ValidationError('Invalid event id')
+            raise serializers.ValidationError("Invalid event id")
         return value
 
     def create(self, validated_data):
-        event_id = validated_data.pop('event').get('id', None)
+        event_id = validated_data.pop("event").get("id", None)
         event = Event.objects.get(id=event_id)
-        attendee = self.context['request'].user.profile
-        validated_data['event'] = event
-        validated_data['attendee'] = attendee
-        rating = validated_data.get('rating', None)
-        validated_data['rating'] = None if not rating else rating
+        attendee = self.context["request"].user.profile
+        validated_data["event"] = event
+        validated_data["attendee"] = attendee
+        rating = validated_data.get("rating", None)
+        validated_data["rating"] = None if not rating else rating
         feedback = Feedback.objects.filter(event=event).filter(attendee=attendee)
         if feedback.exists():
             return self.update(feedback.first(), validated_data)
@@ -95,13 +97,11 @@ class FeedbackSerializer(
 
     class Meta:
         model = Feedback
-        exclude = ['event', 'attendee']
-        select_related_fields = ['event']
+        exclude = ["event", "attendee"]
+        select_related_fields = ["event"]
 
 
-class FullEventSerializer(
-        PrefetchMixin,
-        serializers.ModelSerializer):
+class FullEventSerializer(PrefetchMixin, serializers.ModelSerializer):
 
     speaker_unique_id = serializers.CharField(write_only=True, required=False)
     speaker = SimpleProfileSerializer(read_only=True)
@@ -119,9 +119,9 @@ class FullEventSerializer(
             queryset = queryset.prefetch_related(*meta.prefetch_related_fields)
 
         queryset = queryset.annotate(
-            n_attendees=Count('attendees', distinct=True),
-            n_attended=Count('attended', distinct=True),
-            avg_rating=Avg('feedbacks__rating', distinct=True)
+            n_attendees=Count("attendees", distinct=True),
+            n_attended=Count("attended", distinct=True),
+            avg_rating=Avg("feedbacks__rating", distinct=True),
         )
         return queryset
 
@@ -129,25 +129,23 @@ class FullEventSerializer(
         if not value:
             return None
         if not Profile.objects.filter(unique_id=value).exists():
-            raise serializers.ValidationError('Invalid speaker unique id')
+            raise serializers.ValidationError("Invalid speaker unique id")
         return value
 
     def create(self, validated_data):
-        unique_id = validated_data.pop('speaker_unique_id', None)
+        unique_id = validated_data.pop("speaker_unique_id", None)
         if unique_id:
-            validated_data['speaker'] = Profile.objects.get(unique_id=unique_id)
+            validated_data["speaker"] = Profile.objects.get(unique_id=unique_id)
         return super().create(validated_data)
 
     class Meta:
-        exclude = ['attendees', 'attended']
+        exclude = ["attendees", "attended"]
         model = Event
-        select_related_fields = ['speaker__shortcuts', 'speaker__user']
-        prefetch_related_fields = ['feedbacks__event']
+        select_related_fields = ["speaker__shortcuts", "speaker__user"]
+        prefetch_related_fields = ["feedbacks__event"]
 
 
-class AttendedEventSerializer(
-        PrefetchMixin,
-        serializers.ModelSerializer):
+class AttendedEventSerializer(PrefetchMixin, serializers.ModelSerializer):
 
     speaker = SimpleProfileSerializer(read_only=True)
     n_attendees = serializers.IntegerField(read_only=True)
@@ -157,10 +155,10 @@ class AttendedEventSerializer(
     def setup_eager_loading(self, queryset):
         meta = self.Meta
 
-        attendee = self.context['request'].user.profile
+        attendee = self.context["request"].user.profile
         feedbacks_queryset = Feedback.objects.filter(attendee=attendee)
         queryset = queryset.prefetch_related(
-            Prefetch('feedbacks', queryset=feedbacks_queryset)
+            Prefetch("feedbacks", queryset=feedbacks_queryset)
         )
 
         if hasattr(meta, "select_related_fields"):
@@ -169,13 +167,13 @@ class AttendedEventSerializer(
             queryset = queryset.prefetch_related(*meta.prefetch_related_fields)
 
         queryset = queryset.annotate(
-            n_attendees=Count('attendees', distinct=True),
-            n_attended=Count('attended', distinct=True),
+            n_attendees=Count("attendees", distinct=True),
+            n_attended=Count("attended", distinct=True),
         )
         return queryset
 
     class Meta:
-        exclude = ['attendees', 'attended']
+        exclude = ["attendees", "attended"]
         model = Event
-        select_related_fields = ['speaker__shortcuts', 'speaker__user']
-        prefetch_related_fields = ['feedbacks__event']
+        select_related_fields = ["speaker__shortcuts", "speaker__user"]
+        prefetch_related_fields = ["feedbacks__event"]

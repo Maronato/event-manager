@@ -6,9 +6,8 @@ from .models import Ticket
 
 
 class TicketSignalConsumer(ModelSignalConsumer):
-
     async def get_creator_unique_id(self):
-        return self.scope['url_route']['kwargs']['unique_id']
+        return self.scope["url_route"]["kwargs"]["unique_id"]
 
     async def get_app_model(self):
         return Ticket
@@ -24,13 +23,13 @@ class TicketSignalConsumer(ModelSignalConsumer):
 
     async def get_signal_group_name(self):
         unique_id = await self.get_creator_unique_id()
-        return f'ticket_sub_{unique_id}_universal'
+        return f"ticket_sub_{unique_id}_universal"
 
 
 class OnlineMentorConsumer(AsyncJsonWebsocketConsumer):
     """Consumer that tracks online mentors"""
 
-    group_name = 'online_mentors'
+    group_name = "online_mentors"
 
     @database_sync_to_async
     def get_profile(self, user):
@@ -72,18 +71,12 @@ class OnlineMentorConsumer(AsyncJsonWebsocketConsumer):
         await self.set_online(mentor)
 
         # Subscribe to group
-        await self.channel_layer.group_add(
-            self.group_name,
-            self.channel_name
-        )
+        await self.channel_layer.group_add(self.group_name, self.channel_name)
         await self.accept()
 
     async def disconnect(self, close_code):
         # Unsubscribe from group
-        await self.channel_layer.group_discard(
-            self.group_name,
-            self.channel_name
-        )
+        await self.channel_layer.group_discard(self.group_name, self.channel_name)
         user = await get_user(self.scope)
         profile = await self.get_profile(user)
         mentor = await self.get_mentor(profile)

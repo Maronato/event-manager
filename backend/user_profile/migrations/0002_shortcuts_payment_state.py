@@ -5,14 +5,12 @@ from django.db import migrations, models
 
 class Migration(migrations.Migration):
 
-    dependencies = [
-        ('user_profile', '0001_squashed_0010_shortcuts_is_mentor'),
-    ]
+    dependencies = [("user_profile", "0001_squashed_0010_shortcuts_is_mentor")]
 
     operations = [
         migrations.AddField(
-            model_name='shortcuts',
-            name='payment_state',
-            field=models.CharField(default='', max_length=20),
-        ),
+            model_name="shortcuts",
+            name="payment_state",
+            field=models.CharField(default="", max_length=20),
+        )
     ]

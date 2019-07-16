@@ -5,16 +5,18 @@ from godmode.permissions import IsAdmin
 from staff.permissions import IsStaff
 from company.permissions import EmployeeHasAccess
 from .mixins import StatsContextMixin
+
 # Create your views here.
 
 
 class StatsView(
-        PermissionClassesMixin,
-        SidebarContextMixin,
-        StatsContextMixin,
-        UserContextMixin,
-        TemplateView):
-    template_name = 'stats/stats.html'
-    active_tab = 'stats'
+    PermissionClassesMixin,
+    SidebarContextMixin,
+    StatsContextMixin,
+    UserContextMixin,
+    TemplateView,
+):
+    template_name = "stats/stats.html"
+    active_tab = "stats"
 
     permission_classes = [Or(IsAdmin, IsStaff, EmployeeHasAccess)]

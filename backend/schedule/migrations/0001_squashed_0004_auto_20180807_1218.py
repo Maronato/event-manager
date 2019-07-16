@@ -8,80 +8,157 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-        ('user_profile', '0001_squashed_0010_shortcuts_is_mentor'),
-    ]
+    dependencies = [("user_profile", "0001_squashed_0010_shortcuts_is_mentor")]
 
     operations = [
         migrations.CreateModel(
-            name='Event',
+            name="Event",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=50)),
-                ('description', models.CharField(max_length=100)),
-                ('event_type', models.CharField(choices=[('meta', 'Meta'), ('keynote', 'Keynote'), ('workshop', 'Workshop'), ('seminar', 'Palestra')], max_length=20)),
-                ('start', models.DateTimeField()),
-                ('duration', models.TimeField()),
-                ('require_register', models.BooleanField(default=False)),
-                ('max_attendees', models.IntegerField()),
-                ('attended', models.ManyToManyField(related_name='attended_events', to='user_profile.Profile')),
-                ('attendees', models.ManyToManyField(related_name='selected_events', to='user_profile.Profile')),
-                ('speaker', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='my_events', to='user_profile.Profile')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("name", models.CharField(max_length=50)),
+                ("description", models.CharField(max_length=100)),
+                (
+                    "event_type",
+                    models.CharField(
+                        choices=[
+                            ("meta", "Meta"),
+                            ("keynote", "Keynote"),
+                            ("workshop", "Workshop"),
+                            ("seminar", "Palestra"),
+                        ],
+                        max_length=20,
+                    ),
+                ),
+                ("start", models.DateTimeField()),
+                ("duration", models.TimeField()),
+                ("require_register", models.BooleanField(default=False)),
+                ("max_attendees", models.IntegerField()),
+                (
+                    "attended",
+                    models.ManyToManyField(
+                        related_name="attended_events", to="user_profile.Profile"
+                    ),
+                ),
+                (
+                    "attendees",
+                    models.ManyToManyField(
+                        related_name="selected_events", to="user_profile.Profile"
+                    ),
+                ),
+                (
+                    "speaker",
+                    models.ForeignKey(
+                        null=True,
+                        on_delete=django.db.models.deletion.SET_NULL,
+                        related_name="my_events",
+                        to="user_profile.Profile",
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='Feedback',
+            name="Feedback",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('rating', models.IntegerField(blank=True, null=True)),
-                ('comments', models.TextField(blank=True)),
-                ('attendee', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='feedbacks', to='user_profile.Profile')),
-                ('event', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='feedbacks', to='schedule.Event')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("rating", models.IntegerField(blank=True, null=True)),
+                ("comments", models.TextField(blank=True)),
+                (
+                    "attendee",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="feedbacks",
+                        to="user_profile.Profile",
+                    ),
+                ),
+                (
+                    "event",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="feedbacks",
+                        to="schedule.Event",
+                    ),
+                ),
             ],
         ),
         migrations.AlterField(
-            model_name='event',
-            name='attended',
-            field=models.ManyToManyField(null=True, related_name='attended_events', to='user_profile.Profile'),
+            model_name="event",
+            name="attended",
+            field=models.ManyToManyField(
+                null=True, related_name="attended_events", to="user_profile.Profile"
+            ),
         ),
         migrations.AlterField(
-            model_name='event',
-            name='attendees',
-            field=models.ManyToManyField(null=True, related_name='selected_events', to='user_profile.Profile'),
+            model_name="event",
+            name="attendees",
+            field=models.ManyToManyField(
+                null=True, related_name="selected_events", to="user_profile.Profile"
+            ),
         ),
         migrations.AlterField(
-            model_name='event',
-            name='event_type',
-            field=models.CharField(choices=[('Meta', 'Meta'), ('Keynote', 'Keynote'), ('Workshop', 'Workshop'), ('Palestra', 'Palestra')], max_length=20),
+            model_name="event",
+            name="event_type",
+            field=models.CharField(
+                choices=[
+                    ("Meta", "Meta"),
+                    ("Keynote", "Keynote"),
+                    ("Workshop", "Workshop"),
+                    ("Palestra", "Palestra"),
+                ],
+                max_length=20,
+            ),
         ),
         migrations.AlterField(
-            model_name='event',
-            name='max_attendees',
+            model_name="event",
+            name="max_attendees",
             field=models.IntegerField(blank=True, null=True),
         ),
         migrations.AlterField(
-            model_name='event',
-            name='speaker',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='my_events', to='user_profile.Profile'),
+            model_name="event",
+            name="speaker",
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.SET_NULL,
+                related_name="my_events",
+                to="user_profile.Profile",
+            ),
         ),
         migrations.AlterField(
-            model_name='event',
-            name='description',
+            model_name="event",
+            name="description",
             field=models.CharField(max_length=200),
         ),
         migrations.AlterField(
-            model_name='event',
-            name='name',
-            field=models.CharField(max_length=100),
+            model_name="event", name="name", field=models.CharField(max_length=100)
         ),
         migrations.AlterField(
-            model_name='event',
-            name='attended',
-            field=models.ManyToManyField(related_name='attended_events', to='user_profile.Profile'),
+            model_name="event",
+            name="attended",
+            field=models.ManyToManyField(
+                related_name="attended_events", to="user_profile.Profile"
+            ),
         ),
         migrations.AlterField(
-            model_name='event',
-            name='attendees',
-            field=models.ManyToManyField(related_name='selected_events', to='user_profile.Profile'),
+            model_name="event",
+            name="attendees",
+            field=models.ManyToManyField(
+                related_name="selected_events", to="user_profile.Profile"
+            ),
         ),
     ]

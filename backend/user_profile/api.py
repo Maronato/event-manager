@@ -11,7 +11,11 @@ from staff.permissions import IsStaff
 from project.generics import PrefetchListAPIView
 from .models import Profile, User
 from .tasks import send_recover_token_email
-from .serializers import ListProfileSerializer, ListHackerProfileSerializer, SUIProfileListSerializer
+from .serializers import (
+    ListProfileSerializer,
+    ListHackerProfileSerializer,
+    SUIProfileListSerializer,
+)
 import time
 
 
@@ -24,14 +28,16 @@ class TokenLogin(views.APIView):
     authentication_classes = []
 
     def post(self, request):
-        token = request.data.get('token')
+        token = request.data.get("token")
         try:
             instance = Profile.objects.get(token=token)
             login(request, instance.user)
-            return views.Response({'token': jwt_encode_handler(jwt_payload_handler(instance.user))})
+            return views.Response(
+                {"token": jwt_encode_handler(jwt_payload_handler(instance.user))}
+            )
         except Profile.DoesNotExist:
             time.sleep(2)
-            return views.Response({'error': 'Token inválido'}, status=404)
+            return views.Response({"error": "Token inválido"}, status=404)
 
 
 class CheckToken(views.APIView):
@@ -39,14 +45,16 @@ class CheckToken(views.APIView):
     authentication_classes = []
 
     def post(self, request):
-        token = request.data.get('token')
+        token = request.data.get("token")
         try:
             instance = Profile.objects.get(token=token)
             login(request, instance.user)
-            return views.Response({'redirect_url': request.GET.get('next', settings.PROFILE_REDIRECT_URL)})
+            return views.Response(
+                {"redirect_url": request.GET.get("next", settings.PROFILE_REDIRECT_URL)}
+            )
         except Profile.DoesNotExist:
             time.sleep(2)
-            return views.Response({'error': 'Token inválido'}, status=404)
+            return views.Response({"error": "Token inválido"}, status=404)
 
 
 class ResetTokenEmail(views.APIView):
@@ -54,25 +62,25 @@ class ResetTokenEmail(views.APIView):
     authentication_classes = []
 
     def post(self, request):
-        email = request.data.get('email')
+        email = request.data.get("email")
         user = User.objects.filter(email=email)
         if user.exists():
             user = user.first()
             user.profile.new_token()
             send_recover_token_email.delay(user.profile.id)
         time.sleep(2)
-        return views.Response({'message': 'Olhe seu email :)'})
+        return views.Response({"message": "Olhe seu email :)"})
 
 
 class ChangeEmail(views.APIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request):
-        email = request.data.get('email')
+        email = request.data.get("email")
         user = request.user
         user.profile.change_email(email)
         time.sleep(2)
-        return views.Response({'message': 'Olhe seu email :)'})
+        return views.Response({"message": "Olhe seu email :)"})
 
 
 class ChangeToken(views.APIView):
@@ -81,7 +89,7 @@ class ChangeToken(views.APIView):
     def post(self, request):
         user = request.user
         token = user.profile.new_token()
-        return views.Response({'message': 'Token alterado', 'token': token})
+        return views.Response({"message": "Token alterado", "token": token})
 
 
 class ListProfiles(PrefetchListAPIView):
@@ -96,7 +104,16 @@ class ListHackerProfiles(PrefetchListAPIView):
     permission_classes = [IsStaff]
 
     def get_queryset(self):
-        self.queryset = self.queryset.filter(shortcuts__state__in=['checkedin', 'confirmed', 'waitlist', 'admitted', 'submitted', 'declined'])
+        self.queryset = self.queryset.filter(
+            shortcuts__state__in=[
+                "checkedin",
+                "confirmed",
+                "waitlist",
+                "admitted",
+                "submitted",
+                "declined",
+            ]
+        )
         return super().get_queryset()
 
 
@@ -106,29 +123,34 @@ class SUIListProfiles(PrefetchListAPIView):
     permission_classes = [IsStaff]
 
     def get_queryset(self, *args, **kwargs):
-        q = self.request.query_params.get('search', None)
+        q = self.request.query_params.get("search", None)
         queryset = self.queryset
         if q:
-            if connection.vendor == 'postgresql':
+            if connection.vendor == "postgresql":
                 query = SearchQuery(q, config="portuguese")
-                vectors = SearchVector('shortcuts__full_name', config="portuguese", weight="A") + SearchVector('user__email', config="portuguese", weight="B") + SearchVector('unique_id', config="portuguese", weight="C")
-                queryset = queryset.annotate(
-                    search=vectors
-                ).filter(
-                    Q(shortcuts__full_name__icontains=q) |
-                    Q(user__email__icontains=q) |
-                    Q(unique_id__icontains=q) |
-                    Q(search=query)
-                ).annotate(
-                    rank=SearchRank(vectors, query)
-                ).order_by(
-                    '-rank'
+                vectors = (
+                    SearchVector(
+                        "shortcuts__full_name", config="portuguese", weight="A"
+                    )
+                    + SearchVector("user__email", config="portuguese", weight="B")
+                    + SearchVector("unique_id", config="portuguese", weight="C")
+                )
+                queryset = (
+                    queryset.annotate(search=vectors)
+                    .filter(
+                        Q(shortcuts__full_name__icontains=q)
+                        | Q(user__email__icontains=q)
+                        | Q(unique_id__icontains=q)
+                        | Q(search=query)
+                    )
+                    .annotate(rank=SearchRank(vectors, query))
+                    .order_by("-rank")
                 )
             else:
                 queryset = queryset.filter(
-                    Q(shortcuts__full_name__icontains=q) |
-                    Q(user__email__icontains=q) |
-                    Q(unique_id__icontains=q)
+                    Q(shortcuts__full_name__icontains=q)
+                    | Q(user__email__icontains=q)
+                    | Q(unique_id__icontains=q)
                 )
         self.queryset = queryset
         return super().get_queryset()
@@ -145,4 +167,4 @@ class SUIListProfiles(PrefetchListAPIView):
         success = True
         if len(serializer.data) == 0:
             success = False
-        return response.Response({'success': success, 'results': serializer.data})
+        return response.Response({"success": success, "results": serializer.data})

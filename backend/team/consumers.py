@@ -7,7 +7,7 @@ class TeamSignalConsumer(ModelSignalConsumer):
     """Consumer that tracks individual teams"""
 
     async def get_team_id(self):
-        return self.scope['url_route']['kwargs']['team_id']
+        return self.scope["url_route"]["kwargs"]["team_id"]
 
     async def get_app_model(self):
         return Team
@@ -22,4 +22,4 @@ class TeamSignalConsumer(ModelSignalConsumer):
     async def get_signal_group_name(self):
         team_id = await self.get_team_id()
         signal = await self.get_signal_type()
-        return f'team_sub_{team_id}_{signal}'
+        return f"team_sub_{team_id}_{signal}"

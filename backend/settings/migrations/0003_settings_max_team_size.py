@@ -6,13 +6,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('settings', '0002_auto_20190323_1231_squashed_0003_auto_20190323_2336'),
+        ("settings", "0002_auto_20190323_1231_squashed_0003_auto_20190323_2336")
     ]
 
     operations = [
         migrations.AddField(
-            model_name='settings',
-            name='max_team_size',
+            model_name="settings",
+            name="max_team_size",
             field=models.IntegerField(default=5),
-        ),
+        )
     ]

@@ -3,7 +3,7 @@ from project.custom_appconf import NoPrefixAppConf
 
 
 class DashboardConfig(AppConfig):
-    name = 'dashboard'
+    name = "dashboard"
 
 
 class DashboardSettings(NoPrefixAppConf):

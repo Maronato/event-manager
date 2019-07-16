@@ -62,7 +62,7 @@ class LoginWithJWT(ObtainJSONWebToken):
     """
 
     def post(self, request, *args, **kwargs):
-        payload = jwt_decode_handler(request.data.get('token'))
+        payload = jwt_decode_handler(request.data.get("token"))
         username = jwt_get_username_from_payload(payload)
         user = User.objects.get_by_natural_key(username)
         login(request, user)
@@ -82,9 +82,7 @@ class VerifyJWT(VerifyJSONWebToken):
         return super().post(request, *args, **kwargs)
 
 
-
 class Logout(APIView):
-
     def get(self, request, format=None):
         logout(request)
         return Response()

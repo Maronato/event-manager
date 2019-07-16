@@ -4,10 +4,4 @@ from hacker.permissions import IsCheckedin, IsConfirmed
 from staff.permissions import IsStaff
 from company.permissions import EmployeeHasAccess
 
-CanAttendEvents = Or(
-    IsAdmin,
-    IsCheckedin,
-    IsConfirmed,
-    IsStaff,
-    EmployeeHasAccess
-)
+CanAttendEvents = Or(IsAdmin, IsCheckedin, IsConfirmed, IsStaff, EmployeeHasAccess)

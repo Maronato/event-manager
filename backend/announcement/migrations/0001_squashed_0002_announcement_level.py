@@ -8,20 +8,45 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-        ('user_profile', '0001_squashed_0010_shortcuts_is_mentor'),
-    ]
+    dependencies = [("user_profile", "0001_squashed_0010_shortcuts_is_mentor")]
 
     operations = [
         migrations.CreateModel(
-            name='Announcement',
+            name="Announcement",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('created', models.DateTimeField(auto_now_add=True)),
-                ('title', models.CharField(max_length=50)),
-                ('text', models.TextField()),
-                ('creator', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='announcements', to='user_profile.Profile')),
-                ('level', models.CharField(choices=[('info', 'Informativo'), ('warning', 'Atenção'), ('error', 'Problema'), ('success', 'Sucesso')], default='info', max_length=20)),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("created", models.DateTimeField(auto_now_add=True)),
+                ("title", models.CharField(max_length=50)),
+                ("text", models.TextField()),
+                (
+                    "creator",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="announcements",
+                        to="user_profile.Profile",
+                    ),
+                ),
+                (
+                    "level",
+                    models.CharField(
+                        choices=[
+                            ("info", "Informativo"),
+                            ("warning", "Atenção"),
+                            ("error", "Problema"),
+                            ("success", "Sucesso"),
+                        ],
+                        default="info",
+                        max_length=20,
+                    ),
+                ),
             ],
-        ),
+        )
     ]

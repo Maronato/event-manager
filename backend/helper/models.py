@@ -11,14 +11,11 @@ from .subscriptions import ticket_subscription
 
 class Mentor(models.Model):
     msocks_allow = True
-    msocks_serializer = 'helper.serializers.MentorSubscriptionSerializer'
+    msocks_serializer = "helper.serializers.MentorSubscriptionSerializer"
 
-    profile = models.OneToOneField(
-        Profile,
-        on_delete=models.CASCADE
-    )
+    profile = models.OneToOneField(Profile, on_delete=models.CASCADE)
     online = models.BooleanField(default=False)
-    skills = models.TextField(blank=True, default='[]')
+    skills = models.TextField(blank=True, default="[]")
 
     def set_online(self):
         self.online = True
@@ -31,23 +28,23 @@ class Mentor(models.Model):
     @staticmethod
     def claimed_ticket_completed(sender, **kwargs):
         """A ticket that a mentor claimed was completed"""
-        instance = kwargs['instance']
+        instance = kwargs["instance"]
         if not instance.state == "completed":
             return
         self = instance.claimer.mentor
         post_save.send(Mentor, instance=self, created=False)
 
     def __str__(self):
-        return f'Mentor {self.profile}'
+        return f"Mentor {self.profile}"
 
 
 def update_mentor(sender, **kwargs):
     # Updates profile
-    kwargs['instance'].profile.trigger_update()
+    kwargs["instance"].profile.trigger_update()
 
 
 def delete_mentor(sender, **kwargs):
-    profile = kwargs['instance'].profile
+    profile = kwargs["instance"].profile
     profile.mentor = None
     profile.trigger_update()
 
@@ -70,18 +67,13 @@ def calc_ticket_expires():
 
 class Ticket(models.Model):
     msocks_allow = True
-    msocks_serializer = 'helper.serializers.TicketSubscriptionSerializer'
+    msocks_serializer = "helper.serializers.TicketSubscriptionSerializer"
 
     creator = models.ForeignKey(
-        Profile,
-        related_name='tickets',
-        on_delete=models.CASCADE
+        Profile, related_name="tickets", on_delete=models.CASCADE
     )
     claimer = models.ForeignKey(
-        Profile,
-        related_name='claimed_tickets',
-        on_delete=models.CASCADE,
-        null=True
+        Profile, related_name="claimed_tickets", on_delete=models.CASCADE, null=True
     )
     topic = models.CharField(max_length=100)
     location = models.CharField(max_length=100)
@@ -97,19 +89,19 @@ class Ticket(models.Model):
     def state(self):
         if self.completed:
             if self.rating:
-                return 'completed'
-            return 'unrated'
+                return "completed"
+            return "unrated"
         if self.claimed:
-            return 'claimed'
+            return "claimed"
         if timezone.now() > self.expires:
-            return 'expired'
-        return 'open'
+            return "expired"
+        return "open"
 
 
 mapper = {
-    'create': (ticket_subscription.CreateTicketSubscription, post_save),
-    'update': (ticket_subscription.UpdateTicketSubscription, post_save),
-    'delete': (ticket_subscription.DeleteTicketSubscription, post_delete)
+    "create": (ticket_subscription.CreateTicketSubscription, post_save),
+    "update": (ticket_subscription.UpdateTicketSubscription, post_save),
+    "delete": (ticket_subscription.DeleteTicketSubscription, post_delete),
 }
 
 for event in mapper.keys():

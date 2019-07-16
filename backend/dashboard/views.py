@@ -5,12 +5,13 @@ from .mixins import DashboardContextMixin
 
 
 class Dashboard(
-        PermissionClassesMixin,
-        SidebarContextMixin,
-        DashboardContextMixin,
-        UserContextMixin,
-        TemplateView):
+    PermissionClassesMixin,
+    SidebarContextMixin,
+    DashboardContextMixin,
+    UserContextMixin,
+    TemplateView,
+):
 
-    template_name = 'dashboard/dashboard.html'
-    active_tab = 'dashboard'
+    template_name = "dashboard/dashboard.html"
+    active_tab = "dashboard"
     permission_classes = [IsAuthenticated]

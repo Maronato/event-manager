@@ -5,21 +5,17 @@ from .serializers import FeedbackSerializer
 from .models import Feedback, Event
 
 
-class ExportFeedbackSerializer(
-        PrefetchMixin,
-        serializers.ModelSerializer):
+class ExportFeedbackSerializer(PrefetchMixin, serializers.ModelSerializer):
 
-    event = serializers.CharField(source='event.name')
+    event = serializers.CharField(source="event.name")
 
     class Meta:
         model = Feedback
-        exclude = ['attendee', 'id']
-        select_related_fields = ['event']
+        exclude = ["attendee", "id"]
+        select_related_fields = ["event"]
 
 
-class ExportEventSerializer(
-        PrefetchMixin,
-        serializers.ModelSerializer):
+class ExportEventSerializer(PrefetchMixin, serializers.ModelSerializer):
 
     attendees = ExportProfileSerializer(many=True)
     attended = ExportProfileSerializer(many=True)
@@ -28,12 +24,12 @@ class ExportEventSerializer(
 
     class Meta:
         model = Event
-        fields = '__all__'
-        select_related_fields = ['speaker__shortcuts', 'speaker__user']
+        fields = "__all__"
+        select_related_fields = ["speaker__shortcuts", "speaker__user"]
         prefetch_related_fields = [
-            'feedbacks__event',
-            'attendees__shortcuts',
-            'attendees__user',
-            'attended__shortcuts',
-            'attended__user'
+            "feedbacks__event",
+            "attendees__shortcuts",
+            "attendees__user",
+            "attended__shortcuts",
+            "attended__user",
         ]

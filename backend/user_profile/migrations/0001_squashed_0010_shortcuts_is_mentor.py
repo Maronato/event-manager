@@ -10,43 +10,87 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-        migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-    ]
+    dependencies = [migrations.swappable_dependency(settings.AUTH_USER_MODEL)]
 
     operations = [
         migrations.CreateModel(
-            name='Profile',
+            name="Profile",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('token', models.CharField(default=user_profile.models.gen_token, max_length=20, unique=True)),
-                ('verified', models.BooleanField(default=False)),
-                ('verification_code', models.CharField(default=user_profile.models.gen_verification_code, max_length=20, unique=True)),
-                ('user', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
-                ('unique_id', models.CharField(default=user_profile.models.gen_unique_id, max_length=20, unique=True)),
-                ('_update_field', models.BooleanField(default=False)),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "token",
+                    models.CharField(
+                        default=user_profile.models.gen_token,
+                        max_length=20,
+                        unique=True,
+                    ),
+                ),
+                ("verified", models.BooleanField(default=False)),
+                (
+                    "verification_code",
+                    models.CharField(
+                        default=user_profile.models.gen_verification_code,
+                        max_length=20,
+                        unique=True,
+                    ),
+                ),
+                (
+                    "user",
+                    models.OneToOneField(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
+                (
+                    "unique_id",
+                    models.CharField(
+                        default=user_profile.models.gen_unique_id,
+                        max_length=20,
+                        unique=True,
+                    ),
+                ),
+                ("_update_field", models.BooleanField(default=False)),
             ],
         ),
         migrations.CreateModel(
-            name='Shortcuts',
+            name="Shortcuts",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('has_facebook', models.BooleanField(default=False)),
-                ('has_github', models.BooleanField(default=False)),
-                ('has_google', models.BooleanField(default=False)),
-                ('is_hacker', models.BooleanField(default=False)),
-                ('is_staff', models.BooleanField(default=False)),
-                ('is_employee', models.BooleanField(default=False)),
-                ('is_admin', models.BooleanField(default=False)),
-                ('state', models.CharField(default='', max_length=20)),
-                ('is_verified', models.BooleanField(default=False)),
-                ('profile', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, to='user_profile.Profile')),
-                ('full_name', models.CharField(default='', max_length=100)),
-                ('is_mentor', models.BooleanField(default=False)),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("has_facebook", models.BooleanField(default=False)),
+                ("has_github", models.BooleanField(default=False)),
+                ("has_google", models.BooleanField(default=False)),
+                ("is_hacker", models.BooleanField(default=False)),
+                ("is_staff", models.BooleanField(default=False)),
+                ("is_employee", models.BooleanField(default=False)),
+                ("is_admin", models.BooleanField(default=False)),
+                ("state", models.CharField(default="", max_length=20)),
+                ("is_verified", models.BooleanField(default=False)),
+                (
+                    "profile",
+                    models.OneToOneField(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="user_profile.Profile",
+                    ),
+                ),
+                ("full_name", models.CharField(default="", max_length=100)),
+                ("is_mentor", models.BooleanField(default=False)),
             ],
         ),
-        migrations.RemoveField(
-            model_name='profile',
-            name='_update_field',
-        ),
+        migrations.RemoveField(model_name="profile", name="_update_field"),
     ]

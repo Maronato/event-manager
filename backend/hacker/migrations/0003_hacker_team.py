@@ -7,14 +7,19 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('team', '0001_squashed_0002_team_allow_new'),
-        ('hacker', '0002_auto_20190320_0034_squashed_0004_auto_20190321_0826'),
+        ("team", "0001_squashed_0002_team_allow_new"),
+        ("hacker", "0002_auto_20190320_0034_squashed_0004_auto_20190321_0826"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='hacker',
-            name='team',
-            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='hackers', to='team.Team'),
-        ),
+            model_name="hacker",
+            name="team",
+            field=models.ForeignKey(
+                null=True,
+                on_delete=django.db.models.deletion.SET_NULL,
+                related_name="hackers",
+                to="team.Team",
+            ),
+        )
     ]

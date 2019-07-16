@@ -8,16 +8,28 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-        ('user_profile', '0001_squashed_0010_shortcuts_is_mentor'),
-    ]
+    dependencies = [("user_profile", "0001_squashed_0010_shortcuts_is_mentor")]
 
     operations = [
         migrations.CreateModel(
-            name='Staff',
+            name="Staff",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('profile', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, to='user_profile.Profile')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "profile",
+                    models.OneToOneField(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="user_profile.Profile",
+                    ),
+                ),
             ],
-        ),
+        )
     ]

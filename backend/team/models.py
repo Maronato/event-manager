@@ -6,7 +6,7 @@ from .subscriptions import team_subscription
 
 class Team(models.Model):
     msocks_allow = True
-    msocks_serializer = 'team.serializers.TeamSubscriptionSerializer'
+    msocks_serializer = "team.serializers.TeamSubscriptionSerializer"
 
     name = models.CharField(max_length=32)
     description = models.TextField(max_length=256, blank=True)
@@ -16,7 +16,9 @@ class Team(models.Model):
 
     @property
     def members(self):
-        return list(self.hackers.all().values_list('profile__shortcuts__full_name', flat=True))
+        return list(
+            self.hackers.all().values_list("profile__shortcuts__full_name", flat=True)
+        )
 
     @property
     def is_full(self):
@@ -33,13 +35,17 @@ class Team(models.Model):
 
     @classmethod
     def is_team_member(cls, team_id, user):
-        return cls.objects.filter(id=team_id).filter(hackers__in=[user.profile.hacker]).exists()
+        return (
+            cls.objects.filter(id=team_id)
+            .filter(hackers__in=[user.profile.hacker])
+            .exists()
+        )
 
 
 mapper = {
-    'create': (team_subscription.CreateTeamSubscription, post_save),
-    'update': (team_subscription.UpdateTeamSubscription, post_save),
-    'delete': (team_subscription.DeleteTeamSubscription, post_delete)
+    "create": (team_subscription.CreateTeamSubscription, post_save),
+    "update": (team_subscription.UpdateTeamSubscription, post_save),
+    "delete": (team_subscription.DeleteTeamSubscription, post_delete),
 }
 
 for event in mapper.keys():

@@ -10,18 +10,18 @@ class ToggleIsAdmin(views.APIView):
     permission_classes = [IsAdmin]
 
     def post(self, request):
-        unique_id = request.data['unique_id']
+        unique_id = request.data["unique_id"]
         user = Profile.objects.get(unique_id=unique_id).user
         user.is_superuser = not user.is_superuser
         user.save()
-        return views.Response({'message': 'Permissão alterada'})
+        return views.Response({"message": "Permissão alterada"})
 
 
 class DeleteUser(generics.DestroyAPIView):
     permission_classes = [IsAdmin]
     queryset = User.objects.all()
-    lookup_field = 'profile__unique_id'
-    lookup_url_kwarg = 'unique_id'
+    lookup_field = "profile__unique_id"
+    lookup_url_kwarg = "unique_id"
 
 
 class BatchCreateUsers(views.APIView):
@@ -34,24 +34,24 @@ class BatchCreateUsers(views.APIView):
         return username
 
     def post(self, request):
-        users = request.data['users']
-        send_emails = request.data['send_emails']
+        users = request.data["users"]
+        send_emails = request.data["send_emails"]
 
         for user in users:
 
-            if User.objects.filter(email=user['email']).exists():
-                user['result'] = 'error'
+            if User.objects.filter(email=user["email"]).exists():
+                user["result"] = "error"
                 continue
 
-            user.pop('result')
-            user.pop('token')
+            user.pop("result")
+            user.pop("token")
 
             new = User(**user)
             new.username = self.uniqueUsername()
             new.save()
 
-            user['result'] = 'success'
-            user['token'] = new.profile.token
+            user["result"] = "success"
+            user["token"] = new.profile.token
 
             if send_emails:
                 send_verify_email.delay(new.profile.id)
@@ -60,4 +60,4 @@ class BatchCreateUsers(views.APIView):
                 profile.verified = True
                 profile.save()
 
-        return views.Response({'users': users})
+        return views.Response({"users": users})

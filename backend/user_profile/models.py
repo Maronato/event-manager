@@ -8,6 +8,7 @@ import re
 
 
 from .tasks import send_verify_email
+
 # Create your models here.
 
 
@@ -34,12 +35,9 @@ class Profile(models.Model):
 
     # Subscription permissions
     msocks_allow = True
-    msocks_serializer = 'user_profile.serializers.UserSubscriptionSerializer'
+    msocks_serializer = "user_profile.serializers.UserSubscriptionSerializer"
 
-    user = models.OneToOneField(
-        User,
-        on_delete=models.CASCADE
-    )
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
 
     # Public unique ID
     unique_id = models.CharField(max_length=20, unique=True, default=gen_unique_id)
@@ -49,29 +47,31 @@ class Profile(models.Model):
 
     # Email verification
     verified = models.BooleanField(default=False)
-    verification_code = models.CharField(max_length=20, unique=True, default=gen_verification_code)
+    verification_code = models.CharField(
+        max_length=20, unique=True, default=gen_verification_code
+    )
 
     @property
     def is_verified(self):
         """Profile's email is verified and ready to use"""
-        temp_email = re.match(r'^temp_\d+@email.com$', self.user.email)
+        temp_email = re.match(r"^temp_\d+@email.com$", self.user.email)
         return self.verified and temp_email is None
 
     @property
     def state(self):
-        if self.is_hacker and self.hacker.hacker_state == 'incomplete':
-            return 'incomplete'
+        if self.is_hacker and self.hacker.hacker_state == "incomplete":
+            return "incomplete"
         if not self.is_verified:
-            return 'unverified'
+            return "unverified"
         if self.is_hacker:
             return self.hacker.hacker_state
-        return 'verified'
+        return "verified"
 
     @property
     def payment_state(self):
         if self.is_hacker:
             return self.hacker.transaction_status
-        return 'N/A'
+        return "N/A"
 
     def trigger_update(self):
         """Trigger Update
@@ -83,24 +83,24 @@ class Profile(models.Model):
     # Social logins
     @property
     def has_facebook(self):
-        return self.social_logins.filter(provider='facebook').exists()
+        return self.social_logins.filter(provider="facebook").exists()
 
     @property
     def has_github(self):
-        return self.social_logins.filter(provider='github').exists()
+        return self.social_logins.filter(provider="github").exists()
 
     @property
     def has_google(self):
-        return self.social_logins.filter(provider='google').exists()
+        return self.social_logins.filter(provider="google").exists()
 
     # Hacker and staff attributes
     @property
     def is_hacker(self):
-        return hasattr(self, 'hacker')
+        return hasattr(self, "hacker")
 
     @property
     def is_staff(self):
-        return hasattr(self, 'staff')
+        return hasattr(self, "staff")
 
     @property
     def is_admin(self):
@@ -108,15 +108,15 @@ class Profile(models.Model):
 
     @property
     def is_employee(self):
-        return hasattr(self, 'employee')
+        return hasattr(self, "employee")
 
     @property
     def is_mentor(self):
-        return hasattr(self, 'mentor')
+        return hasattr(self, "mentor")
 
     @property
     def employee_company_access(self):
-        return (self.employee.company.access_level if self.is_employee else -1)
+        return self.employee.company.access_level if self.is_employee else -1
 
     @property
     def full_name(self):
@@ -164,8 +164,8 @@ class Profile(models.Model):
 
 
 def create_profile(sender, **kwargs):
-    user = kwargs['instance']
-    if kwargs['created']:
+    user = kwargs["instance"]
+    if kwargs["created"]:
         profile = Profile(user=user)
         profile.save()
         shortcuts = Shortcuts(profile=profile)
@@ -173,7 +173,7 @@ def create_profile(sender, **kwargs):
         update_shortcuts(profile)
     # Trigger profile update on user update
     else:
-        if hasattr(user, 'profile'):
+        if hasattr(user, "profile"):
             user.profile.trigger_update()
 
 
@@ -181,10 +181,7 @@ post_save.connect(create_profile, sender=User)
 
 
 class Shortcuts(models.Model):
-    profile = models.OneToOneField(
-        Profile,
-        on_delete=models.CASCADE
-    )
+    profile = models.OneToOneField(Profile, on_delete=models.CASCADE)
     # Social attributes
     has_facebook = models.BooleanField(default=False)
     has_github = models.BooleanField(default=False)
@@ -198,33 +195,30 @@ class Shortcuts(models.Model):
     is_mentor = models.BooleanField(default=False)
 
     # Control attributes
-    state = models.CharField(default='', max_length=20)
+    state = models.CharField(default="", max_length=20)
     is_verified = models.BooleanField(default=False)
 
-    full_name = models.CharField(default='', max_length=100)
+    full_name = models.CharField(default="", max_length=100)
 
-    payment_state = models.CharField(default='', max_length=20)
+    payment_state = models.CharField(default="", max_length=20)
 
 
 def update_shortcuts(profile):
     data = {
-        'has_facebook': profile.has_facebook,
-        'has_github': profile.has_github,
-        'has_google': profile.has_google,
-        'is_hacker': profile.is_hacker,
-        'is_staff': profile.is_staff,
-        'is_employee': profile.is_employee,
-        'is_admin': profile.is_admin,
-        'is_mentor': profile.is_mentor,
-        'state': profile.state,
-        'is_verified': profile.is_verified,
-        'full_name': profile.full_name,
-        'payment_state': profile.payment_state
+        "has_facebook": profile.has_facebook,
+        "has_github": profile.has_github,
+        "has_google": profile.has_google,
+        "is_hacker": profile.is_hacker,
+        "is_staff": profile.is_staff,
+        "is_employee": profile.is_employee,
+        "is_admin": profile.is_admin,
+        "is_mentor": profile.is_mentor,
+        "state": profile.state,
+        "is_verified": profile.is_verified,
+        "full_name": profile.full_name,
+        "payment_state": profile.payment_state,
     }
-    Shortcuts.objects.update_or_create(
-        profile=profile,
-        defaults=data
-    )
+    Shortcuts.objects.update_or_create(profile=profile, defaults=data)
 
     def __str__(self):
-        return f'Shortcut de {self.profile}'
+        return f"Shortcut de {self.profile}"

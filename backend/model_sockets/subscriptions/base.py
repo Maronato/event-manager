@@ -10,8 +10,8 @@ subscribed_instances = []
 
 class BaseSubscriptionReceiver:
 
-    sub_type = 'publish.subscription'
-    signal_name = 'universal'
+    sub_type = "publish.subscription"
+    signal_name = "universal"
 
     def __init__(self, signal, *args):
         self.args = args
@@ -31,7 +31,9 @@ class BaseSubscriptionReceiver:
     def get_allowed_serializer_class(self, path=None):
         # Get the model serializer class
         try:
-            path = path or getattr(self.sender, settings.MSOCKS_SERIALIZER_PARAMETER, '')
+            path = path or getattr(
+                self.sender, settings.MSOCKS_SERIALIZER_PARAMETER, ""
+            )
             if isinstance(path, str):
                 return import_string(path)
             return path
@@ -51,16 +53,13 @@ class BaseSubscriptionReceiver:
         if not self.is_valid():
             return
         response = {}
-        response['data'] = self.get_allowed_data()
-        response['type'] = self.sub_type
-        response['signal_name'] = self.signal_name
-        async_to_sync(get_channel_layer().group_send)(
-            self.group_name,
-            response
-        )
+        response["data"] = self.get_allowed_data()
+        response["type"] = self.sub_type
+        response["signal_name"] = self.signal_name
+        async_to_sync(get_channel_layer().group_send)(self.group_name, response)
 
     def get_instance(self, sender, **kwargs):
-        return kwargs['instance']
+        return kwargs["instance"]
 
     def receive(self, sender, **kwargs):
         """ Receive an update from django db signals
@@ -103,13 +102,13 @@ class BaseInstanceUpdateReceiver(BaseSubscriptionReceiver):
 
     like subscriptions of a specific user"""
 
-    signal_name = 'update'
+    signal_name = "update"
 
     def receive(self, sender, **kwargs):
         super().receive(sender, **kwargs)
         # Only accept updated signals
-        if kwargs['created']:
+        if kwargs["created"]:
             return
-        self.volatile_args = [getattr(self.instance, 'id', None)] + list(self.args)
+        self.volatile_args = [getattr(self.instance, "id", None)] + list(self.args)
         self.all_fields = self.get_instance_fields(sender, self.instance)
         self.dispatch()

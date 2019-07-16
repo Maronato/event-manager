@@ -7,15 +7,14 @@ import json
 
 
 class ModelSignalConsumer(AsyncJsonWebsocketConsumer):
-
     async def get_app_name(self):
-        return self.scope['url_route']['kwargs']['app']
+        return self.scope["url_route"]["kwargs"]["app"]
 
     async def get_model_name(self):
-        return self.scope['url_route']['kwargs']['model']
+        return self.scope["url_route"]["kwargs"]["model"]
 
     async def get_signal_type(self):
-        return self.scope['url_route']['kwargs']['signal']
+        return self.scope["url_route"]["kwargs"]["signal"]
 
     async def get_app_model(self):
         app = await self.get_app_name()
@@ -26,7 +25,7 @@ class ModelSignalConsumer(AsyncJsonWebsocketConsumer):
         app = await self.get_app_name()
         model = await self.get_model_name()
         signal = await self.get_signal_type()
-        return f'sub_{app}_{model}_{signal}'
+        return f"sub_{app}_{model}_{signal}"
 
     async def get_model_is_allowed(self, model_class):
         return getattr(model_class, settings.MSOCKS_ALLOW_PARAMETER, False)
@@ -56,25 +55,19 @@ class ModelSignalConsumer(AsyncJsonWebsocketConsumer):
             return await self.close()
 
         # Subscribe to the group
-        await self.channel_layer.group_add(
-            self.signal_group_name,
-            self.channel_name
-        )
+        await self.channel_layer.group_add(self.signal_group_name, self.channel_name)
         await self.accept()
 
     async def disconnect(self, close_code):
         signal_group_name = await self.get_signal_group_name()
         # Unsubscribe from group
-        await self.channel_layer.group_discard(
-            signal_group_name,
-            self.channel_name
-        )
+        await self.channel_layer.group_discard(signal_group_name, self.channel_name)
 
     async def publish_subscription(self, event):
-        data = event['data']
-        signal_name = event.get('signal_name', 'universal')
+        data = event["data"]
+        signal_name = event.get("signal_name", "universal")
         response = {"data": data, "signal_name": signal_name}
-        print('publishing', response)
+        print("publishing", response)
         await self.send_json(content=response)
 
     @classmethod
@@ -106,4 +99,4 @@ class SelfSignalConsumer(ModelSignalConsumer):
         model = await self.get_model_name()
         signal = await self.get_signal_type()
         relation_id = await self.get_relation_id(await get_user(self.scope))
-        return f'sub_{app}_{model}_{relation_id}_{signal}'
+        return f"sub_{app}_{model}_{relation_id}_{signal}"

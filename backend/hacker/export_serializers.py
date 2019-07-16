@@ -8,9 +8,7 @@ from company.export_serializers import ExportScanSerializer
 from company.models import Scan
 
 
-class ExportScannedHackersSerializer(
-        PrefetchMixin,
-        serializers.ModelSerializer):
+class ExportScannedHackersSerializer(PrefetchMixin, serializers.ModelSerializer):
     profile = ExportProfileSerializer()
     scan = serializers.SerializerMethodField()
     application = ExportApplicationSerializer(source="profile.hacker.application")
@@ -29,27 +27,27 @@ class ExportScannedHackersSerializer(
             queryset = queryset.prefetch_related(*meta.prefetch_related_fields)
 
         company_scans = Scan.objects.filter(scanner__employee__company=company)
-        company_scans = company_scans.select_related(*ExportScanSerializer.Meta.select_related_fields)
+        company_scans = company_scans.select_related(
+            *ExportScanSerializer.Meta.select_related_fields
+        )
 
         queryset = queryset.prefetch_related(
-            Prefetch('profile__scanned_me', queryset=company_scans, to_attr='scan')
+            Prefetch("profile__scanned_me", queryset=company_scans, to_attr="scan")
         )
 
         return queryset
 
     class Meta:
         model = User
-        fields = ['profile', 'scan', 'application']
-        select_related_fields = ['profile__hacker__application', 'profile__shortcuts']
+        fields = ["profile", "scan", "application"]
+        select_related_fields = ["profile__hacker__application", "profile__shortcuts"]
 
 
-class ExportAllHackersSerializer(
-        PrefetchMixin,
-        serializers.ModelSerializer):
+class ExportAllHackersSerializer(PrefetchMixin, serializers.ModelSerializer):
     profile = ExportProfileSerializer()
     application = ExportApplicationSerializer(source="profile.hacker.application")
 
     class Meta:
         model = User
-        fields = ['profile', 'application']
-        select_related_fields = ['profile__hacker__application', 'profile__shortcuts']
+        fields = ["profile", "application"]
+        select_related_fields = ["profile__hacker__application", "profile__shortcuts"]

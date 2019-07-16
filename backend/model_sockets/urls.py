@@ -6,5 +6,5 @@ urlpatterns = []
 
 if settings.DEBUG:
     urlpatterns += [
-        path('test/', TemplateView.as_view(template_name='model_sockets/test.html'))
+        path("test/", TemplateView.as_view(template_name="model_sockets/test.html"))
     ]

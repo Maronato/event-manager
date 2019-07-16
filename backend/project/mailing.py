@@ -10,7 +10,16 @@ class EMail(object):
     event_url = settings.ROOT_URL
     facebook_handle = settings.FACEBOOK_HANDLE
 
-    def __init__(self, to, subject='', title='', subtitle='', description='', action_url='', action_name=''):
+    def __init__(
+        self,
+        to,
+        subject="",
+        title="",
+        subtitle="",
+        description="",
+        action_url="",
+        action_name="",
+    ):
         self.subject = subject
         self.title = title
         self.subtitle = subtitle
@@ -20,27 +29,25 @@ class EMail(object):
         self.action_url = action_url
 
     def build_context(self):
-        email_kargs = {
-            'event_name': self.event_name
-        }
+        email_kargs = {"event_name": self.event_name}
         context = {
-            'title': self.title.format(**email_kargs),
-            'subtitle': self.subtitle.format(**email_kargs),
-            'description': self.description.format(**email_kargs),
-            'actionUrl': self.event_url + self.action_url,
-            'actionName': self.action_name,
-            'project_url': self.event_url,
-            'hackathon_name': self.event_name,
-            'facebookHandle': self.facebook_handle
+            "title": self.title.format(**email_kargs),
+            "subtitle": self.subtitle.format(**email_kargs),
+            "description": self.description.format(**email_kargs),
+            "actionUrl": self.event_url + self.action_url,
+            "actionName": self.action_name,
+            "project_url": self.event_url,
+            "hackathon_name": self.event_name,
+            "facebookHandle": self.facebook_handle,
         }
         return context
 
     def send_action(self):
         context = self.build_context()
-        msg_plain = render_to_string('project/email/action/text.txt', context)
-        msg_html = render_to_string('project/email/action/html.html', context)
+        msg_plain = render_to_string("project/email/action/text.txt", context)
+        msg_html = render_to_string("project/email/action/html.html", context)
         send_mail(
-            f'[{self.event_name}] {self.subject}',
+            f"[{self.event_name}] {self.subject}",
             msg_plain,
             self.fr,
             self.to,
@@ -49,10 +56,10 @@ class EMail(object):
 
     def send_basic(self):
         context = self.build_context()
-        msg_plain = render_to_string('project/email/basic/text.txt', context)
-        msg_html = render_to_string('project/email/basic/html.html', context)
+        msg_plain = render_to_string("project/email/basic/text.txt", context)
+        msg_html = render_to_string("project/email/basic/html.html", context)
         send_mail(
-            f'[{self.event_name}] {self.subject}',
+            f"[{self.event_name}] {self.subject}",
             msg_plain,
             self.fr,
             self.to,

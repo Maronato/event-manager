@@ -12,34 +12,36 @@ from settings.models import Settings
 # Create your views here.
 
 
-class PaymentView(
-        PermissionClassesMixin,
-        RedirectView):
+class PaymentView(PermissionClassesMixin, RedirectView):
 
-    http_method_names = ['get']
+    http_method_names = ["get"]
     permanent = False
     permission_classes = [And(CanConfirm, IsUnpayed)]
 
     def get_redirect_url(self, *args, **kwargs):
         sett = Settings.get()
         if not sett.require_payment:
-            add_message(self.request, ERROR, 'Pagamentos desabilitados')
-            return '/'
+            add_message(self.request, ERROR, "Pagamentos desabilitados")
+            return "/"
         item = PagSeguroItem(
-            id='1',
-            description=f'Ingresso para {settings.EVENT_NAME}',
-            amount=f'{sett.ticket_price}',
-            quantity=1
+            id="1",
+            description=f"Ingresso para {settings.EVENT_NAME}",
+            amount=f"{sett.ticket_price}",
+            quantity=1,
         )
         reference = get_random_string(length=32)
         api = PagSeguroApi(reference=reference)
         api.add_item(item)
         checkout = api.checkout()
-        if checkout['success']:
+        if checkout["success"]:
             hacker = self.request.user.profile.hacker
             hacker.transaction_reference = reference
             hacker.save()
-            return checkout['redirect_url']
+            return checkout["redirect_url"]
         else:
-            add_message(self.request, ERROR, 'Erro ao criar pedido de pagamento. Tente novamente mais tarde.')
-            return '/'
+            add_message(
+                self.request,
+                ERROR,
+                "Erro ao criar pedido de pagamento. Tente novamente mais tarde.",
+            )
+            return "/"

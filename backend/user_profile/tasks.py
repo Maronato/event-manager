@@ -5,6 +5,7 @@ from celery import shared_task
 @shared_task
 def send_verify_email(profile_id):
     from .models import Profile
+
     profile = Profile.objects.get(id=profile_id)
     return verify_email(profile)
 
@@ -12,5 +13,6 @@ def send_verify_email(profile_id):
 @shared_task
 def send_recover_token_email(profile_id):
     from .models import Profile
+
     profile = Profile.objects.get(id=profile_id)
     return recover_token_email(profile)

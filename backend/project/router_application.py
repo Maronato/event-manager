@@ -14,17 +14,21 @@ def flatten(l):
     return flat
 
 
-application = ProtocolTypeRouter({
-    # (http->django views is added by default)
-    'websocket': AllowedHostsOriginValidator(
-        AuthMiddlewareStack(
-            URLRouter(
-                flatten([
-                    model_sockets_router.websocket_urlpatterns,
-                    helper_router.websocket_urlpatterns,
-                    team_router.websocket_urlpatterns
-                ])
+application = ProtocolTypeRouter(
+    {
+        # (http->django views is added by default)
+        "websocket": AllowedHostsOriginValidator(
+            AuthMiddlewareStack(
+                URLRouter(
+                    flatten(
+                        [
+                            model_sockets_router.websocket_urlpatterns,
+                            helper_router.websocket_urlpatterns,
+                            team_router.websocket_urlpatterns,
+                        ]
+                    )
+                )
             )
-        ),
-    )
-})
+        )
+    }
+)

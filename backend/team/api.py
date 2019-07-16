@@ -12,32 +12,33 @@ from .serializers import SimpleTeamSerializer
 
 
 class TeamViewset(
-        PrefetchQuerysetModelMixin,
-        mixins.CreateModelMixin,
-        mixins.UpdateModelMixin,
-        mixins.RetrieveModelMixin,
-        viewsets.GenericViewSet):
+    PrefetchQuerysetModelMixin,
+    mixins.CreateModelMixin,
+    mixins.UpdateModelMixin,
+    mixins.RetrieveModelMixin,
+    viewsets.GenericViewSet,
+):
     permission_classes = [
         Or(
-            And(IsPostRequest, IsCheckedin, EventIsHappening),   # Creating new teams
+            And(IsPostRequest, IsCheckedin, EventIsHappening),  # Creating new teams
             And(IsGetRequest, IsCheckedin, IsTeamMember),  # Getting teams
-            And(IsPutPatchRequest, EventIsHappening, IsTeamMember)  # Updating teams
+            And(IsPutPatchRequest, EventIsHappening, IsTeamMember),  # Updating teams
         )
     ]
     queryset = Team.objects.all()
     serializer_class = SimpleTeamSerializer
 
-    @action(methods=['post'], detail=False)
+    @action(methods=["post"], detail=False)
     def leave_team(self, request):
         hacker = request.user.profile.hacker
-        team = getattr(hacker, 'team', None)
+        team = getattr(hacker, "team", None)
         if team:
             team.remove_hacker(hacker)
             if len(team.members) == 0:
                 team.delete()
         return Response(status=200)
 
-    @action(methods=['get'], detail=False)
+    @action(methods=["get"], detail=False)
     def current_team(self, request):
         hacker = request.user.profile.hacker
         team = hacker.team

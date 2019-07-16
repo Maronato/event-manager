@@ -5,19 +5,16 @@ from application.export_serializers import ExportApplicationSerializer
 
 
 class HackerSignupSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = User
-        fields = ['date_joined']
+        fields = ["date_joined"]
 
 
-class HackerApplicationSerializer(
-        PrefetchMixin,
-        serializers.ModelSerializer):
+class HackerApplicationSerializer(PrefetchMixin, serializers.ModelSerializer):
 
     application = ExportApplicationSerializer(source="profile.hacker.application")
 
     class Meta:
         model = User
-        fields = ['date_joined', 'application']
-        select_related_fields = ['profile__hacker__application']
+        fields = ["date_joined", "application"]
+        select_related_fields = ["profile__hacker__application"]

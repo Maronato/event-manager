@@ -8,23 +8,35 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-        ('user_profile', '0001_squashed_0010_shortcuts_is_mentor'),
-    ]
+    dependencies = [("user_profile", "0001_squashed_0010_shortcuts_is_mentor")]
 
     operations = [
         migrations.CreateModel(
-            name='Hacker',
+            name="Hacker",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('admitted', models.BooleanField(default=False)),
-                ('declined', models.BooleanField(default=False)),
-                ('waitlist', models.BooleanField(default=False)),
-                ('waitlist_date', models.DateTimeField(blank=True, null=True)),
-                ('withdraw', models.BooleanField(default=False)),
-                ('confirmed', models.BooleanField(default=False)),
-                ('checked_in', models.BooleanField(default=False)),
-                ('profile', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, to='user_profile.Profile')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("admitted", models.BooleanField(default=False)),
+                ("declined", models.BooleanField(default=False)),
+                ("waitlist", models.BooleanField(default=False)),
+                ("waitlist_date", models.DateTimeField(blank=True, null=True)),
+                ("withdraw", models.BooleanField(default=False)),
+                ("confirmed", models.BooleanField(default=False)),
+                ("checked_in", models.BooleanField(default=False)),
+                (
+                    "profile",
+                    models.OneToOneField(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="user_profile.Profile",
+                    ),
+                ),
             ],
-        ),
+        )
     ]

@@ -12,13 +12,13 @@ class TeamContextMixin(ContextMixin):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         team_context = {
-            'api': {
-                'create_team': reverse('team:api:team-list'),
-                'get_team': reverse('team:api:team-detail', args=[0])[:-2],
-                'update_team': reverse('team:api:team-detail', args=[0])[:-2],
-                'leave_team': reverse('team:api:team-leave-team'),
-                'current_team': reverse('team:api:team-current-team'),
+            "api": {
+                "create_team": reverse("team:api:team-list"),
+                "get_team": reverse("team:api:team-detail", args=[0])[:-2],
+                "update_team": reverse("team:api:team-detail", args=[0])[:-2],
+                "leave_team": reverse("team:api:team-leave-team"),
+                "current_team": reverse("team:api:team-current-team"),
             }
         }
-        context['team_context'] = json.dumps(team_context)
+        context["team_context"] = json.dumps(team_context)
         return context

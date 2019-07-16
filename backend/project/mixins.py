@@ -17,22 +17,29 @@ from settings.mixins import SettingsContextMixin
 
 
 def get_fields(s):
-    return {name: get_fields(field) for name, field in s.fields.items() if hasattr(field, 'fields')}
+    return {
+        name: get_fields(field)
+        for name, field in s.fields.items()
+        if hasattr(field, "fields")
+    }
 
 
 class BaseContextSerializerMixin(object):
-
     def __init__(self, *args, **kwargs):
         kwargs.update({"data": get_fields(self)})
         super().__init__(*args, **kwargs)
 
 
 class PermissionsSerializerMixin(object):
-
     def to_representation(self, *args, **kwargs):
-        request = self.context.get('request', False)
-        view = self.context.get('view', False)
-        if request and view and hasattr(self, 'Meta') and hasattr(self.Meta, 'permission_classes'):
+        request = self.context.get("request", False)
+        view = self.context.get("view", False)
+        if (
+            request
+            and view
+            and hasattr(self, "Meta")
+            and hasattr(self.Meta, "permission_classes")
+        ):
             for permission in self.Meta.permission_classes:
                 if not permission().has_permission(request, view):
                     return {}
@@ -46,33 +53,31 @@ class SidebarContextMixin(SettingsContextMixin, ContextMixin):
     the sidebar
     """
 
-    active_tab = ''
+    active_tab = ""
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         sidebar_context = {
-            'active_tab': self.active_tab,
-            'event_name': dj_settings.EVENT_NAME,
-            'event_description': dj_settings.EVENT_DESCRIPTION,
-            'event_logo': static('project/img/logo.svg'),
-            'event_logo_png': static('project/img/logo.png'),
-            'redirect_urls': {
-                'dashboard': reverse('dashboard:index'),
-                'application': reverse('application:form'),
-                'company': reverse('company:index'),
-                'team': reverse('team:index'),
-                'admin': reverse('godmode:index'),
-                'staff': reverse('staff:index'),
-                'stats': reverse('stats:index'),
-                'schedule': reverse('schedule:index'),
-                'helper': reverse('helper:index'),
-                'logout': reverse('profile:logout'),
+            "active_tab": self.active_tab,
+            "event_name": dj_settings.EVENT_NAME,
+            "event_description": dj_settings.EVENT_DESCRIPTION,
+            "event_logo": static("project/img/logo.svg"),
+            "event_logo_png": static("project/img/logo.png"),
+            "redirect_urls": {
+                "dashboard": reverse("dashboard:index"),
+                "application": reverse("application:form"),
+                "company": reverse("company:index"),
+                "team": reverse("team:index"),
+                "admin": reverse("godmode:index"),
+                "staff": reverse("staff:index"),
+                "stats": reverse("stats:index"),
+                "schedule": reverse("schedule:index"),
+                "helper": reverse("helper:index"),
+                "logout": reverse("profile:logout"),
             },
-            'api': {
-                'get_announcement': reverse('announcement:api:announcement-list'),
-            }
+            "api": {"get_announcement": reverse("announcement:api:announcement-list")},
         }
-        context['sidebar_context'] = json.dumps(sidebar_context)
+        context["sidebar_context"] = json.dumps(sidebar_context)
         return context
 
 
@@ -87,28 +92,28 @@ class UserContextMixin(ContextMixin):
         user = self.request.user
         profile = user.profile
         user_context = {
-            'is_admin': profile.is_admin,
-            'token': profile.token,
-            'is_verified': profile.is_verified,
-            'unique_id': profile.unique_id,
-            'is_hacker': profile.is_hacker,
-            'is_staff': profile.is_staff,
-            'is_employee': profile.is_employee,
-            'is_mentor': profile.is_mentor,
-            'is_judge': False,
-            'employee_company_access': profile.employee_company_access,
-            'state': profile.state,
-            'payment_state': profile.payment_state,
-            'email': user.email,
-            'first_name': user.first_name,
-            'last_name': user.last_name,
-            'social': {
-                'has_facebook': profile.has_facebook,
-                'has_github': profile.has_github,
-                'has_google': profile.has_google
-            }
+            "is_admin": profile.is_admin,
+            "token": profile.token,
+            "is_verified": profile.is_verified,
+            "unique_id": profile.unique_id,
+            "is_hacker": profile.is_hacker,
+            "is_staff": profile.is_staff,
+            "is_employee": profile.is_employee,
+            "is_mentor": profile.is_mentor,
+            "is_judge": False,
+            "employee_company_access": profile.employee_company_access,
+            "state": profile.state,
+            "payment_state": profile.payment_state,
+            "email": user.email,
+            "first_name": user.first_name,
+            "last_name": user.last_name,
+            "social": {
+                "has_facebook": profile.has_facebook,
+                "has_github": profile.has_github,
+                "has_google": profile.has_google,
+            },
         }
-        context['user_context'] = json.dumps(user_context)
+        context["user_context"] = json.dumps(user_context)
         return context
 
 
@@ -118,25 +123,25 @@ class LoginContextMixin(ContextMixin):
     Inherit this mixin to get user data
     """
 
-    form_error = ''
-    form_success = ''
+    form_error = ""
+    form_success = ""
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         login_context = {
-            'event_bg': static('project/img/bg.png'),
-            'event_logo': static('project/img/logo.png'),
-            'check_token_url': reverse('profile:api:check_token'),
-            'reset_email_url': reverse('profile:api:reset_token_email'),
-            'error': self.form_error,
-            'success': self.form_success,
-            'social_urls': {
-                'facebook': reverse('social:login', kwargs={'provider': 'facebook'}),
-                'github': reverse('social:login', kwargs={'provider': 'github'}),
-                'google': reverse('social:login', kwargs={'provider': 'google'}),
-            }
+            "event_bg": static("project/img/bg.png"),
+            "event_logo": static("project/img/logo.png"),
+            "check_token_url": reverse("profile:api:check_token"),
+            "reset_email_url": reverse("profile:api:reset_token_email"),
+            "error": self.form_error,
+            "success": self.form_success,
+            "social_urls": {
+                "facebook": reverse("social:login", kwargs={"provider": "facebook"}),
+                "github": reverse("social:login", kwargs={"provider": "github"}),
+                "google": reverse("social:login", kwargs={"provider": "google"}),
+            },
         }
-        context['login_context'] = json.dumps(login_context)
+        context["login_context"] = json.dumps(login_context)
         return context
 
 
@@ -145,6 +150,7 @@ class ExportMixin(object):
     Enables exporting in various formats
     Can be used with the DownloadButton.vue component
     """
+
     renderer_classes = (
         BrowsableAPIRenderer,
         JSONRenderer,
@@ -154,7 +160,7 @@ class ExportMixin(object):
         NotNestedTSVRenderer,
         YAMLRenderer,
         XMLRenderer,
-        MessagePackRenderer
+        MessagePackRenderer,
     )
 
 
@@ -173,7 +179,6 @@ class PrefetchQuerysetModelMixin(object):
 
 
 class PrefetchMixin(object):
-
     @classmethod
     def setup_eager_loading(cls, queryset):
         meta = cls.Meta
@@ -185,7 +190,7 @@ class PrefetchMixin(object):
 
     @classmethod
     def many_init(cls, *args, **kwargs):
-        qs = args[0] if len(args) > 0 else kwargs.get('instance', None)
+        qs = args[0] if len(args) > 0 else kwargs.get("instance", None)
         if qs:
             qs = cls.setup_eager_loading(qs)
         if len(args) > 0:
@@ -193,14 +198,13 @@ class PrefetchMixin(object):
             args[0] = qs
             args = tuple(args)
         else:
-            kwargs['instance'] = qs
+            kwargs["instance"] = qs
         return super().many_init(*args, **kwargs)
 
 
 class SingleInstancePrefetchMixin(PrefetchMixin):
-
     def __init__(self, *args, **kwargs):
-        qs = args[0] if len(args) > 0 else kwargs.get('instance', None)
+        qs = args[0] if len(args) > 0 else kwargs.get("instance", None)
         if qs:
             qs = qs.__class__.objects.filter(pk=qs.pk)
             qs = self.setup_eager_loading(qs).first()
@@ -209,7 +213,7 @@ class SingleInstancePrefetchMixin(PrefetchMixin):
             args[0] = qs
             args = tuple(args)
         else:
-            kwargs['instance'] = qs
+            kwargs["instance"] = qs
         super().__init__(*args, **kwargs)
 
 
@@ -218,8 +222,9 @@ class PermissionClassesMixin(AccessMixin):
     with regular django and verify that the current user
     has all specified permissions.
     """
+
     permission_classes = []
-    permission_denied_message = 'Você não tem permissão para acessar essa página'
+    permission_denied_message = "Você não tem permissão para acessar essa página"
 
     def get_permission_classes(self):
         """
@@ -228,8 +233,8 @@ class PermissionClassesMixin(AccessMixin):
         """
         if self.permission_classes == []:
             raise ImproperlyConfigured(
-                '{0} is missing the permission_classes attribute. Define {0}.permission_classes, or override '
-                '{0}.get_permission_classes().'.format(self.__class__.__name__)
+                "{0} is missing the permission_classes attribute. Define {0}.permission_classes, or override "
+                "{0}.get_permission_classes().".format(self.__class__.__name__)
             )
         if isinstance(self.permission_classes, str):
             perms = (self.permission_classes,)
@@ -240,7 +245,11 @@ class PermissionClassesMixin(AccessMixin):
 
     def handle_no_permission(self):
         add_message(self.request, ERROR, self.get_permission_denied_message())
-        return redirect_to_login(self.request.get_full_path(), self.get_login_url(), self.get_redirect_field_name())
+        return redirect_to_login(
+            self.request.get_full_path(),
+            self.get_login_url(),
+            self.get_redirect_field_name(),
+        )
 
     def dispatch(self, request, *args, **kwargs):
         for permission in self.get_permission_classes():

@@ -8,22 +8,46 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-        ('user_profile', '0001_squashed_0010_shortcuts_is_mentor'),
-    ]
+    dependencies = [("user_profile", "0001_squashed_0010_shortcuts_is_mentor")]
 
     operations = [
         migrations.CreateModel(
-            name='Social',
+            name="Social",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('updated_at', models.DateTimeField(auto_now=True)),
-                ('provider', models.CharField(choices=[('facebook', 'Facebook'), ('github', 'Github'), ('google', 'Google')], max_length=20)),
-                ('social_id', models.CharField(max_length=50, unique=True)),
-                ('access_token', models.TextField()),
-                ('expires', models.IntegerField()),
-                ('scopes', models.CharField(default='[]', max_length=2000)),
-                ('profile', models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, related_name='social_logins', to='user_profile.Profile')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("updated_at", models.DateTimeField(auto_now=True)),
+                (
+                    "provider",
+                    models.CharField(
+                        choices=[
+                            ("facebook", "Facebook"),
+                            ("github", "Github"),
+                            ("google", "Google"),
+                        ],
+                        max_length=20,
+                    ),
+                ),
+                ("social_id", models.CharField(max_length=50, unique=True)),
+                ("access_token", models.TextField()),
+                ("expires", models.IntegerField()),
+                ("scopes", models.CharField(default="[]", max_length=2000)),
+                (
+                    "profile",
+                    models.ForeignKey(
+                        null=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="social_logins",
+                        to="user_profile.Profile",
+                    ),
+                ),
             ],
-        ),
+        )
     ]

@@ -6,12 +6,12 @@ from .mixins import LoginContextMixin
 
 
 class LoginView(LoginContextMixin, TemplateView):
-    template_name = 'project/login.html'
+    template_name = "project/login.html"
 
     def get_context_data(self, **kwargs):
-        messages = ''
+        messages = ""
         for message in get_messages(self.request):
-            messages += message.message + '\n'
+            messages += message.message + "\n"
         self.form_error = messages
         return super().get_context_data(**kwargs)
 

@@ -2,7 +2,6 @@ from hacker.permissions import IsHacker
 
 
 class IsTeamMember(IsHacker):
-
     def has_permission(self, request, view):
         is_hacker = super().has_permission(request, view)
         if is_hacker:
@@ -13,6 +12,6 @@ class IsTeamMember(IsHacker):
                 team = None
             hacker = request.user.profile.hacker
             if team is None:
-                return getattr(hacker, 'team', None) is not None
-            return getattr(hacker, 'team', None) == team
+                return getattr(hacker, "team", None) is not None
+            return getattr(hacker, "team", None) == team
         return False

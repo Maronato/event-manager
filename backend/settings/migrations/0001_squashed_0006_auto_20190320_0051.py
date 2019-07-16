@@ -8,26 +8,48 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name='Settings',
+            name="Settings",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('_default_hacker', models.BooleanField(default=False)),
-                ('_default_staff', models.BooleanField(default=False)),
-                ('auto_admit', models.BooleanField(default=False)),
-                ('max_hackers', models.IntegerField(default=100)),
-                ('registration_open', models.DateTimeField(default=django.utils.timezone.now)),
-                ('registration_close', models.DateTimeField(default=django.utils.timezone.now)),
-                ('confirmation', models.DateTimeField(default=django.utils.timezone.now)),
-                ('hackathon_start', models.DateTimeField(default=django.utils.timezone.now)),
-                ('hackathon_end', models.DateTimeField(default=django.utils.timezone.now)),
-                ('ticket_expire', models.IntegerField(default=30)),
-                ('ticket_queue_open', models.BooleanField(default=False)),
-                ('verify_email', models.BooleanField(default=True)),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("_default_hacker", models.BooleanField(default=False)),
+                ("_default_staff", models.BooleanField(default=False)),
+                ("auto_admit", models.BooleanField(default=False)),
+                ("max_hackers", models.IntegerField(default=100)),
+                (
+                    "registration_open",
+                    models.DateTimeField(default=django.utils.timezone.now),
+                ),
+                (
+                    "registration_close",
+                    models.DateTimeField(default=django.utils.timezone.now),
+                ),
+                (
+                    "confirmation",
+                    models.DateTimeField(default=django.utils.timezone.now),
+                ),
+                (
+                    "hackathon_start",
+                    models.DateTimeField(default=django.utils.timezone.now),
+                ),
+                (
+                    "hackathon_end",
+                    models.DateTimeField(default=django.utils.timezone.now),
+                ),
+                ("ticket_expire", models.IntegerField(default=30)),
+                ("ticket_queue_open", models.BooleanField(default=False)),
+                ("verify_email", models.BooleanField(default=True)),
             ],
-        ),
+        )
     ]

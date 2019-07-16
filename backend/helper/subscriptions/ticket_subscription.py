@@ -9,10 +9,10 @@ class BaseTicketSubscription(base.BaseSubscriptionReceiver):
     and only updates of the latest ticket are dispatched
     """
 
-    sub_type = 'publish.subscription'
+    sub_type = "publish.subscription"
 
     def get_group_name(self):
-        return f'ticket_sub_{self.instance.creator.unique_id}_universal'
+        return f"ticket_sub_{self.instance.creator.unique_id}_universal"
 
     def is_valid(self):
         """Whether or not the update
@@ -23,7 +23,10 @@ class BaseTicketSubscription(base.BaseSubscriptionReceiver):
         # If not deleting
         if self.signal != post_delete:
             # Check if it is the latest ticket
-            if self.sender.objects.filter(creator=self.instance.creator).last().id == self.instance.id:
+            if (
+                self.sender.objects.filter(creator=self.instance.creator).last().id
+                == self.instance.id
+            ):
                 return True
             return False
         # If deleting, we have to send and the client has to fetch manually
@@ -33,41 +36,39 @@ class BaseTicketSubscription(base.BaseSubscriptionReceiver):
 
 class CreateTicketSubscription(BaseTicketSubscription):
 
-    signal_name = 'create'
+    signal_name = "create"
 
     def receive(self, sender, **kwargs):
         super().receive(sender, **kwargs)
         # Only accept created signals
-        if not kwargs['created']:
+        if not kwargs["created"]:
             return
 
-        instance = kwargs['instance']
+        instance = kwargs["instance"]
         self.data = self.get_instance_fields(sender, instance)
         self.dispatch()
 
 
 class UpdateTicketSubscription(BaseTicketSubscription):
 
-    signal_name = 'update'
+    signal_name = "update"
 
     def receive(self, sender, **kwargs):
         super().receive(sender, **kwargs)
         # Only accept created signals
-        if kwargs['created']:
+        if kwargs["created"]:
             return
-        instance = kwargs['instance']
+        instance = kwargs["instance"]
         self.data = self.get_instance_fields(sender, instance)
         self.dispatch()
 
 
 class DeleteTicketSubscription(BaseTicketSubscription):
 
-    signal_name = 'delete'
+    signal_name = "delete"
 
     def receive(self, sender, **kwargs):
         super().receive(sender, **kwargs)
-        instance = kwargs['instance']
-        self.data = {
-            'id': getattr(instance, 'id', None)
-        }
+        instance = kwargs["instance"]
+        self.data = {"id": getattr(instance, "id", None)}
         self.dispatch()

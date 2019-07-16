@@ -21,9 +21,17 @@ def canv_url(request):
     """
     # Check whether the last call was secure and use its protocol
     if request.is_secure():
-        return 'https://' + request.get_host() + reverse('social:login_response', kwargs={'provider': 'github'})
+        return (
+            "https://"
+            + request.get_host()
+            + reverse("social:login_response", kwargs={"provider": "github"})
+        )
     else:
-        return 'http://' + request.get_host() + reverse('social:login_response', kwargs={'provider': 'github'})
+        return (
+            "http://"
+            + request.get_host()
+            + reverse("social:login_response", kwargs={"provider": "github"})
+        )
 
 
 def auth_url(request):
@@ -40,21 +48,21 @@ def auth_url(request):
     url = "https://github.com/login/oauth/authorize/?"
 
     # Payload
-    kvps = {'client_id': app_id, 'redirect_uri': canvas_url}
+    kvps = {"client_id": app_id, "redirect_uri": canvas_url}
 
     # Add 'next' as state if provided
     next_param = f"next_url={quote(request.GET.get('next', ''))}"
     # Add 'redirected' as state if provided
     redirected_param = f"redirected={request.GET.get('redirected', '')}"
-    if request.GET.get('next', False):
-        kvps['state'] = next_param
-        redirected_param = f',{redirected_param}'
-    if request.GET.get('redirected', False):
-        kvps['state'] = kvps.get('state', '') + redirected_param
+    if request.GET.get("next", False):
+        kvps["state"] = next_param
+        redirected_param = f",{redirected_param}"
+    if request.GET.get("redirected", False):
+        kvps["state"] = kvps.get("state", "") + redirected_param
 
     # Format permissions if needed
     if perms:
-        kvps['scope'] = ",".join(perms)
+        kvps["scope"] = ",".join(perms)
 
     # Return the url
     return url + urlencode(kvps)
@@ -62,20 +70,22 @@ def auth_url(request):
 
 def get_access_token_from_code(code, redirect_uri):
     app_id, app_secret = get_credentials()
-    url = 'https://github.com/login/oauth/access_token'
-    payload = {
-        'client_id': app_id,
-        'client_secret': app_secret,
-        'code': code
-    }
-    response = requests.post(url, headers={'Accept': 'application/json'}, data=payload)
+    url = "https://github.com/login/oauth/access_token"
+    payload = {"client_id": app_id, "client_secret": app_secret, "code": code}
+    response = requests.post(url, headers={"Accept": "application/json"}, data=payload)
     response.raise_for_status()
     return response.json()
 
 
 def debug_token(token):
-    url = 'https://api.github.com/user'
-    response = requests.get(url, headers={'Accept': 'application/json', 'Authorization': 'token {}'.format(token)})
+    url = "https://api.github.com/user"
+    response = requests.get(
+        url,
+        headers={
+            "Accept": "application/json",
+            "Authorization": "token {}".format(token),
+        },
+    )
     return response.json()
 
 
@@ -92,52 +102,52 @@ def login_successful(code, request):
         token_info = get_access_token_from_code(code, canvas_url)
     except requests.exceptions.HTTPError:
         # For some reason, the auth code has already been used, redirect to login again
-        return 'auth code used'
+        return "auth code used"
 
     try:
         # Extract token from token info
-        access_token = token_info['access_token']
+        access_token = token_info["access_token"]
     except KeyError:
-        return 'token missing'
+        return "token missing"
 
     # Debug the token, as per documentation
     debug = debug_token(access_token)
 
     # Get the user's scope ID from debug data
-    social_id = debug['id']
+    social_id = debug["id"]
     # Github tokens dont expire
     expires = 999999999
-    scopes = token_info.get('scope', "").split(',')
+    scopes = token_info.get("scope", "").split(",")
 
     # Get some user info like name and url
-    names = debug.get('name', ' ')
+    names = debug.get("name", " ")
     if names is not None:
-        names = names.split(' ')
+        names = names.split(" ")
     else:
-        names = ['']
+        names = [""]
     first_name = names[0]
-    last_name = ' '.join(names[1:]) if len(names) > 1 else ''
-    email = debug.get('email', None)
+    last_name = " ".join(names[1:]) if len(names) > 1 else ""
+    email = debug.get("email", None)
 
     # User if not anonymous
     user = request.user if request.user.is_authenticated else None
 
     kwargs = {
-        'provider': 'github',
-        'user': user,
-        'request': request,
-        'social_id': social_id,
-        'access_token': access_token,
-        'expires': expires,
-        'first_name': first_name,
-        'last_name': last_name,
-        'scopes': json.dumps(scopes),
-        'email': email
+        "provider": "github",
+        "user": user,
+        "request": request,
+        "social_id": social_id,
+        "access_token": access_token,
+        "expires": expires,
+        "first_name": first_name,
+        "last_name": last_name,
+        "scopes": json.dumps(scopes),
+        "email": email,
     }
     new, u_created, s_created, request = Social.create_or_update(**kwargs)
 
     if not u_created and s_created:
-        messages.add_message(request, messages.SUCCESS, 'Github vinculado!')
+        messages.add_message(request, messages.SUCCESS, "Github vinculado!")
 
     if new is None:
         return request
@@ -146,7 +156,7 @@ def login_successful(code, request):
     if new.profile.user.is_active:
         login(request, new.profile.user)
     else:
-        messages.add_message(request, messages.ERROR, 'Essa conta foi desativada!')
+        messages.add_message(request, messages.ERROR, "Essa conta foi desativada!")
 
     return request
 
@@ -154,6 +164,8 @@ def login_successful(code, request):
 def code_already_used_url(next_url, redirected):
     state = {}
     if next_url:
-        state['next'] = next_url
-    state['redirected'] = int(redirected) + 1 if redirected else 0
-    return reverse('social:login', kwargs={'provider': 'github'}) + '?' + urlencode(state)
+        state["next"] = next_url
+    state["redirected"] = int(redirected) + 1 if redirected else 0
+    return (
+        reverse("social:login", kwargs={"provider": "github"}) + "?" + urlencode(state)
+    )

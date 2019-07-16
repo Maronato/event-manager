@@ -12,17 +12,18 @@ class StaffContextMixin(ContextMixin):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         staff_context = {
-            'api': {
-                'list_hacker_profiles': reverse('profile:api:list_hacker_profiles'),
-                'create_blank_hacker': reverse('staff:api:create_blank_hacker'),
-                'fetch_checkin_hacker': reverse('hacker:api:fetch_checkin_hacker'),
-                'checkin_hacker': reverse('hacker:api:checkin_hacker'),
-                'admit_hacker': reverse('hacker:api:admit_hacker'),
-                'decline_hacker': reverse('hacker:api:decline_hacker'),
-                'unwaitlist_hacker': reverse('hacker:api:unwaitlist_hacker'),
-
-                'view_application': reverse('application:api:view_application', args=[0])[:-2],
+            "api": {
+                "list_hacker_profiles": reverse("profile:api:list_hacker_profiles"),
+                "create_blank_hacker": reverse("staff:api:create_blank_hacker"),
+                "fetch_checkin_hacker": reverse("hacker:api:fetch_checkin_hacker"),
+                "checkin_hacker": reverse("hacker:api:checkin_hacker"),
+                "admit_hacker": reverse("hacker:api:admit_hacker"),
+                "decline_hacker": reverse("hacker:api:decline_hacker"),
+                "unwaitlist_hacker": reverse("hacker:api:unwaitlist_hacker"),
+                "view_application": reverse(
+                    "application:api:view_application", args=[0]
+                )[:-2],
             }
         }
-        context['staff_context'] = json.dumps(staff_context)
+        context["staff_context"] = json.dumps(staff_context)
         return context

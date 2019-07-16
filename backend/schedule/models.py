@@ -2,20 +2,21 @@ from django.db import models
 from django.utils import timezone
 from datetime import timedelta
 from user_profile.models import Profile
+
 # Create your models here.
 
 
 EVENT_TYPES = (
-    ('Meta', 'Meta'),
-    ('Keynote', 'Keynote'),
-    ('Workshop', 'Workshop'),
-    ('Palestra', 'Palestra')
+    ("Meta", "Meta"),
+    ("Keynote", "Keynote"),
+    ("Workshop", "Workshop"),
+    ("Palestra", "Palestra"),
 )
 
 
 class Event(models.Model):
     msocks_allow = True
-    msocks_serializer = 'schedule.serializers.EventSubscriptionSerializer'
+    msocks_serializer = "schedule.serializers.EventSubscriptionSerializer"
 
     name = models.CharField(max_length=100)
     description = models.CharField(max_length=200)
@@ -29,16 +30,10 @@ class Event(models.Model):
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
-        related_name="my_events"
+        related_name="my_events",
     )
-    attendees = models.ManyToManyField(
-        Profile,
-        related_name="selected_events"
-    )
-    attended = models.ManyToManyField(
-        Profile,
-        related_name="attended_events"
-    )
+    attendees = models.ManyToManyField(Profile, related_name="selected_events")
+    attended = models.ManyToManyField(Profile, related_name="attended_events")
 
     @property
     def is_full(self):
@@ -92,19 +87,13 @@ class Event(models.Model):
         return self.attended.filter(pk=attendee.pk).exists()
 
     def average_rating(self):
-        return self.aggregate(models.Avg('feedbacks__rating'))
+        return self.aggregate(models.Avg("feedbacks__rating"))
 
 
 class Feedback(models.Model):
     attendee = models.ForeignKey(
-        Profile,
-        on_delete=models.CASCADE,
-        related_name="feedbacks"
+        Profile, on_delete=models.CASCADE, related_name="feedbacks"
     )
-    event = models.ForeignKey(
-        Event,
-        on_delete=models.CASCADE,
-        related_name="feedbacks"
-    )
+    event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name="feedbacks")
     rating = models.IntegerField(blank=True, null=True)
     comments = models.TextField(blank=True)

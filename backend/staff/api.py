@@ -13,7 +13,7 @@ class ToggleIsStaff(views.APIView):
     permission_classes = [IsAdmin]
 
     def post(self, request):
-        unique_id = request.data['unique_id']
+        unique_id = request.data["unique_id"]
         profile = Profile.objects.get(unique_id=unique_id)
         if profile.is_staff:
             profile.staff.delete()
@@ -21,7 +21,7 @@ class ToggleIsStaff(views.APIView):
         else:
             staff = Staff(profile=profile)
             staff.save()
-        return views.Response({'message': 'Permissão alterada'})
+        return views.Response({"message": "Permissão alterada"})
 
 
 class CreateBlankHacker(views.APIView):
@@ -38,5 +38,7 @@ class CreateBlankHacker(views.APIView):
         user.save()
         hacker = Hacker(profile=user.profile)
         hacker.save()
-        url = request.build_absolute_uri('/').strip("/") + reverse('profile:token_login', args={user.profile.token})
-        return views.Response({'token': user.profile.token, 'url': url})
+        url = request.build_absolute_uri("/").strip("/") + reverse(
+            "profile:token_login", args={user.profile.token}
+        )
+        return views.Response({"token": user.profile.token, "url": url})

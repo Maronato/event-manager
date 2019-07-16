@@ -7,12 +7,13 @@ from django.db.models.signals import post_save
 from django.db.models import Q
 from django.core.validators import MinValueValidator
 from django.core.cache import cache
+
 # Create your models here.
 
 
 class Settings(models.Model):
     msocks_allow = True
-    msocks_serializer = 'settings.serializers.SettingsSerializer'
+    msocks_serializer = "settings.serializers.SettingsSerializer"
 
     # Whether new users (created with social login) are hackers by default
     _default_hacker = models.BooleanField(default=False)
@@ -44,7 +45,12 @@ class Settings(models.Model):
 
     # Ticket Prices
     require_payment = models.BooleanField(default=False)
-    ticket_price = models.DecimalField(default=10, decimal_places=2, max_digits=10, validators=[MinValueValidator(Decimal(0.01))])
+    ticket_price = models.DecimalField(
+        default=10,
+        decimal_places=2,
+        max_digits=10,
+        validators=[MinValueValidator(Decimal(0.01))],
+    )
 
     # Teams
     max_team_size = models.IntegerField(default=5)
@@ -53,14 +59,14 @@ class Settings(models.Model):
     def get(settings=None):
         if settings is not None:
             return settings
-        cached_settings = cache.get('settings')
+        cached_settings = cache.get("settings")
         if cached_settings is not None:
             return cached_settings
         settings = Settings.objects.first()
         if settings is None:
             settings = Settings()
             settings.save()
-        cache.set('settings', settings)
+        cache.set("settings", settings)
         return settings
 
     # Defaults when creating new users
@@ -101,10 +107,13 @@ class Settings(models.Model):
     @staticmethod
     def is_full(settings=None):
         from hacker.models import Hacker
+
         maximum = Settings.get(settings).max_hackers
         if maximum <= 0:
             return False
-        hackers = Hacker.objects.filter(Q(checked_in=True) | Q(confirmed=True) | Q(admitted=True)).distinct()
+        hackers = Hacker.objects.filter(
+            Q(checked_in=True) | Q(confirmed=True) | Q(admitted=True)
+        ).distinct()
         return len(hackers) > maximum
 
     @staticmethod
@@ -120,31 +129,61 @@ class Settings(models.Model):
 
     @staticmethod
     def registration_open_seconds(settings=None):
-        return int((Settings.get(settings).registration_open - datetime.datetime(1970, 1, 1).replace(tzinfo=pytz.UTC)).total_seconds() * 1000)
+        return int(
+            (
+                Settings.get(settings).registration_open
+                - datetime.datetime(1970, 1, 1).replace(tzinfo=pytz.UTC)
+            ).total_seconds()
+            * 1000
+        )
 
     @staticmethod
     def registration_close_seconds(settings=None):
-        return int((Settings.get(settings).registration_close - datetime.datetime(1970, 1, 1).replace(tzinfo=pytz.UTC)).total_seconds() * 1000)
+        return int(
+            (
+                Settings.get(settings).registration_close
+                - datetime.datetime(1970, 1, 1).replace(tzinfo=pytz.UTC)
+            ).total_seconds()
+            * 1000
+        )
 
     @staticmethod
     def confirmation_seconds(settings=None):
-        return int((Settings.get(settings).confirmation - datetime.datetime(1970, 1, 1).replace(tzinfo=pytz.UTC)).total_seconds() * 1000)
+        return int(
+            (
+                Settings.get(settings).confirmation
+                - datetime.datetime(1970, 1, 1).replace(tzinfo=pytz.UTC)
+            ).total_seconds()
+            * 1000
+        )
 
     @staticmethod
     def hackathon_start_seconds(settings=None):
-        return int((Settings.get(settings).hackathon_start - datetime.datetime(1970, 1, 1).replace(tzinfo=pytz.UTC)).total_seconds() * 1000)
+        return int(
+            (
+                Settings.get(settings).hackathon_start
+                - datetime.datetime(1970, 1, 1).replace(tzinfo=pytz.UTC)
+            ).total_seconds()
+            * 1000
+        )
 
     @staticmethod
     def hackathon_end_seconds(settings=None):
-        return int((Settings.get(settings).hackathon_end - datetime.datetime(1970, 1, 1).replace(tzinfo=pytz.UTC)).total_seconds() * 1000)
+        return int(
+            (
+                Settings.get(settings).hackathon_end
+                - datetime.datetime(1970, 1, 1).replace(tzinfo=pytz.UTC)
+            ).total_seconds()
+            * 1000
+        )
 
     def __str__(self):
-        return 'Settings'
+        return "Settings"
 
 
 def cache_settings(sender, **kwargs):
-    settings = kwargs['instance']
-    cache.set('settings', settings)
+    settings = kwargs["instance"]
+    cache.set("settings", settings)
 
 
 post_save.connect(cache_settings, sender=Settings)

@@ -3,7 +3,6 @@ from .models import Application
 
 
 class ExportApplicationSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = Application
-        exclude = ['hacker', 'id']
+        exclude = ["hacker", "id"]
