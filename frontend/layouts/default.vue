@@ -7,11 +7,12 @@
             :class="{open: showNav}"
             fixed
             dark
-            app>
+            app
+        >
             <v-list>
                 <v-list-item href="/" :ripple="false">
                     <v-list-item-avatar width="100%" height="100%">
-                        <img src="~/static/img/logo.svg">
+                        <img src="~/static/img/logo.svg" />
                     </v-list-item-avatar>
                 </v-list-item>
                 <v-list-item
@@ -88,14 +89,41 @@
                 return items
             }
         },
-        mounted() {
-            this.$selfWS({signal: 'update', debug: true, callback: () => {
-                console.log("deu bom")
-            }})
+        beforeMount() {
+            // API Fetch
+            this.fetchSettings()
+            // WS Subscribe
+            this.selfSub()
+            this.settingsSub()
         },
         methods: {
             logout() {
                 this.$auth.logout()
+            },
+            selfSub() {
+                this.$selfWS({
+                    signal: "update",
+                    debug: true,
+                    callback: user => {
+                        this.$auth.setUset(user)
+                    }
+                })
+            },
+            fetchSettings() {
+                this.$auth.request("/settings/api/settings/").then(settings => {
+                    this.$store.commit("settings/set", settings)
+                })
+            },
+            settingsSub() {
+                this.$modelWS({
+                    app: "settings",
+                    model: "Settings",
+                    signal: "update",
+                    debug: true,
+                    callback: settings => {
+                        this.$store.commit("settings/set", settings)
+                    }
+                })
             }
         }
     }

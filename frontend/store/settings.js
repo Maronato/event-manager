@@ -2,7 +2,7 @@ export const state = () => ({
     settings: {}
 })
 export const mutations = {
-    setSettings(state, settings) {
+    set(state, settings) {
         state.settings = settings
     }
 }

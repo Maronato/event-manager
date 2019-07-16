@@ -1,4 +1,5 @@
 import WebSocketBridge from "./ws_wrapper";
+const consola = require('consola')
 
 const globalSockets = {}
 
@@ -15,18 +16,18 @@ export class BaseSubscription {
 
     connect() {
         if (this.connected) return
-        if (this.debug) console.debug("Connecting");
+        if (this.debug) consola.log("Connecting");
         this.webSocketBridge.connect(this.url);
         const self = this;
         this.webSocketBridge.listen(function (action, stream) {
             self.onmessage(action);
         });
-        if (this.debug) console.debug("Connected");
+        if (this.debug) consola.log("Connected");
         this.connected = true;
     }
 
     onmessage(action) {
-        if (this.debug) console.debug("Message received");
+        if (this.debug) consola.log("Message received");
         for (const listener in this.listeners) {
             this.listeners[listener](action);
         }
@@ -37,14 +38,14 @@ export class BaseSubscription {
             this.connect()
         }
         this.listeners.push(callback);
-        if (this.debug) console.debug("Subscribed to " + this.url);
+        if (this.debug) consola.log("Subscribed to " + this.url);
     }
 
     unsubscribe(callback) {
         this.listeners.splice(this.listeners.indexOf(callback), 1);
-        if (this.debug) console.debug("Unsubscribed from " + this.url);
+        if (this.debug) consola.log("Unsubscribed from " + this.url);
         if (this.listeners.length === 0) {
-            if (this.debug) console.debug("No listeners. Disconnecting from socket... ");
+            if (this.debug) consola.log("No listeners. Disconnecting from socket... ");
             this.disconnect()
         }
     }
@@ -59,22 +60,22 @@ export class BaseSubscription {
             return;
         }
         this.webSocketBridge.send(payload);
-        if (this.debug) console.debug("Payload send to " + this.url);
+        if (this.debug) consola.log("Payload send to " + this.url);
     }
 
     disconnect() {
         this.webSocketBridge.close();
-        if (this.debug) console.debug("Disconnected");
+        if (this.debug) consola.log("Disconnected");
         this.connected = false;
     }
 }
 
 function getOrCreate(url, debug) {
     if (globalSockets[url]) {
-        if (debug) console.debug("Connecting to exisitng Socket");
+        if (debug) consola.log("Connecting to exisitng Socket");
         return globalSockets[url]
     } else {
-        if (debug) console.debug("Creating new Socket");
+        if (debug) consola.log("Creating new Socket");
         const newSocket = new BaseSubscription(url, debug);
         globalSockets[url] = newSocket;
         return newSocket;
@@ -95,18 +96,18 @@ export class SubscriptionManager {
 
     connect() {
         if (this.connected) return
-        if (this.debug) console.debug("Connecting to socket");
+        if (this.debug) consola.log("Connecting to socket");
         this.socketConnection.connect(this.url);
         const self = this;
         this.socketConnection.subscribe(function (action) {
             self.onmessage(action);
         });
-        if (this.debug) console.debug("Connected to socket");
+        if (this.debug) consola.log("Connected to socket");
         this.connected = true;
     }
 
     onmessage(action) {
-        if (this.debug) console.debug("Message received. Passing to socket");
+        if (this.debug) consola.log("Message received. Passing to socket");
         for (const listener in this.listeners) {
             if (action.signal_name === this.signal) {
                 this.listeners[listener](action.data);
@@ -119,14 +120,14 @@ export class SubscriptionManager {
             this.connect()
         }
         this.listeners.push(callback);
-        if (this.debug) console.debug("Subscribed to " + this.url);
+        if (this.debug) consola.log("Subscribed to " + this.url);
     }
 
     unsubscribe(callback) {
         this.listeners.splice(this.listeners.indexOf(callback), 1);
-        if (this.debug) console.debug("Unsubscribed from " + this.url);
+        if (this.debug) consola.log("Unsubscribed from " + this.url);
         if (this.listeners.length === 0) {
-            if (this.debug) console.debug("No listeners. Unsubscribing from socket connection... ");
+            if (this.debug) consola.log("No listeners. Unsubscribing from socket connection... ");
             this.disconnect()
         }
     }
@@ -141,12 +142,12 @@ export class SubscriptionManager {
             return;
         }
         this.socketConnection.send(payload);
-        if (this.debug) console.debug("Payload send to " + this.url);
+        if (this.debug) consola.log("Payload send to " + this.url);
     }
 
     disconnect() {
         this.socketConnection.unsubscribe(this.onmessage)
-        if (this.debug) console.debug("Disconnected");
+        if (this.debug) consola.log("Disconnected");
         this.connected = false;
     }
 }

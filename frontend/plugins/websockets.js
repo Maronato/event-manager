@@ -8,9 +8,15 @@ WSockets.install = function (Vue, options) {
     // Global list of subscription managers
 
     Vue.prototype.$ws = {
-        generic: () => new GenericSubscription(arguments),
-        self: () => new SelfSubscription(arguments),
-        model: () => new ModelSubscription(arguments),
+        generic: function () {
+            return new GenericSubscription(JSON.parse(JSON.stringify(arguments[0])))
+        },
+        self: function () {
+            return new SelfSubscription(JSON.parse(JSON.stringify(arguments[0])))
+        },
+        model: function () {
+            return new ModelSubscription(JSON.parse(JSON.stringify(arguments[0])))
+        },
     }
 
     Vue.mixin({
@@ -21,7 +27,7 @@ WSockets.install = function (Vue, options) {
         },
         methods: {
             $genericWS({ url, debug = false, callback = null } = {}) {
-                const sub = this.$ws.generic(url, debug)
+                const sub = this.$ws.generic({ url: url, debug: debug })
                 this.$store.commit('ws/register', {
                     uid: this._uid,
                     sub: sub
@@ -31,7 +37,7 @@ WSockets.install = function (Vue, options) {
                 }
             },
             $selfWS({ signal = 'update', debug = false, callback = null } = {}) {
-                const sub = this.$ws.self(signal, debug)
+                const sub = this.$ws.self({ signal: signal, debug: debug })
                 this.$store.commit('ws/register', {
                     uid: this._uid,
                     sub: sub
@@ -41,7 +47,7 @@ WSockets.install = function (Vue, options) {
                 }
             },
             $modelWS({ app, model, signal, debug = false, callback = null } = {}) {
-                const sub = this.$ws.model(app, model, signal, debug)
+                const sub = this.$ws.model({ app: app, model: model, signal: signal, debug: debug })
                 this.$store.commit('ws/register', {
                     uid: this._uid,
                     sub: sub
