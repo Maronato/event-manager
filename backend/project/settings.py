@@ -61,13 +61,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'maintenance_mode',
 
-    'pwa',
-
-    'compressor',
-    'compressor_toolkit',
     'storages',
     'djcelery_email',
-    'analytical',
     'django_prometheus',
     'django_celery_beat',
 
@@ -171,8 +166,6 @@ if os.environ.get('REDIS_URL'):
             "KEY_PREFIX": "djangocache"
         }
     }
-    SESSION_ENGINE = "django.contrib.sessions.backends.cache"
-    SESSION_CACHE_ALIAS = "default"
 
 
 # Password validation
@@ -223,11 +216,7 @@ AWS_QUERYSTRING_AUTH = False
 FILE_UPLOAD_HANDLERS = ['django.core.files.uploadhandler.TemporaryFileUploadHandler']
 STATIC_ROOT = os.path.join(PROJECT_ROOT, 'staticfiles')
 STATIC_URL = '/static/'
-STATICFILES_FINDERS = (
-    'django.contrib.staticfiles.finders.FileSystemFinder',
-    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
-    'compressor.finders.CompressorFinder'
-)
+
 if not DEBUG and AWS_STORAGE_BUCKET_NAME:
     STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
     DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
@@ -248,30 +237,6 @@ if not DEBUG and eval(os.environ.get("USE_SSL", "False")):
     SESSION_COOKIE_SECURE = True
     CSRF_COOKIE_SECURE = True
 
-
-# Compressor settings
-COMPRESS_OFFLINE = not DEBUG
-
-COMPRESS_PRECOMPILERS = (
-    ('module', 'compressor_toolkit.precompilers.ES6Compiler'),
-    ('text/es6', 'compressor_toolkit.precompilers.ES6Compiler'),
-    ('text/js', 'compressor_toolkit.precompilers.ES6Compiler'),
-    ('text/javascript', 'compressor_toolkit.precompilers.ES6Compiler'),
-    ('text/x-scss', 'compressor_toolkit.precompilers.SCSSCompiler'),
-    ('text/less', 'lessc {infile} {outfile}'),
-)
-
-COMPRESS_ES6_COMPILER_CMD = (
-    'export NODE_PATH="{paths}" && '
-    '{browserify_bin} "{infile}" -o "{outfile}" '
-    '-t [ envify --NODE_ENV production ] '
-    '-t [ "{node_modules}/babelify" --presets="{node_modules}/babel-preset-env" ] '
-)
-if not DEBUG:
-    COMPRESS_ES6_COMPILER_CMD = COMPRESS_ES6_COMPILER_CMD.replace("{browserify_bin}", "NODE_ENV=production {browserify_bin} -g envify")
-    if AWS_STORAGE_BUCKET_NAME:
-        COMPRESS_URL = 'https://{}.s3.amazonaws.com/'.format(AWS_STORAGE_BUCKET_NAME)
-        COMPRESS_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 
 # Celery stuff
 CELERY_BROKER_URL = os.environ.get('CELERY_BROKER_URL')
@@ -321,15 +286,6 @@ MAINTENANCE_MODE_IGNORE_SUPERUSER = True
 # Scout Monitor
 SCOUT_NAME = EVENT_NAME
 
-# Analytics
-GOOGLE_ANALYTICS_PROPERTY_ID = os.environ.get('GOOGLE_ANALYTICS')
-
-# Progressive Web App Settings
-PWA_APP_NAME = EVENT_NAME
-PWA_APP_DESCRIPTION = EVENT_DESCRIPTION
-PWA_APP_THEME_COLOR = '#0A0302'
-PWA_APP_DISPLAY = 'standalone'
-PWA_APP_START_URL = '/'
 
 # PagSeguro settings
 PAGSEGURO_EMAIL = os.environ.get('PAGSEGURO_EMAIL', '')
