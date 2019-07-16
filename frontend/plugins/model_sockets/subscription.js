@@ -8,7 +8,7 @@ export class BaseSubscription {
         this.listeners = [];
         this.debug = false;
         if (debug !== "undefined") this.debug = debug;
-        this.url = url.startsWith("http") ? url : "ws://localhost:8000" + url;
+        this.url = url.startsWith("http") ? url : process.env.WS_URL + url;
         this.webSocketBridge = new WebSocketBridge();
         this.connected = false;
         this.allowSend = true;
@@ -87,7 +87,7 @@ export class SubscriptionManager {
         this.listeners = [];
         this.signal = signal || 'universal';
         this.debug = debug || false;
-        this.url = url.startsWith("http") ? url : "ws://localhost:8000" + url;
+        this.url = url.startsWith("http") ? url : process.env.WS_URL + url;
         this.socketConnection = getOrCreate(url, debug);
         this.connected = false;
         this.allowSend = false;

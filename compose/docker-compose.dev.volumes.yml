@@ -3,6 +3,9 @@ services:
   backend:
     volumes:
       - ../backend:/app
+  backend_ws:
+    volumes:
+      - ../backend:/app
   frontend:
     volumes:
       - ../frontend:/app

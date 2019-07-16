@@ -6,6 +6,12 @@ services:
       dockerfile: backend.dockerfile
       args:
         env: dev
+  backend_ws:
+    build:
+      context: ../backend
+      dockerfile: backend.dockerfile
+      args:
+        env: dev
   frontend:
     build:
       context: ../frontend
@@ -24,9 +30,3 @@ services:
       dockerfile: worker.dockerfile
       args:
         env: dev
-  grafana:
-    build:
-      context: ../grafana
-  prometheus:
-    build:
-      context: ../prometheus

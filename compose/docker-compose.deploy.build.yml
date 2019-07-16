@@ -15,9 +15,3 @@ services:
     build:
       context: ../backend
       dockerfile: worker.dockerfile
-  grafana:
-    build:
-      context: ../grafana
-  prometheus:
-    build:
-      context: ../prometheus

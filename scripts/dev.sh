@@ -9,6 +9,4 @@ DOCKER_BUILDKIT=1 docker build backend/ -f backend/worker.dockerfile -t localhos
 
 DOCKER_BUILDKIT=1 docker build frontend/ -t localhost/em-frontend:dev --build-arg APP_ENV=dev
 
-docker network rm proxy || true
-docker network create proxy || true
 docker-compose -p em up

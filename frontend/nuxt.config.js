@@ -78,6 +78,7 @@ module.exports = {
         middleware: ['auth']
     },
     env: {
+        WS_URL: process.env.WS_URL,
         API_URL: process.env.API_URL,
         API_URL_BROWSER: process.env.API_URL_BROWSER,
         EVENT_NAME: process.env.EVENT_NAME,

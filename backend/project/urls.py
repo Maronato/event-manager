@@ -26,7 +26,6 @@ urlpatterns = [
     path('api/', include((api_patterns, 'api'), namespace='api')),
     path("auth/", include((auth_patterns, 'auth'), namespace='auth')),
     path('', LoginView.as_view(), name='login'),
-    path('', include('pwa.urls')),
     path('', include('django_prometheus.urls')),
     path('admin/', admin.site.urls),
     path('dashboard/', include('dashboard.urls')),
