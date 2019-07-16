@@ -171,10 +171,10 @@ class PrefetchQuerysetModelMixin(object):
     """
 
     def get_queryset(self):
-        # assert self.queryset is not None
-        # queryset = self.queryset
-        # if hasattr(self.get_serializer_class(), 'setup_eager_loading'):
-        #     queryset = self.get_serializer().setup_eager_loading(queryset)
+        assert self.queryset is not None
+        queryset = self.queryset
+        if hasattr(self.get_serializer_class(), 'setup_eager_loading'):
+            queryset = self.get_serializer().setup_eager_loading(queryset)
         return queryset
 
 
@@ -187,19 +187,6 @@ class PrefetchMixin(object):
         if hasattr(meta, "prefetch_related_fields"):
             queryset = queryset.prefetch_related(*meta.prefetch_related_fields)
         return queryset
-
-    @classmethod
-    def many_init(cls, *args, **kwargs):
-        qs = args[0] if len(args) > 0 else kwargs.get("instance", None)
-        if qs:
-            qs = cls.setup_eager_loading(qs)
-        if len(args) > 0:
-            args = list(args)
-            args[0] = qs
-            args = tuple(args)
-        else:
-            kwargs["instance"] = qs
-        return super().many_init(*args, **kwargs)
 
 
 class SingleInstancePrefetchMixin(PrefetchMixin):

@@ -1,19 +1,12 @@
-from django.urls import path, include
-from . import views, api
+# from django.urls import path, include
+from project.router import base_router
+from . import api
 
-apipatterns = [
-    path(
-        "view_application/<str:unique_id>/",
-        api.ViewApplication.as_view(),
-        name="view_application",
-    ),
-    path(
-        "form_options/<str:option>/", api.FormOptionsAPI.as_view(), name="form_options"
-    ),
-]
+
+base_router.register('staff/view_application', api.ViewHackerApplication, 'view_application')
+base_router.register('hacker/application/form_options', api.FormOptions, 'form_options')
+base_router.register('hacker/application', api.ApplicationViewset, 'application')
 
 app_name = "application"
 urlpatterns = [
-    path("api/", include((apipatterns, "api")), name="api"),
-    path("", views.ApplicationView.as_view(), name="form"),
 ]

@@ -1,27 +1,19 @@
-from django.urls import path, include
-from rest_framework.routers import DefaultRouter
-from . import api, views
+# from django.urls import path, include
+from project.router import base_router
+from . import api
 
-router = DefaultRouter()
-router.register(r"company", api.CompanyViewset)
-router.register(r"employee", api.EmployeeViewset)
-router.register(r"scan", api.ScanViewset)
 
-apipatterns = router.urls
+base_router.register("company", api.CompanyViewset, "company")
+base_router.register("employee", api.EmployeeViewset, "employee")
+base_router.register("scan/hacker/fetch", api.FetchScanHacker, "scan_hacker_fetch")
+base_router.register("scan/hacker", api.ScanHacker, "scan_hacker")
+base_router.register("scan/employee/fetch", api.FetchCheckinEmployee, "scan_employee_fetch")
+base_router.register("scan/employee", api.CheckinEmployee, "scan_employee")
+base_router.register("scan", api.ScanViewset, "scan")
 
-apipatterns += [
-    path("fetch_scan_hacker/", api.FetchScanHacker.as_view(), name="fetch_scan_hacker"),
-    path("scan_hacker", api.ScanHacker.as_view(), name="scan_hacker"),
-    path(
-        "fetch_checkin_employee/",
-        api.FetchCheckinEmployee.as_view(),
-        name="fetch_checkin_employee",
-    ),
-    path("checkin_employee", api.CheckinEmployee.as_view(), name="checkin_employee"),
+apipatterns = [
 ]
 
 app_name = "company"
 urlpatterns = [
-    path("api/", include((apipatterns, "api")), name="api"),
-    path("", views.CompanyView.as_view(), name="index"),
 ]

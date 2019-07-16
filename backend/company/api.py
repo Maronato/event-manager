@@ -12,6 +12,7 @@ from .serializers import (
     ReadEmployeeSerializer,
     CreateEmployeeSerializer,
     ScanSerializer,
+    UniqueIDSerializer,
 )
 from .models import Company, Employee, Scan
 
@@ -58,11 +59,14 @@ class ScanViewset(
         return super().get_queryset()
 
 
-class FetchScanHacker(views.APIView):
+class FetchScanHacker(mixins.CreateModelMixin, viewsets.GenericViewSet):
     permission_classes = [EmployeeHasAccess]
+    serializer_class = UniqueIDSerializer
 
-    def post(self, request):
-        unique_id = request.data["unique_id"]
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=False)
+        unique_id = serializer.validated_data['unique_id']
         try:
             profile = Profile.objects.get(
                 Q(unique_id=unique_id) | Q(user__email=unique_id)
@@ -110,11 +114,14 @@ class FetchScanHacker(views.APIView):
         )
 
 
-class ScanHacker(views.APIView):
+class ScanHacker(mixins.CreateModelMixin, viewsets.GenericViewSet):
     permission_classes = [EmployeeHasAccess]
+    serializer_class = UniqueIDSerializer
 
-    def post(self, request):
-        unique_id = request.data["unique_id"]
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=False)
+        unique_id = serializer.validated_data['unique_id']
         scanner = request.user.profile
         profile = get_object_or_404(
             Profile, Q(unique_id=unique_id) | Q(user__email=unique_id)
@@ -133,11 +140,14 @@ class ScanHacker(views.APIView):
         )
 
 
-class FetchCheckinEmployee(views.APIView):
+class FetchCheckinEmployee(mixins.CreateModelMixin, viewsets.GenericViewSet):
     permission_classes = [IsAdmin]
+    serializer_class = UniqueIDSerializer
 
-    def post(self, request):
-        unique_id = request.data["unique_id"]
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=False)
+        unique_id = serializer.validated_data['unique_id']
         try:
             profile = Profile.objects.get(
                 Q(unique_id=unique_id) | Q(user__email=unique_id)
@@ -177,11 +187,14 @@ class FetchCheckinEmployee(views.APIView):
         )
 
 
-class CheckinEmployee(views.APIView):
+class CheckinEmployee(mixins.CreateModelMixin, viewsets.GenericViewSet):
     permission_classes = [IsAdmin]
+    serializer_class = UniqueIDSerializer
 
-    def post(self, request):
-        unique_id = request.data["unique_id"]
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=False)
+        unique_id = serializer.validated_data['unique_id']
         profile = get_object_or_404(
             Profile, Q(unique_id=unique_id) | Q(user__email=unique_id)
         )

@@ -4,6 +4,10 @@ from project.mixins import PrefetchMixin, SingleInstancePrefetchMixin
 from .models import Company, Employee, Scan
 
 
+class UniqueIDSerializer(serializers.Serializer):
+    unique_id = serializers.CharField()
+
+
 class CompanySerializer(serializers.ModelSerializer):
     class Meta:
         fields = ["id", "name", "access_level"]

@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from project.mixins import SingleInstancePrefetchMixin
+from .models import Hacker
 
 
 class HackerSubscriptionSerializer(
