@@ -2,130 +2,118 @@
     <div id="login">
         <v-container>
             <div class="content">
-                <v-segment>
-                    <div class="logo">
-                        <img :src="context.event_logo" />
-                    </div>
-                    <v-divider horizontal></v-divider>
-                    <div v-if="loginState === 'login'">
-                        <v-form :loading="formLoading">
-                            <v-form-field>
+                <v-card>
+                    <v-container>
+                        <div class="logo">
+                            <img src="~/static/img/logo.png" />
+                        </div>
+                        <div v-if="loginState === 'login'">
+                            <v-form :loading="formLoading">
                                 <v-btn
-                                    type="btn"
-                                    fluid
-                                    social="facebook"
-                                    content="Entrar com Facebook"
-                                    icon="facebook"
-                                    @click="socialLogin('facebook')"
-                                />
-                            </v-form-field>
-                            <v-form-field>
+                                    class="my-3"
+                                    block
+                                    tile
+                                    color="blue"
+                                    :href="baseURL + `/social/login/facebook/`"
+                                >
+                                    <v-icon left>fab fa-facebook-f</v-icon>Entrar com Facebook
+                                </v-btn>
                                 <v-btn
-                                    type="btn"
-                                    fluid
+                                    class="my-3"
+                                    block
+                                    tile
                                     color="black"
-                                    content="Entrar com GitHub"
-                                    icon="github"
-                                    @click="socialLogin('github')"
-                                />
-                            </v-form-field>
-                            <v-form-field>
+                                    :href="baseURL + `/social/login/github/`"
+                                >
+                                    <v-icon left>fab fa-github</v-icon>Entrar com GitHub
+                                </v-btn>
                                 <v-btn
-                                    type="btn"
-                                    fluid
-                                    social="youtube"
-                                    content="Entrar com Google"
-                                    icon="google"
-                                    @click="socialLogin('google')"
-                                />
-                            </v-form-field>
-                        </v-form>
-                        <v-divider horizontal>Ou</v-divider>
-                        <v-btn
-                            v-show="!showTokenField"
-                            type="btn"
-                            class="login"
-                            fluid
-                            content="Usar token para acesso"
-                            @click="showTokenField = true"
-                        />
-                        <v-form
-                            v-show="showTokenField"
-                            :error="error"
-                            @submit.prevent="tokenLogin()"
-                        >
-                            <v-form-field>
-                                <v-message error>{{ errorMessage }}</v-message>
-                                <label>Token</label>
-                                <v-input
+                                    class="my-3"
+                                    block
+                                    tile
+                                    color="red"
+                                    :href="baseURL + `/social/login/google/`"
+                                >
+                                    <v-icon left>fab fa-google</v-icon>Entrar com Google
+                                </v-btn>
+                            </v-form>
+                            <v-divider></v-divider>
+                            <v-btn
+                                v-show="!showTokenField"
+                                class="my-3 login"
+                                block
+                                tile
+                                @click="showTokenField = true"
+                            >Usar token para acesso</v-btn>
+                            <v-form
+                                v-show="showTokenField"
+                                :error="error"
+                                class="my-3"
+                                @submit.prevent="tokenLogin()"
+                            >
+                                <v-alert v-show="errorMessage" type="error">{{ errorMessage }}</v-alert>
+                                <v-text-field
                                     v-model="token"
                                     :loading="tokenLoading"
                                     :disabled="tokenLoading"
                                     type="text"
+                                    label="Token"
                                     required
                                     placeholder="AbC123"
                                 />
-                            </v-form-field>
-                            <v-btn
-                                :loading="tokenLoading"
-                                :disabled="tokenLoading"
-                                class="login"
-                                fluid
-                                content="Entrar com token"
-                                type="submit"
-                            />
-                        </v-form>
-                    </div>
-                    <div v-if="loginState === 'forgot'">
-                        <div class="ui forgot-password form">
-                            <v-form :success="success" @submit.prevent="sendResetEmail()">
-                                <v-message success>{{ successMessage }}</v-message>
-                                <v-form-field>
-                                    <label>Email</label>
-                                    <v-input
+                                <v-btn
+                                    :loading="tokenLoading"
+                                    :disabled="tokenLoading"
+                                    class="mb-3 login"
+                                    block
+                                    tile
+                                    @click="tokenLogin"
+                                >Entrar com token</v-btn>
+                            </v-form>
+                        </div>
+                        <div v-if="loginState === 'forgot'">
+                            <div class="forgot-password form">
+                                <v-form :success="success" @submit.prevent="sendResetEmail()">
+                                    <v-message success>{{ successMessage }}</v-message>
+                                    <v-text-field
                                         v-model="resetEmail"
                                         type="email"
+                                        label="Email"
                                         :loading="emailLoading"
                                         :disabled="emailLoading"
                                         required
                                         placeholder="foo@bar.com"
                                     />
-                                </v-form-field>
-                                <v-form-field>
                                     <v-btn
                                         :loading="emailLoading"
                                         :disabled="emailLoading"
-                                        class="login"
-                                        fluid
-                                        content="Recuperar token"
-                                        type="submit"
-                                    />
-                                </v-form-field>
-                            </v-form>
+                                        class="my-3 login"
+                                        block
+                                        tile
+                                    >Recuperar token</v-btn>
+                                </v-form>
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="ui divider"></div>
+                        <v-divider />
 
-                    <div v-if="loginState === 'login'" class="forgot">
-                        <a href="#" @click="setLoginState('forgot')">Esqueceu seu token?</a>
-                    </div>
-                    <div v-if="loginState === 'forgot'" class="forgot">
-                        <a href="#" @click="setLoginState('login')">Fazer login</a>
-                    </div>
-                </v-segment>
+                        <div v-if="loginState === 'login'" class="forgot mt-3">
+                            <a href="#" @click="setLoginState('forgot')">Esqueceu seu token?</a>
+                        </div>
+                        <div v-if="loginState === 'forgot'" class="forgot mt-3">
+                            <a href="#" @click="setLoginState('login')">Fazer login</a>
+                        </div>
+                    </v-container>
+                </v-card>
             </div>
         </v-container>
     </div>
 </template>
 <script>
-    import axios from "axios"
-
     export default {
-        props: ["loginContext"],
         data() {
             return {
-                errorMessage: login_context.error != "" ? login_context.error : "",
+                errorMessage: "",
                 successMessage: "",
                 loginState: "login",
                 tokenLoading: false,
@@ -133,16 +121,43 @@
                 formLoading: false,
                 showTokenField: false,
                 resetEmail: "",
-                token: "",
-                context: login_context
+                token: ""
             }
         },
         computed: {
             error: function() {
-                return this.errorMessage != ""
+                return this.errorMessage !== ""
             },
             success: function() {
-                return this.successMessage != ""
+                return this.successMessage !== ""
+            },
+            baseURL() {
+                return process.env.API_URL_BROWSER
+            }
+        },
+        created() {
+            if (this.$auth.loggedIn) {
+                this.$router.push('/')
+            }
+        },
+        mounted() {
+            let messages = this.$route.query.messages
+            if (messages) {
+                messages = Array.isArray(messages) ? messages : [messages]
+                messages.forEach(message => {
+                    this.$toast("", message)
+                })
+            }
+            let errors = this.$route.query.errors
+            if (errors) {
+                errors = Array.isArray(errors) ? errors : [errors]
+                errors.forEach(error => {
+                    this.$toast("", error, "error")
+                })
+            }
+
+            if (this.$route.query.token) {
+                this.login(this.$route.query.token)
             }
         },
         methods: {
@@ -150,95 +165,87 @@
                 this.loginState = state
             },
             tokenLogin() {
-                self.errorMessage = ""
+                this.errorMessage = ""
                 if (this.token === "") return
-                self = this
                 this.tokenLoading = true
-                axios
-                    .post(this.context.check_token_url, {
-                        token: this.token
+                this.$auth
+                    .request({
+                        method: "post",
+                        url: "/profile/api/check_token/",
+                        data: {
+                            token: this.token
+                        }
                     })
-                    .then(function(response) {
-                        window.location.href = response.data.redirect_url
+                    .then(response => {
+                        this.$auth.request({
+                            method: 'post',
+                            url: '/profile/api/token_login/',
+                            data: {
+                                token: this.token
+                            }
+                        }).then(response => {
+                            this.login(response.token)
+                        })
                     })
-                    .catch(function(error) {
-                        self.errorMessage = error.response.data.error
-                        self.tokenLoading = false
+                    .catch(error => {
+                        this.errorMessage = error.response.data.error
+                        this.tokenLoading = false
+                        return Promise.reject(error)
                     })
             },
             sendResetEmail() {
                 if (this.resetEmail === "") return
-                self = this
                 this.emailLoading = true
-                axios
-                    .post(this.context.reset_email_url, {
-                        email: self.resetEmail
+                this.$auth
+                    .request({
+                        method: "post",
+                        url: "/profile/api/reset_token_email/",
+                        data: {
+                            email: this.resetEmail
+                        }
                     })
-                    .then(function(response) {
-                        self.successMessage = response.data.message
+                    .then(response => {
+                        this.successMessage = response.data.message
                     })
-                    .catch(function(error) {
+                    .catch(error => {
                         console.error(error)
                     })
-                    .then(function() {
-                        self.emailLoading = false
+                    .then(() => {
+                        this.emailLoading = false
                     })
             },
-            socialLogin(login) {
+            login(token) {
                 this.formLoading = true
-                if (login === "facebook") {
-                    window.location.pathname = this.context.social_urls.facebook
-                }
-                if (login === "github") {
-                    window.location.pathname = this.context.social_urls.github
-                }
-                if (login === "google") {
-                    window.location.pathname = this.context.social_urls.google
-                }
-            }
-        }
-    }
-</script>
-
-<script>
-    export default {
-        data() {
-            return {
-                token: ""
-            }
-        },
-        mounted() {
-            const query = new URLSearchParams(window.location.search)
-            if (query.get("token")) {
-                this.token = query.get("token")
-                this.login()
-            }
-        },
-        methods: {
-            login() {
-                this.loading = true
                 this.$auth
                     .loginWith("local", {
                         data: {
-                            token: this.token
+                            token: token
                         }
                     })
                     .then(() => {
                         this.$router.push("/")
                     })
                     .catch(err => {
-                        this.loading = false
+                        this.formLoading = false
                         if (err.response.status === 400) {
-                            this.loginFail = true
+                            this.$toast(
+                                "Opa!",
+                                "Parece que você não tem acesso para entrar",
+                                "error"
+                            )
                         } else {
-                            this.error = true
-                            this.errorMessage = "Oops! Algo de errado aconteceu!"
+                            this.$toast(
+                                "Opa!",
+                                "Algo de errado aconteceu!",
+                                "error"
+                            )
                         }
                     })
             }
         },
         options: {
-            auth: false
+            auth: false,
+            layout: "login"
         }
     }
 </script>

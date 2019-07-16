@@ -2,7 +2,7 @@ from django.urls import path, include
 from django.contrib import admin
 from django.conf import settings
 import debug_toolbar
-from .authapi import ObtainJWT, VerifyJWT, RefreshJWT, LoginWithJWT
+from .authapi import ObtainJWT, VerifyJWT, RefreshJWT, LoginWithJWT, Logout
 from .api import MeView
 from .views import LoginView
 admin.autodiscover()
@@ -10,6 +10,7 @@ admin.autodiscover()
 
 jwt_auth_patterns = [
     path("login/", ObtainJWT.as_view(), name='login'),
+    path("logout/", Logout.as_view(), name='logout'),
     path("login_with/", LoginWithJWT.as_view(), name='login_with'),
     path("verify/", VerifyJWT.as_view(), name='verify'),
     path("refresh/", RefreshJWT.as_view(), name='refresh'),

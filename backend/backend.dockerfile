@@ -1,7 +1,6 @@
 # Load environment
 ARG APP_ENV=dev
 FROM python:3.7-alpine as base
-MAINTAINER Gustavo Maronato <gustavo.maronato@wavy.global>
 
 RUN echo "Configuring environment"
 # Configure environment

@@ -5,6 +5,7 @@ from django.db.models import Q
 from django.db import connection
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework import views, response
+from rest_framework_jwt.settings import api_settings
 from godmode.permissions import IsAdmin
 from staff.permissions import IsStaff
 from project.generics import PrefetchListAPIView
@@ -14,8 +15,28 @@ from .serializers import ListProfileSerializer, ListHackerProfileSerializer, SUI
 import time
 
 
+jwt_payload_handler = api_settings.JWT_PAYLOAD_HANDLER
+jwt_encode_handler = api_settings.JWT_ENCODE_HANDLER
+
+
+class TokenLogin(views.APIView):
+    permission_classes = [AllowAny]
+    authentication_classes = []
+
+    def post(self, request):
+        token = request.data.get('token')
+        try:
+            instance = Profile.objects.get(token=token)
+            login(request, instance.user)
+            return views.Response({'token': jwt_encode_handler(jwt_payload_handler(instance.user))})
+        except Profile.DoesNotExist:
+            time.sleep(2)
+            return views.Response({'error': 'Token inválido'}, status=404)
+
+
 class CheckToken(views.APIView):
     permission_classes = [AllowAny]
+    authentication_classes = []
 
     def post(self, request):
         token = request.data.get('token')
@@ -30,6 +51,7 @@ class CheckToken(views.APIView):
 
 class ResetTokenEmail(views.APIView):
     permission_classes = [AllowAny]
+    authentication_classes = []
 
     def post(self, request):
         email = request.data.get('email')

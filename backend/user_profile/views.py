@@ -5,7 +5,6 @@ from django.contrib.auth import login
 from project.mixins import PermissionClassesMixin
 from settings.permissions import RegistrationOpen
 from .models import Profile
-import time
 # Create your views here.
 
 
@@ -27,21 +26,4 @@ class VerifyEmailView(
         except Profile.DoesNotExist:
             add_message(request, ERROR, 'Código inválido')
 
-        return redirect('dashboard:index')
-
-
-class TokenLoginView(View):
-
-    http_method_names = ['get']
-
-    def get(self, request, *args, **kwargs):
-        token = kwargs.get('token', 'invalid')
-        try:
-            profile = Profile.objects.get(token=token)
-            login(request, profile.user)
-            # Force profile update on login
-            profile.trigger_update()
-        except Profile.DoesNotExist:
-            add_message(request, ERROR, 'Token inválido')
-            time.sleep(2)
         return redirect('dashboard:index')

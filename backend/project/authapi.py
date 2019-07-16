@@ -1,10 +1,17 @@
+from django.contrib.auth.models import User
+from django.contrib.auth import login, logout
 from rest_framework.response import Response
+from rest_framework.views import APIView
 from rest_framework import serializers
 from rest_framework_jwt.views import (
     RefreshJSONWebToken,
     ObtainJSONWebToken,
     VerifyJSONWebToken,
 )
+from rest_framework_jwt.settings import api_settings
+
+jwt_decode_handler = api_settings.JWT_DECODE_HANDLER
+jwt_get_username_from_payload = api_settings.JWT_PAYLOAD_GET_USERNAME_HANDLER
 
 
 class TokenSerializer(serializers.Serializer):
@@ -55,6 +62,10 @@ class LoginWithJWT(ObtainJSONWebToken):
     """
 
     def post(self, request, *args, **kwargs):
+        payload = jwt_decode_handler(request.data.get('token'))
+        username = jwt_get_username_from_payload(payload)
+        user = User.objects.get_by_natural_key(username)
+        login(request, user)
         return Response(request.data)
 
 
@@ -69,3 +80,11 @@ class VerifyJWT(VerifyJSONWebToken):
 
     def post(self, request, *args, **kwargs):
         return super().post(request, *args, **kwargs)
+
+
+
+class Logout(APIView):
+
+    def get(self, request, format=None):
+        logout(request)
+        return Response()

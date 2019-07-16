@@ -53,10 +53,16 @@
                     <v-spacer />
                     <v-btn
                         color="primary"
-                        flat
+                        text
                         nuxt
                         to="/inspire">
                         Continue
+                    </v-btn>
+                    <v-btn
+                        color="primary"
+                        text
+                        @click="sub()">
+                        Sub
                     </v-btn>
                 </v-card-actions>
             </v-card>
@@ -72,6 +78,13 @@
         components: {
             Logo,
             VuetifyLogo
-        }
+        },
+        methods: {
+            sub() {
+                this.$selfWS({signal: 'update', debug: true, callback: () => {
+                    console.log("deu bom")
+                }})
+            }
+        },
     }
 </script>

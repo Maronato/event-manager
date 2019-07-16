@@ -12,8 +12,8 @@ module.exports = {
      ** Headers of the page
      */
     head: {
-        titleTemplate: '%s - ' + process.env.npm_package_name,
-        title: process.env.npm_package_name || '',
+        titleTemplate: '%s - ' + process.env.EVENT_NAME ,
+        title:'',
         meta: [
             { charset: 'utf-8' },
             { name: 'viewport', content: 'width=device-width, initial-scale=1' },
@@ -29,6 +29,14 @@ module.exports = {
                 rel: 'stylesheet',
                 href:
                     'https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons'
+            },
+            {
+                rel: "stylesheet",
+                href: "//use.fontawesome.com/releases/v5.9.0/css/all.css"
+            },
+            {
+                rel: "stylesheet",
+                href: "//cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/css/iziToast.min.css"
             }
         ]
     },
@@ -39,15 +47,19 @@ module.exports = {
     /*
      ** Global CSS
      */
-    css: [],
+    css: [
+        '~/assets/scss/normalize.css',
+        '~/assets/scss/site.scss'
+    ],
     /*
      ** Plugins to load before mounting the App
      */
     plugins: [
-        { src: '~/plugins/localStorage.js', ssr: false },
+        { src: '~/plugins/localStorage.js', mode: 'client' },
+        { src: '~/plugins/toast.js', mode: 'client' },
+        { src: '~/plugins/websockets.js', mode: 'client' },
         '~/plugins/moment.plugin.js',
         '~/plugins/eventBus.js',
-        '~/plugins/websockets.js',
     ],
     /*
      ** Nuxt.js modules
@@ -66,16 +78,18 @@ module.exports = {
         middleware: ['auth']
     },
     env: {
-        baseURL: process.env.API_URL,
         API_URL: process.env.API_URL,
+        API_URL_BROWSER: process.env.API_URL_BROWSER,
+        EVENT_NAME: process.env.EVENT_NAME,
+        EVENT_DESCRIPTION: process.env.EVENT_DESCRIPTION,
+    },
+    axios: {
+        credentials: true
     },
     /*
      ** Axios module configuration
      ** See https://axios.nuxtjs.org/options
      */
-    axios: {
-        baseURL: process.env.API_URL
-    },
     auth: {
         strategies: {
             local: {
@@ -86,7 +100,11 @@ module.exports = {
                         method: "post",
                         propertyName: "token"
                     },
-                    logout: false,
+                    logout: {
+                        url: "/auth/jwt/logout/",
+                        method: "get",
+                        propertyName: false
+                    },
                     user: {
                         url: "/api/me/",
                         method: "get",
@@ -114,6 +132,9 @@ module.exports = {
             warning: colors.amber.base,
             error: colors.deepOrange.accent4,
             success: colors.green.accent3
+        },
+        icons: {
+            iconfont: 'fa'
         }
     },
     /*

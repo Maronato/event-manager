@@ -12,12 +12,12 @@ apipattens = [
     path('list_profiles/', api.ListProfiles.as_view(), name='list_profiles'),
     path('list_hacker_profiles/', api.ListHackerProfiles.as_view(), name='list_hacker_profiles'),
     path('sui_list_profiles/', api.SUIListProfiles.as_view(), name='sui_list_profiles'),
+    path('token_login/', api.TokenLogin.as_view(), name='token_login'),
 ]
 
 app_name = 'profile'
 urlpatterns = [
     path('api/', include((apipattens, 'api')), name='api'),
     path('logout/', LogoutView.as_view(next_page=settings.LOGIN_URL), name='logout'),
-    path('token_login/<str:token>/', views.TokenLoginView.as_view(), name='token_login'),
     path('verify_email/<str:code>/', views.VerifyEmailView.as_view(), name='verify_email'),
 ]

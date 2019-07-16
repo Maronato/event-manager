@@ -7,7 +7,7 @@ export class BaseSubscription {
         this.listeners = [];
         this.debug = false;
         if (debug !== "undefined") this.debug = debug;
-        this.url = url.startsWith("http") ? url : process.env.baseURL + url;
+        this.url = url.startsWith("http") ? url : "ws://localhost:8000" + url;
         this.webSocketBridge = new WebSocketBridge();
         this.connected = false;
         this.allowSend = true;
@@ -18,7 +18,7 @@ export class BaseSubscription {
         if (this.debug) console.debug("Connecting");
         this.webSocketBridge.connect(this.url);
         const self = this;
-        this.webSocketBridge.listen(function(action, stream) {
+        this.webSocketBridge.listen(function (action, stream) {
             self.onmessage(action);
         });
         if (this.debug) console.debug("Connected");
@@ -34,10 +34,7 @@ export class BaseSubscription {
 
     subscribe(callback) {
         if (!this.connected) {
-            console.error(
-                "Can't subscribe, websocket disconnected! Call .connect()"
-            );
-            return;
+            this.connect()
         }
         this.listeners.push(callback);
         if (this.debug) console.debug("Subscribed to " + this.url);
@@ -46,6 +43,10 @@ export class BaseSubscription {
     unsubscribe(callback) {
         this.listeners.splice(this.listeners.indexOf(callback), 1);
         if (this.debug) console.debug("Unsubscribed from " + this.url);
+        if (this.listeners.length === 0) {
+            if (this.debug) console.debug("No listeners. Disconnecting from socket... ");
+            this.disconnect()
+        }
     }
 
     send(payload) {
@@ -85,7 +86,7 @@ export class SubscriptionManager {
         this.listeners = [];
         this.signal = signal || 'universal';
         this.debug = debug || false;
-        this.url = url.startsWith("http") ? url : process.env.baseURL + url;
+        this.url = url.startsWith("http") ? url : "ws://localhost:8000" + url;
         this.socketConnection = getOrCreate(url, debug);
         this.connected = false;
         this.allowSend = false;
@@ -97,7 +98,7 @@ export class SubscriptionManager {
         if (this.debug) console.debug("Connecting to socket");
         this.socketConnection.connect(this.url);
         const self = this;
-        this.socketConnection.subscribe(function(action) {
+        this.socketConnection.subscribe(function (action) {
             self.onmessage(action);
         });
         if (this.debug) console.debug("Connected to socket");
@@ -115,10 +116,7 @@ export class SubscriptionManager {
 
     subscribe(callback) {
         if (!this.connected) {
-            console.error(
-                "Can't subscribe, websocket disconnected! Call .connect()"
-            );
-            return;
+            this.connect()
         }
         this.listeners.push(callback);
         if (this.debug) console.debug("Subscribed to " + this.url);
@@ -127,6 +125,10 @@ export class SubscriptionManager {
     unsubscribe(callback) {
         this.listeners.splice(this.listeners.indexOf(callback), 1);
         if (this.debug) console.debug("Unsubscribed from " + this.url);
+        if (this.listeners.length === 0) {
+            if (this.debug) console.debug("No listeners. Unsubscribing from socket connection... ");
+            this.disconnect()
+        }
     }
 
     send(payload) {
@@ -150,7 +152,7 @@ export class SubscriptionManager {
 }
 
 export class ModelSubscription extends SubscriptionManager {
-    constructor(app, model, signal, debug) {
+    constructor({ app, model, signal, debug = false } = {}) {
         const url =
             "/ws/subscriptions/models/" +
             app +
@@ -162,14 +164,14 @@ export class ModelSubscription extends SubscriptionManager {
 }
 
 export class SelfSubscription extends SubscriptionManager {
-    constructor(signal, debug) {
+    constructor({ signal = 'update', debug = false } = {}) {
         const url = "/ws/subscriptions/instances/me/" + signal + "/";
         super(url, debug, false, signal);
     }
 }
 
 export class GenericSubscription extends SubscriptionManager {
-    constructor(url, debug) {
+    constructor({ url, debug = false } = {}) {
         super(url, debug, true);
     }
 }

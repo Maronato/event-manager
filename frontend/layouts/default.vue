@@ -1,97 +1,110 @@
 <template>
-    <v-app dark>
+    <base-layout>
         <v-navigation-drawer
-            v-model="drawer"
-            :mini-variant="miniVariant"
-            :clipped="clipped"
+            id="sidebar"
+            v-model="showNav"
+            class="elevation-8"
+            :class="{open: showNav}"
             fixed
-            app
-        >
+            dark
+            app>
             <v-list>
-                <v-list-tile
+                <v-list-item href="/" :ripple="false">
+                    <v-list-item-avatar width="100%" height="100%">
+                        <img src="~/static/img/logo.svg">
+                    </v-list-item-avatar>
+                </v-list-item>
+                <v-list-item
                     v-for="(item, i) in items"
                     :key="i"
                     :to="item.to"
                     router
-                    exact
-                >
-                    <v-list-tile-action>
+                    exact>
+                    <v-list-item-action>
                         <v-icon>{{ item.icon }}</v-icon>
-                    </v-list-tile-action>
-                    <v-list-tile-content>
-                        <v-list-tile-title v-text="item.title" />
-                    </v-list-tile-content>
-                </v-list-tile>
+                    </v-list-item-action>
+                    <v-list-item-content>
+                        <v-list-item-title v-text="item.title" />
+                    </v-list-item-content>
+                </v-list-item>
+                <v-list-item @click="logout()">
+                    <v-list-item-action>
+                        <v-icon>fas fa-sign-out-alt</v-icon>
+                    </v-list-item-action>
+                    <v-list-item-content>
+                        <v-list-item-title>Logout</v-list-item-title>
+                    </v-list-item-content>
+                </v-list-item>
             </v-list>
         </v-navigation-drawer>
-        <v-toolbar :clipped-left="clipped" fixed app>
-            <v-toolbar-side-icon @click="drawer = !drawer" />
-            <v-btn icon @click.stop="miniVariant = !miniVariant">
-                <v-icon>{{ `chevron_${miniVariant ? 'right' : 'left'}` }}</v-icon>
-            </v-btn>
-            <v-btn icon @click.stop="clipped = !clipped">
-                <v-icon>web</v-icon>
-            </v-btn>
-            <v-btn icon @click.stop="fixed = !fixed">
-                <v-icon>remove</v-icon>
-            </v-btn>
-            <v-toolbar-title v-text="title" />
-            <v-spacer />
-            <v-btn icon @click.stop="rightDrawer = !rightDrawer">
-                <v-icon>menu</v-icon>
-            </v-btn>
-        </v-toolbar>
+        <div v-show="isMobile" class="tab" @click="drawer = !drawer">
+            <img v-show="!showNav" src="~/static/img/logo.svg" />
+            <span v-show="showNav" class="close">&#x2715;</span>
+        </div>
         <v-content>
             <v-container>
                 <nuxt />
             </v-container>
         </v-content>
-        <v-navigation-drawer
-            v-model="rightDrawer"
-            :right="right"
-            temporary
-            fixed>
-            <v-list>
-                <v-list-tile @click.native="right = !right">
-                    <v-list-tile-action>
-                        <v-icon light>
-                            compare_arrows
-                        </v-icon>
-                    </v-list-tile-action>
-                    <v-list-tile-title>Switch drawer (click me)</v-list-tile-title>
-                </v-list-tile>
-            </v-list>
-        </v-navigation-drawer>
-        <v-footer :fixed="fixed" app>
-            <span>&copy; 2019</span>
-        </v-footer>
-    </v-app>
+    </base-layout>
 </template>
 
 <script>
+    import baseLayout from "./base"
     export default {
+        components: { baseLayout },
         data() {
             return {
-                clipped: false,
-                drawer: false,
-                fixed: false,
-                items: [
+                drawer: false
+            }
+        },
+        computed: {
+            isMobile() {
+                return this.$vuetify.breakpoint.width <= 1264
+            },
+            showNav: {
+                get() {
+                    return this.drawer || !this.isMobile
+                },
+                set(value) {
+                    this.drawer = value
+                }
+            },
+            items() {
+                const items = [
                     {
-                        icon: 'apps',
-                        title: 'Welcome',
-                        to: '/'
-                    },
-                    {
-                        icon: 'bubble_chart',
-                        title: 'Inspire',
-                        to: '/inspire'
+                        icon: "fas fa-tachometer-alt",
+                        title: "Dashboard",
+                        to: "/"
                     }
-                ],
-                miniVariant: false,
-                right: true,
-                rightDrawer: false,
-                title: 'Vuetify.js'
+                ]
+                if (this.$auth.user.is_admin) {
+                    items.push({
+                        icon: "fas fa-users-cog",
+                        title: "Admin",
+                        to: "/admin/"
+                    })
+                }
+                return items
+            }
+        },
+        mounted() {
+            this.$selfWS({signal: 'update', debug: true, callback: () => {
+                console.log("deu bom")
+            }})
+        },
+        methods: {
+            logout() {
+                this.$auth.logout()
             }
         }
     }
 </script>
+<style lang="scss">
+    #sidebar.open + .tab {
+        margin-left: -10px;
+    }
+    .v-navigation-drawer__content a {
+        color: white;
+    }
+</stylelang>
