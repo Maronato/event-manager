@@ -1,4 +1,4 @@
-from rest_framework import views, viewsets, mixins, generics
+from rest_framework import viewsets, mixins
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_condition import And, Or
@@ -13,16 +13,21 @@ from project.permissions import (
 from godmode.permissions import IsAdmin
 from user_profile.models import Profile
 from project.mixins import PrefetchQuerysetModelMixin
+from project.serializers import UniqueIDSerializer
 from .permissions import IsMentor, CanSubmitTickets
 from .models import Mentor, Ticket
 from .serializers import TicketSerializer, MentorSerializer
 
 
-class ToggleIsMentor(views.APIView):
+class ToggleIsMentor(mixins.CreateModelMixin, viewsets.GenericViewSet):
     permission_classes = [IsAdmin]
+    serializer_class = UniqueIDSerializer
 
-    def post(self, request):
-        unique_id = request.data["unique_id"]
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        unique_id = serializer.validated_data['unique_id']
+
         profile = Profile.objects.get(unique_id=unique_id)
         if profile.is_mentor:
             profile.mentor.delete()
@@ -30,7 +35,7 @@ class ToggleIsMentor(views.APIView):
         else:
             mentor = Mentor(profile=profile)
             mentor.save()
-        return views.Response({"message": "Permissão alterada"})
+        return Response({"message": "Permissão alterada"})
 
 
 class TicketViewset(PrefetchQuerysetModelMixin, viewsets.ModelViewSet):
@@ -89,10 +94,13 @@ class OnlineMentorViewset(
     serializer_class = MentorSerializer
 
 
-class SelfMentor(PrefetchQuerysetModelMixin, generics.RetrieveUpdateAPIView):
+class SelfMentor(PrefetchQuerysetModelMixin, mixins.RetrieveModelMixin, mixins.ListModelMixin, mixins.UpdateModelMixin, viewsets.GenericViewSet):
     queryset = Mentor.objects.all()
     serializer_class = MentorSerializer
     permission_classes = [IsMentor]
 
     def get_object(self):
         return self.get_queryset().get(profile=self.request.user.profile)
+
+    def list(self, request, *args, **kwargs):
+        return self.retrieve(request, *args, **kwargs)

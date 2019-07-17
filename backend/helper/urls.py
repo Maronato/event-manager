@@ -1,21 +1,13 @@
-from django.urls import path, include
-from rest_framework.routers import DefaultRouter
-from . import views, api
+from project.router import base_router
+from . import api
 
-router = DefaultRouter()
-router.register(r"ticket", api.TicketViewset)
-router.register(r"mentor", api.MentorViewset)
-router.register(r"online_mentors", api.OnlineMentorViewset, "online_mentors")
+base_router.register("ticket", api.TicketViewset, "ticket")
+base_router.register("mentor/me", api.SelfMentor, "mentor_self")
+base_router.register("mentor/toggle", api.ToggleIsMentor, "mentor_toggle")
+base_router.register("mentor", api.MentorViewset, "mentor")
+base_router.register("online_mentors", api.OnlineMentorViewset, "online_mentors")
 
-apipatterns = router.urls
-
-apipatterns += [
-    path("toggle_is_mentor/", api.ToggleIsMentor.as_view(), name="toggle_is_mentor"),
-    path("self_mentor/", api.SelfMentor.as_view(), name="self_mentor"),
-]
+apipatterns = []
 
 app_name = "helper"
-urlpatterns = [
-    path("api/", include((apipatterns, "api")), name="api"),
-    path("", views.HelperView.as_view(), name="index"),
-]
+urlpatterns = []

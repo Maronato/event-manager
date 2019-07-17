@@ -7,7 +7,7 @@ from company.urls import urlpatterns as company_urls
 from godmode.urls import urlpatterns as godmode_urls
 from hacker.urls import urlpatterns as hacker_urls
 from hacker.urls import payment_urlpatterns as payment_urls
-
+from helper.urls import urlpatterns as helper_urls
 from user_profile.urls import tokenauthpatterns as token_auth_patterns
 from .router import base_router, export_router
 from .authapi import ObtainJWT, VerifyJWT, RefreshJWT, LoginWithJWT, Logout
