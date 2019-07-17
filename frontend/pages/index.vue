@@ -1,89 +1,78 @@
 <template>
-    <v-layout column justify-center align-center>
-        <v-flex xs12 sm8 md6>
-            <div class="text-xs-center">
-                <logo />
-                <vuetify-logo />
-            </div>
-            <v-card>
-                <v-card-title class="headline">
-                    Welcome to the Vuetify + Nuxt.js template
-                </v-card-title>
-                <v-card-text>
-                    <p>
-                        Vuetify is a progressive Material Design component framework for
-                        Vue.js. It was designed to empower developers to create amazing
-                        applications.
-                    </p>
-                    <p>
-                        For more information on Vuetify, check out the
-                        <a href="https://vuetifyjs.com" target="_blank"> documentation </a>.
-                    </p>
-                    <p>
-                        If you have questions, please join the official
-                        <a href="https://chat.vuetifyjs.com/" target="_blank" title="chat">
-                            discord </a>.
-                    </p>
-                    <p>
-                        Find a bug? Report it on the github
-                        <a
-                            href="https://github.com/vuetifyjs/vuetify/issues"
-                            target="_blank"
-                            title="contribute"
-                        >
-                            issue board </a>.
-                    </p>
-                    <p>
-                        Thank you for developing with Vuetify and I look forward to bringing
-                        more exciting features in the future.
-                    </p>
-                    <div class="text-xs-right">
-                        <em><small>&mdash; John Leider</small></em>
+    <div id="dashboard" class="page">
+        <div class="divided big-title">Dashboard</div>
+        <div class="ui stackable centered page grid">
+            <div class="row">
+                <div class="column">
+                    <div class="ui status">
+                        <!-- Visível a hackers o tempo todo ou para outros não verificados -->
+                        <State v-if="$auth.user.is_hacker || $auth.user.state === 'unverified'" />
+
+                        <CompleteApp v-if="$auth.user.state === 'incomplete'" />
+
+                        <!-- Visível para todos não verificados -->
+                        <ResendEmail />
+
+                        <!-- Visível a hackers que foram admitidos -->
+                        <Confirm v-if="$auth.user.state === 'admitted'" />
+
+                        <!-- Visível a hackers que se abstiveram -->
+                        <!-- <UndoWithdraw v-if="$auth.user.state=='withdraw'" /> -->
+
+                        <!-- Visível a hackers que não pagaram -->
+                        <Payment v-if="$auth.user.state=='unpaid'" />
+
+                        <!-- Visível a hackers que confirmaram -->
+                        <Info v-if="$auth.user.state=='confirmed'" />
+
+                        <!-- Visível sempre para quem não é hacker ou para hackers confirmados e que fizeram checkin -->
+                        <Reminders v-if="!$auth.user.is_hacker || ($auth.user.is_hacker && ($auth.user.state === 'confirmed' || $auth.user.state === 'checkedin'))" />
+
+                        <!-- Visível sempre para quem não é hacker ou para hackers confirmados e que fizeram checkin -->
+                        <QRid v-if="!$auth.user.is_hacker || ($auth.user.is_hacker && ($auth.user.state === 'confirmed' || $auth.user.state === 'checkedin'))" />
+
+                        <!-- Visível a hackers que confirmaram -->
+                        <!-- <Withdraw v-if="$auth.user.state=='confirmed'" /> -->
+
+                        <!-- Visível sempre pra todos -->
+                        <!-- <Access /> -->
                     </div>
-                    <hr class="my-3" />
-                    <a href="https://nuxtjs.org/" target="_blank">
-                        Nuxt Documentation
-                    </a>
-                    <br />
-                    <a href="https://github.com/nuxt/nuxt.js" target="_blank">
-                        Nuxt GitHub
-                    </a>
-                </v-card-text>
-                <v-card-actions>
-                    <v-spacer />
-                    <v-btn
-                        color="primary"
-                        text
-                        nuxt
-                        to="/inspire">
-                        Continue
-                    </v-btn>
-                    <v-btn
-                        color="primary"
-                        text
-                        @click="sub()">
-                        Sub
-                    </v-btn>
-                </v-card-actions>
-            </v-card>
-        </v-flex>
-    </v-layout>
+                </div>
+            </div>
+        </div>
+    </div>
 </template>
 
 <script>
-    import Logo from '~/components/Logo.vue'
-    import VuetifyLogo from '~/components/VuetifyLogo.vue'
+    // import Access from "~/components/dashboard/sections/Access"
+    import QRid from "~/components/dashboard/sections/QRid"
+    import State from "~/components/dashboard/sections/State"
+    import ResendEmail from "~/components/dashboard/sections/ResendEmail"
+    import Confirm from "~/components/dashboard/sections/Confirm"
+    // import UndoWithdraw from "~/components/dashboard/sections/UndoWithdraw"
+    // import Withdraw from "~/components/dashboard/sections/Withdraw"
+    import Info from "~/components/dashboard/sections/Info"
+    import CompleteApp from "~/components/dashboard/sections/CompleteApp"
+    import Reminders from "~/components/dashboard/sections/Reminders"
+    import Payment from "~/components/dashboard/sections/Payment"
 
     export default {
         components: {
-            Logo,
-            VuetifyLogo
+            // Access,
+            QRid,
+            State,
+            ResendEmail,
+            Confirm,
+            // UndoWithdraw,
+            // Withdraw,
+            Info,
+            CompleteApp,
+            Reminders,
+            Payment
         },
-        methods: {
-            sub() {
-                this.$selfWS({signal: 'update', debug: true, callback: () => {
-                    console.log("deu bom")
-                }})
+        data() {
+            return {
+                page_title: 'Dashboard'
             }
         },
     }

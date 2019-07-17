@@ -12,7 +12,7 @@ $login-color: $primary;
 $register-color: $tertiary;
 
 $status-unverified-color: rgb(82, 82, 82);
-$status-incomplete-color: #f5f5f5;
+$status-incomplete-color: #c42d2d;
 $status-submitted-color: lighten($secondary, 20%);
 $status-admitted-color: $primary;
 $status-confirmed-color: $secondary;
@@ -46,8 +46,8 @@ $brand-tertiary: $tertiary;
 }
 
 @import "login";
-@import "base";
 @import "sidebar";
+@import "base";
 @import "page";
 @import "dashboard";
 @import "application";

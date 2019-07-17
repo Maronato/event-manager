@@ -5,7 +5,7 @@
         :dismissible="allowDelete"
         :type="announcement.level"
         :icon="icon">
-        <div class="header">{{ announcement.title }}</div>
+        <div class="headline font-weight-bold">{{ announcement.title }}</div>
         <p>{{ humanDate }}</p>
         <p>
             <VueMarkdown :source="announcement.text"></VueMarkdown>

@@ -22,7 +22,7 @@ class PaymentView(PermissionClassesMixin, RedirectView):
         sett = Settings.get()
         if not sett.require_payment:
             add_message(self.request, ERROR, "Pagamentos desabilitados")
-            return "/"
+            return settings.FRONTEND_URL
         item = PagSeguroItem(
             id="1",
             description=f"Ingresso para {settings.EVENT_NAME}",

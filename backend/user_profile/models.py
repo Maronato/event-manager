@@ -202,11 +202,14 @@ class Shortcuts(models.Model):
 
     payment_state = models.CharField(default="", max_length=20)
 
+    def __str__(self):
+        return f"Shortcut de {self.profile}"
+
 
 def update_shortcuts(profile):
-    queryset = Profile.objects.filter(pk=profile.pk)
-    queryset = queryset.select_related('user', 'hacker', 'staff', 'mentor', 'employee', 'employee__company')
-    profile = queryset.first()
+    # queryset = Profile.objects.filter(pk=profile.pk)
+    # queryset = queryset.select_related('user', 'hacker', 'staff', 'mentor', 'employee', 'employee__company')
+    # profile = queryset.first()
     data = {
         "has_facebook": profile.has_facebook,
         "has_github": profile.has_github,
@@ -222,6 +225,3 @@ def update_shortcuts(profile):
         "payment_state": profile.payment_state,
     }
     Shortcuts.objects.update_or_create(profile=profile, defaults=data)
-
-    def __str__(self):
-        return f"Shortcut de {self.profile}"

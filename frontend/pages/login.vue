@@ -144,22 +144,7 @@
                 this.$router.push("/")
             }
         },
-        mounted() {
-            let messages = this.$route.query.messages
-            if (messages) {
-                messages = Array.isArray(messages) ? messages : [messages]
-                messages.forEach(message => {
-                    this.$toast("", message)
-                })
-            }
-            let errors = this.$route.query.errors
-            if (errors) {
-                errors = Array.isArray(errors) ? errors : [errors]
-                errors.forEach(error => {
-                    this.$toast("", error, "error")
-                })
-            }
-
+        beforeMount() {
             if (this.$route.query.token) {
                 this.login(this.$route.query.token)
             }

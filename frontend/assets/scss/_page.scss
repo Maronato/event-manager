@@ -4,7 +4,7 @@
 .page {
   padding-top: 2em;
   padding-bottom: 4em;
-  .title {
+  .big-title {
     font-family: $font-header;
     text-transform: uppercase;
     font-size: 2.5em;
@@ -30,7 +30,7 @@
   }
 
   .form {
-    .title {
+    .big-title {
       font-size: 1em;
       letter-spacing: 4px;
       &:after {
@@ -47,7 +47,7 @@
 
 @media only screen and (max-width: 768px) {
   .page {
-    .title {
+    .big-title {
       font-size: 1.25em;
     }
   }

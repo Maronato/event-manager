@@ -118,6 +118,8 @@ if not DEBUG:
 
 ROOT_URLCONF = "project.urls"
 
+MESSAGE_STORAGE = 'project.cookie.JavascripAccessibleMessageStorage'
+
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
@@ -288,7 +290,8 @@ PROMETHEUS_EXPORT_MIGRATIONS = False
 # Shell plus settings
 SHELL_PLUS_PRINT_SQL = True
 SHELL_PLUS = "ptipython"
-SHELL_PLUS_SQLPARSE_FORMAT_KWARGS = dict(reindent_aligned=True, truncate_strings=1000)
+SHELL_PLUS_PRINT_SQL_TRUNCATE = 10000
+SHELL_PLUS_SQLPARSE_FORMAT_KWARGS = dict(reindent_aligned=True, truncate_strings=10000)
 
 
 # Rest Settings

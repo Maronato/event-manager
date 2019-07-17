@@ -11,9 +11,11 @@
         >
             <v-list>
                 <v-list-item href="/" :ripple="false">
-                    <v-list-item-avatar width="100%" height="100%">
-                        <img src="~/static/img/logo.svg" />
-                    </v-list-item-avatar>
+                    <v-container>
+                        <v-list-item-avatar width="100%" height="100%" tile>
+                            <img src="~/static/img/logo.svg" />
+                        </v-list-item-avatar>
+                    </v-container>
                 </v-list-item>
                 <v-list-item
                     v-for="(item, i) in items"
@@ -45,14 +47,14 @@
             <v-container>
                 <v-layout row wrap>
                     <v-spacer />
-                    <v-flex xs12 lg8>
+                    <v-flex xs12 lg8 xl6>
                         <LatestAnnouncement />
                     </v-flex>
                     <v-spacer />
                 </v-layout>
                 <v-layout row wrap>
                     <v-spacer />
-                    <v-flex xs12 lg8>
+                    <v-flex xs12 lg8 xl6>
                         <nuxt />
                     </v-flex>
                     <v-spacer />
@@ -134,7 +136,7 @@
                     signal: "update",
                     debug: false,
                     callback: user => {
-                        this.$auth.setUset(user)
+                        this.$auth.setUser(user)
                     }
                 })
             },

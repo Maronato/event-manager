@@ -58,6 +58,7 @@ module.exports = {
         { src: '~/plugins/localStorage.js', mode: 'client' },
         { src: '~/plugins/toast.js', mode: 'client' },
         { src: '~/plugins/websockets.js', mode: 'client' },
+        { src: '~/plugins/qrcode.js', mode: 'client' },
         '~/plugins/moment.plugin.js',
         '~/plugins/eventBus.js',
     ],
@@ -69,6 +70,7 @@ module.exports = {
         '@nuxtjs/axios',
         '@nuxtjs/pwa',
         "@nuxtjs/auth",
+        'cookie-universal-nuxt',
     ],
     devModules: [
         '@nuxtjs/vuetify',

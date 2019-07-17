@@ -1,0 +1,25 @@
+<template>
+    <div>
+        <div class="description">
+            <b>Atenção!</b>
+            Você tem até {{ reg_date }} pra completar sua aplicação.
+        </div>
+        <v-btn
+            router
+            nuxt
+            tile
+            to="/application"
+            color="primary">Complete sua aplicação</v-btn>
+    </div>
+</template>
+<script>
+    export default {
+        computed: {
+            reg_date() {
+                return this.$moment(
+                    this.$store.state.settings.settings.registration_close_seconds
+                ).calendar()
+            }
+        }
+    }
+</script>
