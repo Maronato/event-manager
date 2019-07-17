@@ -32,12 +32,12 @@ class TokenLogin(views.APIView):
         try:
             instance = Profile.objects.get(token=token)
             login(request, instance.user)
-            return views.Response(
+            return response.Response(
                 {"token": jwt_encode_handler(jwt_payload_handler(instance.user))}
             )
         except Profile.DoesNotExist:
             time.sleep(2)
-            return views.Response({"error": "Token inválido"}, status=404)
+            return response.Response({"error": "Token inválido"}, status=404)
 
 
 class CheckToken(views.APIView):
@@ -49,12 +49,10 @@ class CheckToken(views.APIView):
         try:
             instance = Profile.objects.get(token=token)
             login(request, instance.user)
-            return views.Response(
-                {"redirect_url": request.GET.get("next", settings.PROFILE_REDIRECT_URL)}
-            )
+            return response.Response({"success": True})
         except Profile.DoesNotExist:
             time.sleep(2)
-            return views.Response({"error": "Token inválido"}, status=404)
+            return response.Response({"error": "Token inválido"}, status=404)
 
 
 class ResetTokenEmail(views.APIView):

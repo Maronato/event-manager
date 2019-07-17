@@ -4,8 +4,13 @@ from django.conf import settings
 from . import api
 from . import views
 
+
+tokenauthpatterns = [
+    path("check/", api.CheckToken.as_view(), name="check_token"),
+    path("login/", api.TokenLogin.as_view(), name="token_login"),
+]
+
 apipattens = [
-    path("check_token/", api.CheckToken.as_view(), name="check_token"),
     path("change_email/", api.ChangeEmail.as_view(), name="change_email"),
     path("change_token/", api.ChangeToken.as_view(), name="change_token"),
     path("reset_token_email/", api.ResetTokenEmail.as_view(), name="reset_token_email"),
@@ -16,7 +21,6 @@ apipattens = [
         name="list_hacker_profiles",
     ),
     path("sui_list_profiles/", api.SUIListProfiles.as_view(), name="sui_list_profiles"),
-    path("token_login/", api.TokenLogin.as_view(), name="token_login"),
 ]
 
 app_name = "profile"

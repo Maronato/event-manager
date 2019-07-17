@@ -1,16 +1,12 @@
-from django.urls import path, include
+from project.router import base_router
 from . import views, api
 
-apipattens = [
-    path("toggle_is_admin/", api.ToggleIsAdmin.as_view(), name="toggle_is_admin"),
-    path("delete_user/<str:unique_id>/", api.DeleteUser.as_view(), name="delete_user"),
-    path(
-        "batch_create_users/", api.BatchCreateUsers.as_view(), name="batch_create_users"
-    ),
-]
+
+base_router.register('admin/toggle', api.ToggleIsAdmin, 'admin_toggle')
+base_router.register('user/delete', api.DeleteUser, 'user_delete')
+base_router.register('user/batch_create', api.BatchCreateUsers, 'user_batch_create')
+
+apipattens = []
 
 app_name = "godmode"
-urlpatterns = [
-    path("api/", include((apipattens, "api")), name="api"),
-    path("", views.AdminView.as_view(), name="index"),
-]
+urlpatterns = []

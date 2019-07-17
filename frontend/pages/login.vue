@@ -7,93 +7,97 @@
                         <div class="logo">
                             <img src="~/static/img/logo.png" />
                         </div>
-                        <div v-if="loginState === 'login'">
-                            <v-form :loading="formLoading">
-                                <v-btn
-                                    class="my-3"
-                                    block
-                                    tile
-                                    color="blue"
-                                    :href="baseURL + `/social/login/facebook/`"
-                                >
-                                    <v-icon left>fab fa-facebook-f</v-icon>Entrar com Facebook
-                                </v-btn>
-                                <v-btn
-                                    class="my-3"
-                                    block
-                                    tile
-                                    color="black"
-                                    :href="baseURL + `/social/login/github/`"
-                                >
-                                    <v-icon left>fab fa-github</v-icon>Entrar com GitHub
-                                </v-btn>
-                                <v-btn
-                                    class="my-3"
-                                    block
-                                    tile
-                                    color="red"
-                                    :href="baseURL + `/social/login/google/`"
-                                >
-                                    <v-icon left>fab fa-google</v-icon>Entrar com Google
-                                </v-btn>
-                            </v-form>
-                            <v-divider></v-divider>
-                            <v-btn
-                                v-show="!showTokenField"
-                                class="my-3 login"
-                                block
-                                tile
-                                @click="showTokenField = true"
-                            >Usar token para acesso</v-btn>
-                            <v-form
-                                v-show="showTokenField"
-                                :error="error"
-                                class="my-3"
-                                @submit.prevent="tokenLogin()"
-                            >
-                                <v-alert v-show="errorMessage" type="error">{{ errorMessage }}</v-alert>
-                                <v-text-field
-                                    v-model="token"
-                                    :loading="tokenLoading"
-                                    :disabled="tokenLoading"
-                                    type="text"
-                                    label="Token"
-                                    required
-                                    placeholder="AbC123"
-                                />
-                                <v-btn
-                                    :loading="tokenLoading"
-                                    :disabled="tokenLoading"
-                                    class="mb-3 login"
-                                    block
-                                    tile
-                                    @click="tokenLogin"
-                                >Entrar com token</v-btn>
-                            </v-form>
-                        </div>
-                        <div v-if="loginState === 'forgot'">
-                            <div class="forgot-password form">
-                                <v-form :success="success" @submit.prevent="sendResetEmail()">
-                                    <v-message success>{{ successMessage }}</v-message>
-                                    <v-text-field
-                                        v-model="resetEmail"
-                                        type="email"
-                                        label="Email"
-                                        :loading="emailLoading"
-                                        :disabled="emailLoading"
-                                        required
-                                        placeholder="foo@bar.com"
-                                    />
+                        <v-expand-transition leave-absolute>
+                            <div v-if="loginState === 'login'">
+                                <v-form :loading="formLoading">
                                     <v-btn
-                                        :loading="emailLoading"
-                                        :disabled="emailLoading"
-                                        class="my-3 login"
+                                        class="my-3"
                                         block
                                         tile
-                                    >Recuperar token</v-btn>
+                                        color="blue"
+                                        :href="baseURL + `/social/login/facebook/`"
+                                    >
+                                        <v-icon left>fab fa-facebook-f</v-icon>Entrar com Facebook
+                                    </v-btn>
+                                    <v-btn
+                                        class="my-3"
+                                        block
+                                        tile
+                                        color="black"
+                                        :href="baseURL + `/social/login/github/`"
+                                    >
+                                        <v-icon left>fab fa-github</v-icon>Entrar com GitHub
+                                    </v-btn>
+                                    <v-btn
+                                        class="my-3"
+                                        block
+                                        tile
+                                        color="red"
+                                        :href="baseURL + `/social/login/google/`"
+                                    >
+                                        <v-icon left>fab fa-google</v-icon>Entrar com Google
+                                    </v-btn>
+                                </v-form>
+                                <v-divider></v-divider>
+                                <v-btn
+                                    v-show="!showTokenField"
+                                    class="my-3 login"
+                                    block
+                                    tile
+                                    @click="showTokenField = true"
+                                >Usar token para acesso</v-btn>
+                                <v-form
+                                    v-show="showTokenField"
+                                    :error="error"
+                                    class="my-3"
+                                    @submit.prevent="tokenLogin()"
+                                >
+                                    <v-alert v-show="errorMessage" type="error">{{ errorMessage }}</v-alert>
+                                    <v-text-field
+                                        v-model="token"
+                                        :loading="tokenLoading"
+                                        :disabled="tokenLoading"
+                                        type="text"
+                                        label="Token"
+                                        required
+                                        placeholder="AbC123"
+                                    />
+                                    <v-btn
+                                        :loading="tokenLoading"
+                                        :disabled="tokenLoading"
+                                        class="mb-3 login"
+                                        block
+                                        tile
+                                        @click="tokenLogin"
+                                    >Entrar com token</v-btn>
                                 </v-form>
                             </div>
-                        </div>
+                        </v-expand-transition>
+                        <v-expand-transition leave-absolute>
+                            <div v-if="loginState === 'forgot'">
+                                <div class="forgot-password form">
+                                    <v-form :success="success" @submit.prevent="sendResetEmail()">
+                                        <v-message success>{{ successMessage }}</v-message>
+                                        <v-text-field
+                                            v-model="resetEmail"
+                                            type="email"
+                                            label="Email"
+                                            :loading="emailLoading"
+                                            :disabled="emailLoading"
+                                            required
+                                            placeholder="foo@bar.com"
+                                        />
+                                        <v-btn
+                                            :loading="emailLoading"
+                                            :disabled="emailLoading"
+                                            class="my-3 login"
+                                            block
+                                            tile
+                                        >Recuperar token</v-btn>
+                                    </v-form>
+                                </div>
+                            </div>
+                        </v-expand-transition>
 
                         <v-divider />
 
@@ -137,7 +141,7 @@
         },
         created() {
             if (this.$auth.loggedIn) {
-                this.$router.push('/')
+                this.$router.push("/")
             }
         },
         mounted() {
@@ -171,21 +175,23 @@
                 this.$auth
                     .request({
                         method: "post",
-                        url: "/profile/api/check_token/",
+                        url: "/auth/token/check/",
                         data: {
                             token: this.token
                         }
                     })
                     .then(response => {
-                        this.$auth.request({
-                            method: 'post',
-                            url: '/profile/api/token_login/',
-                            data: {
-                                token: this.token
-                            }
-                        }).then(response => {
-                            this.login(response.token)
-                        })
+                        this.$auth
+                            .request({
+                                method: "post",
+                                url: "/auth/token/login/",
+                                data: {
+                                    token: this.token
+                                }
+                            })
+                            .then(response => {
+                                this.login(response.token)
+                            })
                     })
                     .catch(error => {
                         this.errorMessage = error.response.data.error

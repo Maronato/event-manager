@@ -3,6 +3,7 @@ from django.db.models import Q
 from rest_framework import viewsets, views, mixins
 from project.mixins import PrefetchQuerysetModelMixin
 from project.permissions import IsReadyOnlyRequest
+from project.serializers import UniqueIDSerializer
 from rest_condition import Or, And
 from godmode.permissions import IsAdmin
 from user_profile.models import Profile
@@ -12,7 +13,6 @@ from .serializers import (
     ReadEmployeeSerializer,
     CreateEmployeeSerializer,
     ScanSerializer,
-    UniqueIDSerializer,
 )
 from .models import Company, Employee, Scan
 
@@ -65,7 +65,7 @@ class FetchScanHacker(mixins.CreateModelMixin, viewsets.GenericViewSet):
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=False)
+        serializer.is_valid(raise_exception=True)
         unique_id = serializer.validated_data['unique_id']
         try:
             profile = Profile.objects.get(
@@ -120,7 +120,7 @@ class ScanHacker(mixins.CreateModelMixin, viewsets.GenericViewSet):
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=False)
+        serializer.is_valid(raise_exception=True)
         unique_id = serializer.validated_data['unique_id']
         scanner = request.user.profile
         profile = get_object_or_404(
@@ -146,7 +146,7 @@ class FetchCheckinEmployee(mixins.CreateModelMixin, viewsets.GenericViewSet):
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=False)
+        serializer.is_valid(raise_exception=True)
         unique_id = serializer.validated_data['unique_id']
         try:
             profile = Profile.objects.get(
@@ -193,7 +193,7 @@ class CheckinEmployee(mixins.CreateModelMixin, viewsets.GenericViewSet):
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=False)
+        serializer.is_valid(raise_exception=True)
         unique_id = serializer.validated_data['unique_id']
         profile = get_object_or_404(
             Profile, Q(unique_id=unique_id) | Q(user__email=unique_id)

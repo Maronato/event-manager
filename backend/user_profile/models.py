@@ -204,6 +204,9 @@ class Shortcuts(models.Model):
 
 
 def update_shortcuts(profile):
+    queryset = Profile.objects.filter(pk=profile.pk)
+    queryset = queryset.select_related('user', 'hacker', 'staff', 'mentor', 'employee', 'employee__company')
+    profile = queryset.first()
     data = {
         "has_facebook": profile.has_facebook,
         "has_github": profile.has_github,

@@ -5,6 +5,9 @@ import debug_toolbar
 from announcement.urls import urlpatterns as announcement_urls
 from application.urls import urlpatterns as application_urls
 from company.urls import urlpatterns as company_urls
+from godmode.urls import urlpatterns as godmode_urls
+
+from user_profile.urls import tokenauthpatterns as token_auth_patterns
 from .router import base_router
 from .authapi import ObtainJWT, VerifyJWT, RefreshJWT, LoginWithJWT, Logout
 from .api import MeView
@@ -20,7 +23,10 @@ jwt_auth_patterns = [
     path("refresh/", RefreshJWT.as_view(), name="refresh"),
 ]
 
-auth_patterns = [path("jwt/", include((jwt_auth_patterns, "jwt"), namespace="jwt"))]
+auth_patterns = [
+    path("jwt/", include((jwt_auth_patterns, "jwt"), namespace="jwt")),
+    path("token/", include((token_auth_patterns, "token"), namespace="token"))
+]
 
 api_patterns = base_router.urls
 
