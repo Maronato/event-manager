@@ -1,13 +1,14 @@
+import time
 from django.contrib.postgres.search import SearchVector, SearchQuery, SearchRank
 from django.contrib.auth import login
-from django.conf import settings
 from django.db.models import Q
 from django.db import connection
 from rest_framework.permissions import IsAuthenticated, AllowAny
-from rest_framework import views, response
+from rest_framework import response, mixins, viewsets, serializers
 from rest_framework_jwt.settings import api_settings
 from godmode.permissions import IsAdmin
 from staff.permissions import IsStaff
+from settings.permissions import RegistrationOpen
 from project.generics import PrefetchListAPIView
 from .models import Profile, User
 from .tasks import send_recover_token_email
@@ -15,20 +16,26 @@ from .serializers import (
     ListProfileSerializer,
     ListHackerProfileSerializer,
     SUIProfileListSerializer,
+    TokenInputSerializer,
+    EmailnputSerializer,
+    CodenputSerializer
 )
-import time
 
 
 jwt_payload_handler = api_settings.JWT_PAYLOAD_HANDLER
 jwt_encode_handler = api_settings.JWT_ENCODE_HANDLER
 
 
-class TokenLogin(views.APIView):
+class TokenLogin(mixins.CreateModelMixin, viewsets.GenericViewSet):
     permission_classes = [AllowAny]
     authentication_classes = []
+    serializer_class = TokenInputSerializer
 
-    def post(self, request):
-        token = request.data.get("token")
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        token = serializer.validated_data['token']
+
         try:
             instance = Profile.objects.get(token=token)
             login(request, instance.user)
@@ -40,12 +47,15 @@ class TokenLogin(views.APIView):
             return response.Response({"error": "Token inválido"}, status=404)
 
 
-class CheckToken(views.APIView):
+class CheckToken(mixins.CreateModelMixin, viewsets.GenericViewSet):
     permission_classes = [AllowAny]
     authentication_classes = []
+    serializer_class = TokenInputSerializer
 
-    def post(self, request):
-        token = request.data.get("token")
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        token = serializer.validated_data['token']
         try:
             instance = Profile.objects.get(token=token)
             login(request, instance.user)
@@ -55,39 +65,65 @@ class CheckToken(views.APIView):
             return response.Response({"error": "Token inválido"}, status=404)
 
 
-class ResetTokenEmail(views.APIView):
+class ResetTokenEmail(mixins.CreateModelMixin, viewsets.GenericViewSet):
     permission_classes = [AllowAny]
     authentication_classes = []
+    serializer_class = EmailnputSerializer
 
-    def post(self, request):
-        email = request.data.get("email")
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        email = serializer.validated_data['email']
         user = User.objects.filter(email=email)
         if user.exists():
             user = user.first()
             user.profile.new_token()
             send_recover_token_email.delay(user.profile.id)
         time.sleep(2)
-        return views.Response({"message": "Olhe seu email :)"})
+        return response.Response({"message": "Olhe seu email :)"})
 
 
-class ChangeEmail(views.APIView):
+class ChangeEmail(mixins.CreateModelMixin, viewsets.GenericViewSet):
     permission_classes = [IsAuthenticated]
+    serializer_class = EmailnputSerializer
 
-    def post(self, request):
-        email = request.data.get("email")
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        email = serializer.validated_data['email']
         user = request.user
         user.profile.change_email(email)
         time.sleep(2)
-        return views.Response({"message": "Olhe seu email :)"})
+        return response.Response({"message": "Olhe seu email :)"})
 
 
-class ChangeToken(views.APIView):
+class VerifyEmail(mixins.CreateModelMixin, viewsets.GenericViewSet):
+    permission_classes = [RegistrationOpen]
+    permission_denied_message = "Estamos fora do período de registro"
+    authentication_classes = []
+    serializer_class = CodenputSerializer
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        code = serializer.validated_data['code']
+        try:
+            profile = Profile.objects.get(verification_code=code)
+            profile.verify_email()
+            login(request, profile.user)
+            return response.Response({"message": "Email verificado"})
+        except Profile.DoesNotExist:
+            return response.Response({"error": "Código inválido"}, status=400)
+
+
+class ChangeToken(mixins.CreateModelMixin, viewsets.GenericViewSet):
     permission_classes = [IsAuthenticated]
+    serializer_class = serializers.Serializer
 
-    def post(self, request):
+    def create(self, request):
         user = request.user
         token = user.profile.new_token()
-        return views.Response({"message": "Token alterado", "token": token})
+        return response.Response({"message": "Token alterado", "token": token})
 
 
 class ListProfiles(PrefetchListAPIView):
@@ -115,7 +151,7 @@ class ListHackerProfiles(PrefetchListAPIView):
         return super().get_queryset()
 
 
-class SUIListProfiles(PrefetchListAPIView):
+class FrontendListProfiles(PrefetchListAPIView):
     serializer_class = SUIProfileListSerializer
     queryset = Profile.objects.filter(shortcuts__is_verified=True)
     permission_classes = [IsStaff]

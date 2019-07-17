@@ -1,4 +1,4 @@
-from rest_framework import generics
+from rest_framework import generics, mixins, viewsets
 from django.contrib.auth.models import User
 from rest_condition import Or
 from godmode.permissions import IsAdmin
@@ -11,7 +11,7 @@ from .export_serializers import (
 )
 
 
-class ExportScannedHackers(ExportMixin, generics.ListAPIView):
+class ExportScannedHackers(ExportMixin, mixins.ListModelMixin, viewsets.GenericViewSet):
     serializer_class = ExportScannedHackersSerializer
     permission_classes = [EmployeeHasAccess]
 

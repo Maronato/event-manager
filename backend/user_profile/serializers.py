@@ -99,3 +99,15 @@ class UserSubscriptionSerializer(SingleInstancePrefetchMixin, ListProfileSeriali
 class SelfSubscriptionSerializer(UserSubscriptionSerializer):
     class Meta(UserSubscriptionSerializer.Meta):
         fields = ["token"] + UserSubscriptionSerializer.Meta.fields
+
+
+class TokenInputSerializer(serializers.Serializer):
+    token = serializers.CharField()
+
+
+class EmailnputSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+
+
+class CodenputSerializer(serializers.Serializer):
+    code = serializers.CharField()

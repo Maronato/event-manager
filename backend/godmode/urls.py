@@ -1,5 +1,5 @@
 from project.router import base_router
-from . import views, api
+from . import api
 
 
 base_router.register('admin/toggle', api.ToggleIsAdmin, 'admin_toggle')

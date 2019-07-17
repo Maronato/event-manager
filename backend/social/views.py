@@ -50,7 +50,7 @@ class SocialLoginResponse(RedirectView):
         next_url = state_data.get("next_url", False)
         if not code or redirected and int(redirected) >= self.max_code_redirects:
             self.request = login_canceled(self.request)
-            url = build_url(settings.LOGIN_REDIRECT_URL, self.request)
+            url = build_url(settings.FRONTEND_URL, self.request)
             return url
         else:
             response = provider.login_successful(code, self.request)
@@ -63,5 +63,5 @@ class SocialLoginResponse(RedirectView):
             self.request = response
         if next_url:
             return next_url
-        url = build_url(settings.LOGIN_REDIRECT_URL, self.request)
+        url = build_url(settings.FRONTEND_URL, self.request)
         return url

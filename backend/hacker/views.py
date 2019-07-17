@@ -44,4 +44,4 @@ class PaymentView(PermissionClassesMixin, RedirectView):
                 ERROR,
                 "Erro ao criar pedido de pagamento. Tente novamente mais tarde.",
             )
-            return "/"
+            return settings.FRONTEND_URL

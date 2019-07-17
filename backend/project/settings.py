@@ -23,7 +23,8 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 
 # Website root url
-ROOT_URL = os.environ.get("ROOT_URL", "localhost:8000")
+ROOT_URL = os.environ.get("SERVER_HOST", "localhost:8000")
+FRONTEND_URL = os.environ.get("FRONTEND_URL", "localhost:3000")
 
 
 # Quick-start development settings - unsuitable for production

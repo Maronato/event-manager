@@ -1,33 +1,23 @@
-from django.urls import path, include
-from django.contrib.auth.views import LogoutView
-from django.conf import settings
+from rest_framework.routers import DefaultRouter
+from project.router import base_router
 from . import api
-from . import views
 
+auth_router = DefaultRouter()
 
-tokenauthpatterns = [
-    path("check/", api.CheckToken.as_view(), name="check_token"),
-    path("login/", api.TokenLogin.as_view(), name="token_login"),
-]
+auth_router.register('check', api.CheckToken, 'check')
+auth_router.register('login', api.TokenLogin, 'login')
 
-apipattens = [
-    path("change_email/", api.ChangeEmail.as_view(), name="change_email"),
-    path("change_token/", api.ChangeToken.as_view(), name="change_token"),
-    path("reset_token_email/", api.ResetTokenEmail.as_view(), name="reset_token_email"),
-    path("list_profiles/", api.ListProfiles.as_view(), name="list_profiles"),
-    path(
-        "list_hacker_profiles/",
-        api.ListHackerProfiles.as_view(),
-        name="list_hacker_profiles",
-    ),
-    path("sui_list_profiles/", api.SUIListProfiles.as_view(), name="sui_list_profiles"),
-]
+tokenauthpatterns = auth_router.urls
+
+base_router.register('profile/change_email', api.ChangeEmail, 'profile_change_email')
+base_router.register('profile/verify_email', api.VerifyEmail, 'profile_verify_email')
+base_router.register('profile/change_token', api.ChangeToken, 'profile_change_token')
+base_router.register('profile/reset_token_email', api.ChangeEmail, 'profile_reset_token_email')
+base_router.register('profile/all', api.ListProfiles, 'profile_list_all')
+base_router.register('profile/all_frontend', api.FrontendListProfiles, 'profile_list_all_frontend')
+base_router.register('profile/hackers', api.ListHackerProfiles, 'profile_list_hackers')
+
+apipattens = []
 
 app_name = "profile"
-urlpatterns = [
-    path("api/", include((apipattens, "api")), name="api"),
-    path("logout/", LogoutView.as_view(next_page=settings.LOGIN_URL), name="logout"),
-    path(
-        "verify_email/<str:code>/", views.VerifyEmailView.as_view(), name="verify_email"
-    ),
-]
+urlpatterns = []

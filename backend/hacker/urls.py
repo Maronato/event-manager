@@ -1,35 +1,33 @@
 from django.urls import path, include
+from project.router import base_router, export_router
 from . import api, exports, views
 
-apipatterns = [
-    path("confirm/", api.ConfirmPresence.as_view(), name="confirm"),
-    path("withdraw/", api.Withdraw.as_view(), name="withdraw"),
-    path("undo_withdraw/", api.UndoWithdraw.as_view(), name="undo_withdraw"),
-    path("toggle_is_hacker/", api.ToggleIsHacker.as_view(), name="toggle_is_hacker"),
-    path("admit_hacker/", api.Admit.as_view(), name="admit_hacker"),
-    path("decline_hacker/", api.Decline.as_view(), name="decline_hacker"),
-    path("unwaitlist_hacker/", api.Unwaitlist.as_view(), name="unwaitlist_hacker"),
-    path(
-        "fetch_checkin_hacker/",
-        api.FetchCheckinHacker.as_view(),
-        name="fetch_checkin_hacker",
-    ),
-    path("checkin_hacker/", api.CheckinHacker.as_view(), name="checkin_hacker"),
-]
+""" API """
 
-exportpatterns = [
-    path(
-        "scanned_hackers/",
-        exports.ExportScannedHackers.as_view(),
-        name="scanned_hackers",
-    ),
-    path("all_hackers/", exports.ExportAllHackers.as_view(), name="all_hackers"),
-]
+# Hacker actions
+base_router.register('hacker/me/confirm', api.ConfirmPresence, "hacker_me_confirm")
+base_router.register('hacker/me/withdraw', api.Withdraw, "hacker_me_withdraw")
+base_router.register('hacker/me/undo_withdraw', api.UndoWithdraw, "hacker_me_undo_withdraw")
+# Staff actions
+base_router.register('hacker/admit', api.Admit, "staff_hacker_admit")
+base_router.register('hacker/decline', api.Decline, "staff_hacker_decline")
+base_router.register('hacker/unwaitlist', api.Unwaitlist, "staff_hacker_unwaitlist")
+base_router.register('hacker/checkin/fetch', api.FetchCheckinHacker, "staff_hacker_checkin_fetch")
+base_router.register('hacker/checkin', api.CheckinHacker, "staff_hacker_checkin")
+# Admin actions
+base_router.register('hacker/toggle', api.ToggleIsHacker, "admin_hacker_toggle")
+
+
+""" Export """
+
+export_router.register('hacker/scanned', exports.ExportScannedHackers, "hacker_scanned")
+export_router.register('hacker/all', exports.ExportAllHackers, "hacker_all")
+
+apipatterns = []
+urlpatterns = []
 
 app_name = "hacker"
-urlpatterns = [
-    path("api/", include((apipatterns, "api")), name="api"),
-    path("exports/", include((exportpatterns, "exports")), name="exports"),
-    path("pagseguro/checkout/", views.PaymentView.as_view(), name="checkout"),
-    path("pagseguro/notifications/", include("pagseguro.urls")),
+payment_urlpatterns = [
+    path("pagseguro/checkout/", views.PaymentView.as_view(), name="pagseguro_checkout"),
+    path("pagseguro/notifications/", include(("pagseguro.urls", "pagseguro"), namespace="pagseguro_notifications")),
 ]
