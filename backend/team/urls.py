@@ -1,14 +1,9 @@
-from django.urls import path, include
-from rest_framework.routers import DefaultRouter
-from . import views, api
+from project.router import base_router
+from . import api
 
-router = DefaultRouter()
-router.register(r"team", api.TeamViewset)
+base_router.register("teams", api.TeamViewset)
 
-apipatterns = router.urls
+apipatterns = []
 
 app_name = "team"
-urlpatterns = [
-    path("api/", include((apipatterns, "api")), name="api"),
-    path("", views.TeamView.as_view(), name="index"),
-]
+urlpatterns = []

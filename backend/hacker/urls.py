@@ -5,23 +5,23 @@ from . import api, exports, views
 """ API """
 
 # Hacker actions
-base_router.register('hacker/me/confirm', api.ConfirmPresence, "hacker_me_confirm")
-base_router.register('hacker/me/withdraw', api.Withdraw, "hacker_me_withdraw")
-base_router.register('hacker/me/undo_withdraw', api.UndoWithdraw, "hacker_me_undo_withdraw")
+base_router.register('hackers/me/confirm', api.ConfirmPresence, "hacker_me_confirm")
+base_router.register('hackers/me/withdraw', api.Withdraw, "hacker_me_withdraw")
+base_router.register('hackers/me/undo_withdraw', api.UndoWithdraw, "hacker_me_undo_withdraw")
 # Staff actions
-base_router.register('hacker/admit', api.Admit, "staff_hacker_admit")
-base_router.register('hacker/decline', api.Decline, "staff_hacker_decline")
-base_router.register('hacker/unwaitlist', api.Unwaitlist, "staff_hacker_unwaitlist")
-base_router.register('hacker/checkin/fetch', api.FetchCheckinHacker, "staff_hacker_checkin_fetch")
-base_router.register('hacker/checkin', api.CheckinHacker, "staff_hacker_checkin")
+base_router.register('hackers/admit', api.Admit, "staff_hacker_admit")
+base_router.register('hackers/decline', api.Decline, "staff_hacker_decline")
+base_router.register('hackers/unwaitlist', api.Unwaitlist, "staff_hacker_unwaitlist")
+base_router.register('hackers/checkin/fetch', api.FetchCheckinHacker, "staff_hacker_checkin_fetch")
+base_router.register('hackers/checkin', api.CheckinHacker, "staff_hacker_checkin")
 # Admin actions
-base_router.register('hacker/toggle', api.ToggleIsHacker, "admin_hacker_toggle")
+base_router.register('hackers/toggle', api.ToggleIsHacker, "admin_hacker_toggle")
 
 
 """ Export """
 
-export_router.register('hacker/scanned', exports.ExportScannedHackers, "hacker_scanned")
-export_router.register('hacker/all', exports.ExportAllHackers, "hacker_all")
+export_router.register('hackers/scanned', exports.ExportScannedHackers, "hacker_scanned")
+export_router.register('hackers/all', exports.ExportAllHackers, "hacker_all")
 
 apipatterns = []
 urlpatterns = []

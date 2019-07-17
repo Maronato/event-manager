@@ -1,17 +1,11 @@
-from django.urls import path, include
-from . import views, api
+from project.router import base_router
+from . import api
 
-apipatterns = [
-    path("toggle_is_staff/", api.ToggleIsStaff.as_view(), name="toggle_is_staff"),
-    path(
-        "create_blank_hacker/",
-        api.CreateBlankHacker.as_view(),
-        name="create_blank_hacker",
-    ),
-]
+
+base_router.register('staff/toggle', api.ToggleIsStaff, 'staff_toggle')
+base_router.register('hackers/create_blank', api.CreateBlankHacker, 'hacker_create_blank')
+
+apipatterns = []
 
 app_name = "staff"
-urlpatterns = [
-    path("api/", include((apipatterns, "api")), name="api"),
-    path("", views.StaffView.as_view(), name="index"),
-]
+urlpatterns = []

@@ -1,7 +1,8 @@
 from django.contrib.auth.models import User
 from django.shortcuts import reverse
 from django.utils.crypto import get_random_string
-from rest_framework import views
+from rest_framework import views, mixins, viewsets, serializers
+from project.serializers import UniqueIDSerializer
 from godmode.permissions import IsAdmin
 from user_profile.models import Profile
 from hacker.models import Hacker
@@ -9,11 +10,14 @@ from .permissions import IsStaff
 from .models import Staff
 
 
-class ToggleIsStaff(views.APIView):
+class ToggleIsStaff(mixins.CreateModelMixin, viewsets.GenericViewSet):
     permission_classes = [IsAdmin]
+    serializer_class = UniqueIDSerializer
 
-    def post(self, request):
-        unique_id = request.data["unique_id"]
+    def create(self, request):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        unique_id = serializer.validated_data["unique_id"]
         profile = Profile.objects.get(unique_id=unique_id)
         if profile.is_staff:
             profile.staff.delete()
@@ -24,8 +28,9 @@ class ToggleIsStaff(views.APIView):
         return views.Response({"message": "Permissão alterada"})
 
 
-class CreateBlankHacker(views.APIView):
+class CreateBlankHacker(mixins.CreateModelMixin, viewsets.GenericViewSet):
     permission_classes = [IsStaff]
+    serializer_class = serializers.Serializer
 
     def uniqueUsername(self):
         username = get_random_string(length=20)
@@ -38,7 +43,4 @@ class CreateBlankHacker(views.APIView):
         user.save()
         hacker = Hacker(profile=user.profile)
         hacker.save()
-        url = request.build_absolute_uri("/").strip("/") + reverse(
-            "profile:token_login", args={user.profile.token}
-        )
-        return views.Response({"token": user.profile.token, "url": url})
+        return views.Response({"token": user.profile.token})

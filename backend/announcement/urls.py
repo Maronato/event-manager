@@ -2,7 +2,7 @@ from django.urls import path, include
 from project.router import base_router
 from . import api
 
-base_router.register("announcement", api.AnnouncementViewset, "announcement")
+base_router.register("announcements", api.AnnouncementViewset, "announcement")
 
 apipatterns = []
 
