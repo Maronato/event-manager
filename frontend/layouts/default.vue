@@ -43,7 +43,20 @@
         </div>
         <v-content>
             <v-container>
-                <nuxt />
+                <v-layout row wrap>
+                    <v-spacer />
+                    <v-flex xs12 lg8>
+                        <LatestAnnouncement />
+                    </v-flex>
+                    <v-spacer />
+                </v-layout>
+                <v-layout row wrap>
+                    <v-spacer />
+                    <v-flex xs12 lg8>
+                        <nuxt />
+                    </v-flex>
+                    <v-spacer />
+                </v-layout>
             </v-container>
         </v-content>
     </base-layout>
@@ -51,8 +64,9 @@
 
 <script>
     import baseLayout from "./base"
+    import LatestAnnouncement from "~/components/announcements/LatestAnnouncement"
     export default {
-        components: { baseLayout },
+        components: { baseLayout, LatestAnnouncement },
         data() {
             return {
                 drawer: false
@@ -91,26 +105,37 @@
         beforeMount() {
             // API Fetch
             this.fetchSettings()
+            this.fetchAnnouncements()
             // WS Subscribe
             this.selfSub()
             this.settingsSub()
+            this.announcementsSub()
         },
         methods: {
             logout() {
                 this.$auth.logout()
             },
+
+            // API Fetch
+            fetchSettings() {
+                this.$auth.request("/api/settings/").then(settings => {
+                    this.$store.commit("settings/set", settings)
+                })
+            },
+            fetchAnnouncements() {
+                this.$auth.request("/api/announcements/").then(announcements => {
+                    this.$store.commit("announcements/update", announcements)
+                })
+            },
+
+            // Subs
             selfSub() {
                 this.$selfWS({
                     signal: "update",
-                    debug: true,
+                    debug: false,
                     callback: user => {
                         this.$auth.setUset(user)
                     }
-                })
-            },
-            fetchSettings() {
-                this.$auth.request("/settings/api/settings/").then(settings => {
-                    this.$store.commit("settings/set", settings)
                 })
             },
             settingsSub() {
@@ -118,9 +143,29 @@
                     app: "settings",
                     model: "Settings",
                     signal: "update",
-                    debug: true,
+                    debug: false,
                     callback: settings => {
                         this.$store.commit("settings/set", settings)
+                    }
+                })
+            },
+            announcementsSub() {
+                this.$modelWS({
+                    app: "announcement",
+                    model: "Announcement",
+                    signal: "create",
+                    debug: false,
+                    callback: announcement => {
+                        this.$store.commit("announcements/push", announcement)
+                    }
+                })
+                this.$modelWS({
+                    app: "announcement",
+                    model: "Announcement",
+                    signal: "delete",
+                    debug: false,
+                    callback: () => {
+                        this.fetchAnnouncements()
                     }
                 })
             }

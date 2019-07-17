@@ -3,6 +3,7 @@ from channels.db import database_sync_to_async
 from channels.auth import get_user
 from django.apps import apps
 from django.conf import settings
+import asyncio
 import json
 
 
@@ -32,12 +33,14 @@ class ModelSignalConsumer(AsyncJsonWebsocketConsumer):
 
     @database_sync_to_async
     def get_user_is_allowed(self, user):
+        print("getting user is allowed", user)
         return user.is_authenticated
 
     async def connect(self):
         print("Connecting")
         # Assert user is allowed
         user_is_allowed = await self.get_user_is_allowed(await get_user(self.scope))
+        print('User is allowed', user_is_allowed)
         if not user_is_allowed:
             return await self.close()
         self.signal_group_name = await self.get_signal_group_name()
@@ -46,11 +49,13 @@ class ModelSignalConsumer(AsyncJsonWebsocketConsumer):
         try:
             model_class = await self.get_app_model()
         except LookupError:
+            print("App or model do not exist! Disconnecting")
             # App or model don't exist
             return await self.close()
 
         model_is_allowed = await self.get_model_is_allowed(model_class)
         if not model_is_allowed:
+            print("App or model do not allow WS! Disconnecting")
             # This model does not allow subscriptions
             return await self.close()
 
