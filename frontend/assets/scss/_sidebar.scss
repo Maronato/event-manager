@@ -64,7 +64,7 @@
     background: $sidebar-color;
     top: 12px;
 
-    z-index: 9999;
+    z-index: 998;
 
     // Is not visible unless mobile.
     visibility: "hidden";
@@ -92,7 +92,7 @@
       @include transform(translate3d(0, 0, 0));
       + .tab {
         // Transform the tab to the side of the sidebar
-        @include transform(translate3d($sidebar-width, 0, 0));
+        @include transform(translate3d($sidebar-width / 3, 0, 0));
 
         // Hack to get the X lined up
         line-height: $sidebar-tab-size;

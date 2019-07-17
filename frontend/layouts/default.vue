@@ -39,8 +39,7 @@
             </v-list>
         </v-navigation-drawer>
         <div v-show="isMobile" class="tab" @click="drawer = !drawer">
-            <img v-show="!showNav" src="~/static/img/logo.svg" />
-            <span v-show="showNav" class="close">&#x2715;</span>
+            <img src="~/static/img/logo.svg" />
         </div>
         <v-content>
             <v-container>
