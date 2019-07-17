@@ -1,5 +1,5 @@
 from django.db.models import Q
-from rest_framework import views, viewsets, response, mixins
+from rest_framework import viewsets, response, mixins
 from rest_condition import And, Or
 from project.mixins import PrefetchQuerysetModelMixin
 from project.permissions import IsReadyOnlyRequest
@@ -11,6 +11,8 @@ from .serializers import (
     FullEventSerializer,
     FeedbackSerializer,
     AttendedEventSerializer,
+    EventIDInputSerializer,
+    EventIDUniqueIDInputSerializer
 )
 from .models import Event, Feedback
 from .permissions import CanAttendEvents
@@ -204,14 +206,16 @@ class FeedbackViewset(
         return response.Response(serializer.data)
 
 
-class AttendEvent(views.APIView):
+class AttendEvent(mixins.CreateModelMixin, viewsets.GenericViewSet):
     """Attend event
     """
-
     permission_classes = [CanAttendEvents]
+    serializer_class = EventIDInputSerializer
 
-    def post(self, request):
-        event_id = request.data.get("event_id", None)
+    def create(self, request):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        event_id = serializer.validated_data['event_id']
         event = Event.objects.filter(pk=event_id)
         if not event.exists():
             return response.Response({"message": "Evento inválido"}, status=400)
@@ -222,11 +226,14 @@ class AttendEvent(views.APIView):
         return response.Response({"message": "Registrado"})
 
 
-class NeglectEvent(views.APIView):
+class NeglectEvent(mixins.CreateModelMixin, viewsets.GenericViewSet):
     permission_classes = [CanAttendEvents]
+    serializer_class = EventIDInputSerializer
 
-    def post(self, request):
-        event_id = request.data.get("event_id", None)
+    def create(self, request):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        event_id = serializer.validated_data['event_id']
         event = Event.objects.filter(pk=event_id)
         if not event.exists():
             return response.Response({"message": "Evento inválido"}, status=400)
@@ -240,12 +247,15 @@ class NeglectEvent(views.APIView):
         return response.Response({"message": "Registrado"})
 
 
-class FetchCheckinAttendee(views.APIView):
+class FetchCheckinAttendee(mixins.CreateModelMixin, viewsets.GenericViewSet):
     permission_classes = [IsStaff]
+    serializer_class = EventIDUniqueIDInputSerializer
 
-    def post(self, request):
-        event_id = request.data.get("event_id", None)
-        unique_id = request.data.get("unique_id", None)
+    def create(self, request):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        event_id = serializer.validated_data['event_id']
+        unique_id = serializer.validated_data['unique_id']
         event = Event.objects.filter(pk=event_id)
         if not event.exists():
             return response.Response(
@@ -286,12 +296,15 @@ class FetchCheckinAttendee(views.APIView):
         )
 
 
-class CheckinAttendee(views.APIView):
+class CheckinAttendee(mixins.CreateModelMixin, viewsets.GenericViewSet):
     permission_classes = [IsStaff]
+    serializer_class = EventIDUniqueIDInputSerializer
 
-    def post(self, request):
-        event_id = request.data.get("event_id", None)
-        unique_id = request.data.get("unique_id", None)
+    def create(self, request):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        event_id = serializer.validated_data['event_id']
+        unique_id = serializer.validated_data['unique_id']
         event = Event.objects.filter(pk=event_id)
         if not event.exists():
             return response.Response(

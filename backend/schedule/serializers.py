@@ -50,7 +50,6 @@ class EventSerializer(PrefetchMixin, serializers.ModelSerializer):
             and not require_register
             and instance.require_register
         ):
-            print("NONNONNONONO")
             instance.attendees.clear()
             instance.attended.clear()
             instance.feedbacks.all().delete()
@@ -121,7 +120,7 @@ class FullEventSerializer(PrefetchMixin, serializers.ModelSerializer):
         queryset = queryset.annotate(
             n_attendees=Count("attendees", distinct=True),
             n_attended=Count("attended", distinct=True),
-            avg_rating=Avg("feedbacks__rating", distinct=True),
+            avg_rating=Avg("feedbacks__rating"),
         )
         return queryset
 
@@ -177,3 +176,11 @@ class AttendedEventSerializer(PrefetchMixin, serializers.ModelSerializer):
         model = Event
         select_related_fields = ["speaker__shortcuts", "speaker__user"]
         prefetch_related_fields = ["feedbacks__event"]
+
+
+class EventIDInputSerializer(serializers.Serializer):
+    event_id = serializers.IntegerField()
+
+
+class EventIDUniqueIDInputSerializer(EventIDInputSerializer):
+    unique_id = serializers.CharField()

@@ -1,41 +1,27 @@
-from django.urls import path, include
-from rest_framework.routers import DefaultRouter
-from . import api, views, exports
+from project.router import base_router, export_router
+from . import api, exports
 
-router = DefaultRouter()
-router.register("event", api.EventViewset)
-router.register("my_events", api.MyEventViewset, "my_event")
-router.register("registered_events", api.RegisteredEventViewset, "registered_event")
-router.register(
-    "not_registered_events", api.NotRegisteredEventViewset, "not_registered_event"
+base_router.register("events/my", api.MyEventViewset, "my_event")
+base_router.register("events/registered", api.RegisteredEventViewset, "registered_event")
+base_router.register(
+    "events/not_registered", api.NotRegisteredEventViewset, "not_registered_event"
 )
-router.register("attended_events", api.AttendedEventViewset, "attended_event")
-router.register("full_events", api.FullEventViewset, "full_event")
-router.register("checkinable_events", api.CheckinableEventViewset, "checkinable_events")
-router.register("my_full_events", api.MyFullEventViewset, "my_full_event")
-router.register("feedback", api.FeedbackViewset)
+base_router.register("events/attended", api.AttendedEventViewset, "attended_event")
+base_router.register("events/full", api.FullEventViewset, "full_event")
+base_router.register("events/checkinable", api.CheckinableEventViewset, "checkinable_events")
+base_router.register("events/my_full", api.MyFullEventViewset, "my_full_event")
+base_router.register("events/feedback", api.FeedbackViewset)
 
-apipatterns = router.urls
+base_router.register("events/attend", api.AttendEvent, 'event_attend')
+base_router.register("events/neglect", api.NeglectEvent, 'event_neglect')
+base_router.register("events/checkin/fetch", api.FetchCheckinAttendee, 'event_checkin_fetch')
+base_router.register("events/checkin", api.CheckinAttendee, 'event_checkin')
 
-apipatterns += [
-    path("attend_event/", api.AttendEvent.as_view(), name="attend_event"),
-    path("neglect_event/", api.NeglectEvent.as_view(), name="neglect_event"),
-    path("fetch_checkin/", api.FetchCheckinAttendee.as_view(), name="fetch_checkin"),
-    path("checkin/", api.CheckinAttendee.as_view(), name="checkin"),
-]
+base_router.register("events", api.EventViewset, 'event')
 
-exportrouter = DefaultRouter()
-exportrouter.register("events", exports.ExportEventsViewset, "events")
+apipatterns = []
 
-exportpatterns = exportrouter.urls
-
-exportpatterns += [
-    path("feedback/<str:event_id>/", exports.ExportFeedback.as_view(), name="feedback")
-]
+export_router.register("events", exports.ExportEventsViewset, "events")
 
 app_name = "schedule"
-urlpatterns = [
-    path("api/", include((apipatterns, "api")), name="api"),
-    path("exports/", include((exportpatterns, "exports")), name="exports"),
-    path("", views.ScheduleView.as_view(), name="index"),
-]
+urlpatterns = []

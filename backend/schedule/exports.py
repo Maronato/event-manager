@@ -1,29 +1,37 @@
-from django.shortcuts import get_object_or_404
 from rest_framework.viewsets import ReadOnlyModelViewSet
-from project.generics import PrefetchListAPIView
+from rest_framework.decorators import action
 from project.mixins import ExportMixin, PrefetchQuerysetModelMixin
 from godmode.permissions import IsAdmin
+from .permissions import CanAttendEvents
 from .models import Event, Feedback
 from .export_serializers import ExportFeedbackSerializer, ExportEventSerializer
-from .permissions import CanAttendEvents
-
-
-class ExportFeedback(ExportMixin, PrefetchListAPIView):
-    serializer_class = ExportFeedbackSerializer
-    permission_classes = [CanAttendEvents]
-
-    def get_queryset(self):
-        event_id = self.kwargs.get("event_id", None)
-        event = get_object_or_404(Event, id=event_id)
-        if event.speaker != self.request.user.profile:
-            return Feedback.objects.none()
-        self.queryset = event.feedbacks.all()
-        return super().get_queryset()
 
 
 class ExportEventsViewset(
     ExportMixin, PrefetchQuerysetModelMixin, ReadOnlyModelViewSet
 ):
     serializer_class = ExportEventSerializer
-    permission_classes = [IsAdmin]
     queryset = Event.objects.all()
+
+    @property
+    def permission_classes(self):
+        if self.action == 'feedback':
+            return [CanAttendEvents]
+        return [IsAdmin]
+
+    def get_queryset(self):
+        if self.action == 'feedback':
+            event = self.get_object()
+            if event.speaker != self.request.user.profile:
+                return Feedback.objects.none()
+            return event.feedbacks.all()
+        return super().get_queryset()
+
+    def get_serializer_class(self):
+        if self.action == 'feedback':
+            return ExportFeedbackSerializer
+        return super().get_serializer_class()
+
+    @action(detail=True, methods=['get'])
+    def feedback(self, request, pk=None):
+        return super().list(self, request)

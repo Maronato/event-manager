@@ -1,7 +1,9 @@
-from django.urls import include, path
+from project.router import base_router
 from . import api
 
-apipatterns = [path("settings/", api.SettingsView.as_view(), name="get_update")]
+base_router.register('settings', api.SettingsView, 'settings')
+
+apipatterns = []
 
 app_name = "settings"
-urlpatterns = [path("api/", include((apipatterns, "api")), name="api")]
+urlpatterns = []
