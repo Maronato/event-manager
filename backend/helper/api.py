@@ -94,13 +94,11 @@ class OnlineMentorViewset(
     serializer_class = MentorSerializer
 
 
-class SelfMentor(PrefetchQuerysetModelMixin, mixins.RetrieveModelMixin, mixins.ListModelMixin, mixins.UpdateModelMixin, viewsets.GenericViewSet):
+class SelfMentor(PrefetchQuerysetModelMixin, mixins.RetrieveModelMixin, mixins.UpdateModelMixin, viewsets.GenericViewSet):
+    single_instance_viewset = True
     queryset = Mentor.objects.all()
     serializer_class = MentorSerializer
     permission_classes = [IsMentor]
 
     def get_object(self):
         return self.get_queryset().get(profile=self.request.user.profile)
-
-    def list(self, request, *args, **kwargs):
-        return self.retrieve(request, *args, **kwargs)

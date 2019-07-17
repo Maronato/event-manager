@@ -70,10 +70,10 @@ class FormOptions(
 class ApplicationViewset(
     PrefetchQuerysetModelMixin,
     mixins.RetrieveModelMixin,
-    mixins.ListModelMixin,
     mixins.CreateModelMixin,
     viewsets.GenericViewSet,
 ):
+    single_instance_viewset = True
     permission_classes = [
         And(Or(IsSubmitted, IsIncomplete, And(IsHacker, IsVerified)), RegistrationOpen)
     ]
@@ -88,6 +88,3 @@ class ApplicationViewset(
     def get_object(self):
         hacker = self.request.user.profile.hacker
         return getattr(hacker, "application", None)
-
-    def list(self, *args, **kwargs):
-        return super().retrieve(*args, **kwargs)
