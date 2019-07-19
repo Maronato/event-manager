@@ -215,7 +215,7 @@
                         }
                     })
                     .then(() => {
-                        this.$router.push("/")
+                        this.$auth.redirect('home')
                     })
                     .catch(err => {
                         this.formLoading = false
