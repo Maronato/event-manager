@@ -16,9 +16,7 @@
     export default {
         computed: {
             reg_date() {
-                return this.$moment(
-                    this.$store.state.settings.settings.registration_close_seconds
-                ).calendar()
+                return this.$moment(this.$store.state.settings.settings.registration_close_seconds).calendar()
             },
             actionWord() {
                 if (this.$auth.user.state === 'incomplete') {
