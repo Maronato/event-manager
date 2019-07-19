@@ -28,8 +28,13 @@
                     :show-expand="isMobile"
                     :headers="headers"
                     :items="filteredList"
-                    :items-per-page="5"
+                    no-data-text="Sem resultados na pesquisa 😞"
+                    no-results-text="Sem resultados na pesquisa 😞"
+                    :page.sync="page"
+                    :items-per-page="itemsPerPage"
+                    hide-default-footer
                     class="elevation-1"
+                    @page-count="pageCount = $event"
                 >
                     <template v-slot:expanded-item="{ headers, item }">
                         <td :colspan="headers.length">
@@ -140,6 +145,32 @@
                             v-text="`Apagar`"
                         />
                     </template>
+                    <template v-slot:footer>
+                        <v-divider></v-divider>
+                        <v-container grid-list-md pb-0>
+                            <v-layout row wrap>
+                                <v-flex xs12 md2>
+                                    <v-select
+                                        v-model="itemsPerPage"
+                                        solo
+                                        :items="itemsPerPageOptions"
+                                        label="Por página"
+                                    ></v-select>
+                                </v-flex>
+                                <v-flex xs12 md8 text-xs-center>
+                                    <v-pagination
+                                        v-model="page"
+                                        prev-icon="mdi-menu-left"
+                                        next-icon="mdi-menu-right"
+                                        class="pagination"
+                                        :total-visible="isMobile ? 5 : 7"
+                                        :length="pageCount"
+                                    ></v-pagination>
+                                </v-flex>
+                                <v-spacer></v-spacer>
+                            </v-layout>
+                        </v-container>
+                    </template>
                 </v-data-table>
             </v-flex>
         </v-layout>
@@ -173,8 +204,25 @@
         },
         data() {
             return {
+                page: 1,
+                pageCount: 0,
+                itemsPerPage: 10,
                 search: "",
                 filter: null,
+                itemsPerPageOptions: [
+                    {
+                        text: 10,
+                        value: 10
+                    },
+                    {
+                        text: 20,
+                        value: 20
+                    },
+                    {
+                        text: 50,
+                        value: 50
+                    }
+                ],
                 filters: [
                     {
                         text: "Todos",
@@ -272,6 +320,11 @@
         }
         .v-data-table td {
             height: 8em;
+        }
+    }
+    @media only screen and (max-width: 400px) {
+        .pagination {
+            margin-left: -3em;
         }
     }
     .no-message-input {
