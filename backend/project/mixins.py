@@ -173,7 +173,7 @@ class PrefetchQuerysetModelMixin(object):
     def get_queryset(self):
         assert self.queryset is not None
         queryset = self.queryset
-        if hasattr(self.get_serializer_class(), 'setup_eager_loading'):
+        if hasattr(self.get_serializer_class(), "setup_eager_loading"):
             queryset = self.get_serializer().setup_eager_loading(queryset)
         return queryset
 

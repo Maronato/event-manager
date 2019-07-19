@@ -78,9 +78,18 @@ def format_phone(phone):
 class ApplicationSerializer(serializers.ModelSerializer):
     """Serialize and validate a hackers application"""
 
-    first_name = serializers.CharField(max_length=50, label="Primeiro nome*", source="hacker.profile.user.first_name")
-    last_name = serializers.CharField(max_length=50, required=True, label="Sobrenome*", source="hacker.profile.user.last_name")
-    email = serializers.EmailField(required=True, label="Email*", source="hacker.profile.user.email")
+    first_name = serializers.CharField(
+        max_length=50, label="Primeiro nome*", source="hacker.profile.user.first_name"
+    )
+    last_name = serializers.CharField(
+        max_length=50,
+        required=True,
+        label="Sobrenome*",
+        source="hacker.profile.user.last_name",
+    )
+    email = serializers.EmailField(
+        required=True, label="Email*", source="hacker.profile.user.email"
+    )
     file_cv = ContentTypeRestrictedFileField(
         allow_empty_file=False,
         content_types=["application/pdf"],
@@ -159,7 +168,9 @@ class ApplicationSerializer(serializers.ModelSerializer):
         try:
             url = upload(file.temporary_file_path())
         except Exception:
-            raise serializers.ValidationError({"file_cv": "Erro fazendo upload do arquivo"})
+            raise serializers.ValidationError(
+                {"file_cv": "Erro fazendo upload do arquivo"}
+            )
         return url
 
     def validate(self, data):
@@ -167,26 +178,28 @@ class ApplicationSerializer(serializers.ModelSerializer):
             file = data.get("file_cv", None)
             url = self.upload(file)
             if not url:
-                raise serializers.ValidationError({"file_cv": ["Nenhum arquivo encontrado"]})
+                raise serializers.ValidationError(
+                    {"file_cv": ["Nenhum arquivo encontrado"]}
+                )
             data["cv"] = url
-        elif data.get("cv_type", False) and not data.get('cv', False):
+        elif data.get("cv_type", False) and not data.get("cv", False):
             raise serializers.ValidationError({"cv": ["Nos fale seu currículo"]})
 
-        if data.get("cv_type2", False) and not data.get('cv2', False):
+        if data.get("cv_type2", False) and not data.get("cv2", False):
             raise serializers.ValidationError({"cv2": ["Nos fale seu currículo"]})
         return data
 
     def save(self):
         data = deepcopy(self.validated_data)
-        hacker_data = data.pop('hacker')
-        profile_data = hacker_data['profile']
-        user_data = profile_data['user']
+        hacker_data = data.pop("hacker")
+        profile_data = hacker_data["profile"]
+        user_data = profile_data["user"]
         first_name = user_data["first_name"]
         last_name = user_data["last_name"]
         email = user_data["email"]
-        data.pop('file_cv', None)
+        data.pop("file_cv", None)
 
-        hacker = self.context['hacker']
+        hacker = self.context["hacker"]
         user = hacker.profile.user
 
         user.first_name = first_name
@@ -195,10 +208,7 @@ class ApplicationSerializer(serializers.ModelSerializer):
         if email != user.email:
             user.profile.change_email(email)
 
-        instance, _ = Application.objects.update_or_create(
-            hacker=hacker,
-            defaults=data
-        )
+        instance, _ = Application.objects.update_or_create(hacker=hacker, defaults=data)
         if Settings.get().auto_admit_hackers():
             hacker.admit(False)
         return instance

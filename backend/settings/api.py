@@ -7,7 +7,9 @@ from .serializers import SettingsSerializer
 from .models import Settings
 
 
-class SettingsView(mixins.RetrieveModelMixin, mixins.UpdateModelMixin, viewsets.GenericViewSet):
+class SettingsView(
+    mixins.RetrieveModelMixin, mixins.UpdateModelMixin, viewsets.GenericViewSet
+):
     single_instance_viewset = True
     serializer_class = SettingsSerializer
     permission_classes = [Or(IsAdmin, And(IsAuthenticated, IsReadyOnlyRequest))]

@@ -26,7 +26,7 @@ class ToggleIsMentor(mixins.CreateModelMixin, viewsets.GenericViewSet):
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        unique_id = serializer.validated_data['unique_id']
+        unique_id = serializer.validated_data["unique_id"]
 
         profile = Profile.objects.get(unique_id=unique_id)
         if profile.is_mentor:
@@ -94,7 +94,12 @@ class OnlineMentorViewset(
     serializer_class = MentorSerializer
 
 
-class SelfMentor(PrefetchQuerysetModelMixin, mixins.RetrieveModelMixin, mixins.UpdateModelMixin, viewsets.GenericViewSet):
+class SelfMentor(
+    PrefetchQuerysetModelMixin,
+    mixins.RetrieveModelMixin,
+    mixins.UpdateModelMixin,
+    viewsets.GenericViewSet,
+):
     single_instance_viewset = True
     queryset = Mentor.objects.all()
     serializer_class = MentorSerializer

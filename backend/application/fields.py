@@ -2,7 +2,6 @@ from rest_framework import serializers
 
 
 class ContentTypeRestrictedValidator(object):
-
     def __call__(self, file):
         try:
             content_type = file.content_type

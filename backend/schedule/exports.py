@@ -15,12 +15,12 @@ class ExportEventsViewset(
 
     @property
     def permission_classes(self):
-        if self.action == 'feedback':
+        if self.action == "feedback":
             return [CanAttendEvents]
         return [IsAdmin]
 
     def get_queryset(self):
-        if self.action == 'feedback':
+        if self.action == "feedback":
             event = self.get_object()
             if event.speaker != self.request.user.profile:
                 return Feedback.objects.none()
@@ -28,10 +28,10 @@ class ExportEventsViewset(
         return super().get_queryset()
 
     def get_serializer_class(self):
-        if self.action == 'feedback':
+        if self.action == "feedback":
             return ExportFeedbackSerializer
         return super().get_serializer_class()
 
-    @action(detail=True, methods=['get'])
+    @action(detail=True, methods=["get"])
     def feedback(self, request, pk=None):
         return super().list(self, request)

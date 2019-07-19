@@ -15,9 +15,7 @@ from .serializers import (
 from .models import Application
 
 
-class ViewHackerApplication(
-        PrefetchQuerysetModelMixin,
-        viewsets.ReadOnlyModelViewSet):
+class ViewHackerApplication(PrefetchQuerysetModelMixin, viewsets.ReadOnlyModelViewSet):
     serializer_class = ApplicationRetrieveSerializer
     permission_classes = [IsStaff]
     queryset = Application.objects.all()
@@ -46,7 +44,8 @@ class FormOptions(
 
     def list(self, request, *args, **kwargs):
         serializer = self.get_serializer(
-            data=list(map(lambda x: {"option": x}, get_form_option_choices())), many=True
+            data=list(map(lambda x: {"option": x}, get_form_option_choices())),
+            many=True,
         )
         serializer.is_valid()
         return response.Response(serializer.validated_data)

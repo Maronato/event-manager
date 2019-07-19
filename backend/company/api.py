@@ -66,7 +66,7 @@ class FetchScanHacker(mixins.CreateModelMixin, viewsets.GenericViewSet):
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        unique_id = serializer.validated_data['unique_id']
+        unique_id = serializer.validated_data["unique_id"]
         try:
             profile = Profile.objects.get(
                 Q(unique_id=unique_id) | Q(user__email=unique_id)
@@ -121,7 +121,7 @@ class ScanHacker(mixins.CreateModelMixin, viewsets.GenericViewSet):
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        unique_id = serializer.validated_data['unique_id']
+        unique_id = serializer.validated_data["unique_id"]
         scanner = request.user.profile
         profile = get_object_or_404(
             Profile, Q(unique_id=unique_id) | Q(user__email=unique_id)
@@ -147,7 +147,7 @@ class FetchCheckinEmployee(mixins.CreateModelMixin, viewsets.GenericViewSet):
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        unique_id = serializer.validated_data['unique_id']
+        unique_id = serializer.validated_data["unique_id"]
         try:
             profile = Profile.objects.get(
                 Q(unique_id=unique_id) | Q(user__email=unique_id)
@@ -194,7 +194,7 @@ class CheckinEmployee(mixins.CreateModelMixin, viewsets.GenericViewSet):
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        unique_id = serializer.validated_data['unique_id']
+        unique_id = serializer.validated_data["unique_id"]
         profile = get_object_or_404(
             Profile, Q(unique_id=unique_id) | Q(user__email=unique_id)
         )

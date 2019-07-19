@@ -10,8 +10,10 @@ from hacker.urls import payment_urlpatterns as payment_urls
 from helper.urls import urlpatterns as helper_urls
 from schedule.urls import urlpatterns as schedule_urls
 from settings.urls import urlpatterns as settings_urls
+
 # TODO: Social URLs na API nova
 from staff.urls import urlpatterns as staff_urls
+
 # TODO: Stats URLs na API nova
 from team.urls import urlpatterns as team_urls
 from user_profile.urls import tokenauthpatterns as token_auth_patterns
@@ -32,15 +34,13 @@ jwt_auth_patterns = [
 
 auth_patterns = [
     path("jwt/", include((jwt_auth_patterns, "jwt"), namespace="jwt")),
-    path("token/", include((token_auth_patterns, "token"), namespace="token"))
+    path("token/", include((token_auth_patterns, "token"), namespace="token")),
 ]
 
 api_patterns = base_router.urls
 export_patterns = export_router.urls
 
-api_patterns += [
-    path("me/", MeView.as_view(), name="me")
-]
+api_patterns += [path("me/", MeView.as_view(), name="me")]
 
 urlpatterns = [
     path("api/", include((api_patterns, "api"), namespace="api")),
@@ -54,4 +54,5 @@ urlpatterns = [
 
 if settings.SHOW_TOOLBAR_CALLBACK:
     import debug_toolbar
+
     urlpatterns = [path("__debug__/", include(debug_toolbar.urls))] + urlpatterns

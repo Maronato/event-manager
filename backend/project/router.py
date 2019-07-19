@@ -7,39 +7,39 @@ class CustomDefaultRouter(DefaultRouter):
     single_instance_routes = [
         # Detail route.
         Route(
-            url=r'^{prefix}{trailing_slash}$',
+            url=r"^{prefix}{trailing_slash}$",
             mapping={
-                'post': 'create',
-                'get': 'retrieve',
-                'put': 'update',
-                'patch': 'partial_update',
-                'delete': 'destroy'
+                "post": "create",
+                "get": "retrieve",
+                "put": "update",
+                "patch": "partial_update",
+                "delete": "destroy",
             },
-            name='{basename}-detail',
+            name="{basename}-detail",
             detail=False,
-            initkwargs={'suffix': 'Instance'}
+            initkwargs={"suffix": "Instance"},
         ),
         # Dynamically generated list routes. Generated using
         # @action(detail=False) decorator on methods of the viewset.
         DynamicRoute(
-            url=r'^{prefix}/{url_path}{trailing_slash}$',
-            name='{basename}-{url_name}',
+            url=r"^{prefix}/{url_path}{trailing_slash}$",
+            name="{basename}-{url_name}",
             detail=False,
-            initkwargs={}
+            initkwargs={},
         ),
         # Dynamically generated detail routes. Generated using
         # @action(detail=True) decorator on methods of the viewset.
         DynamicRoute(
-            url=r'^{prefix}/{lookup}/{url_path}{trailing_slash}$',
-            name='{basename}-{url_name}',
+            url=r"^{prefix}/{lookup}/{url_path}{trailing_slash}$",
+            name="{basename}-{url_name}",
             detail=True,
-            initkwargs={}
+            initkwargs={},
         ),
     ]
 
     def get_routes(self, viewset):
         baseroutes = self.routes
-        if getattr(viewset, 'single_instance_viewset', False):
+        if getattr(viewset, "single_instance_viewset", False):
             baseroutes = list(self.routes)
             self.routes = list(self.single_instance_routes)
         routes = super().get_routes(viewset)
@@ -54,7 +54,7 @@ class CustomDefaultRouter(DefaultRouter):
         list_name = self.routes[0].name
         single_instance_name = self.single_instance_routes[0].name
         for prefix, viewset, basename in self.registry:
-            if getattr(viewset, 'single_instance_viewset', False):
+            if getattr(viewset, "single_instance_viewset", False):
                 api_root_dict[prefix] = single_instance_name.format(basename=basename)
             else:
                 api_root_dict[prefix] = list_name.format(basename=basename)

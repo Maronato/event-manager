@@ -19,7 +19,7 @@ from .serializers import (
     SUIProfileListSerializer,
     TokenInputSerializer,
     EmailnputSerializer,
-    CodenputSerializer
+    CodenputSerializer,
 )
 
 
@@ -35,7 +35,7 @@ class TokenLogin(mixins.CreateModelMixin, viewsets.GenericViewSet):
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        token = serializer.validated_data['token']
+        token = serializer.validated_data["token"]
 
         try:
             instance = Profile.objects.get(token=token)
@@ -56,7 +56,7 @@ class CheckToken(mixins.CreateModelMixin, viewsets.GenericViewSet):
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        token = serializer.validated_data['token']
+        token = serializer.validated_data["token"]
         try:
             instance = Profile.objects.get(token=token)
             login(request, instance.user)
@@ -74,7 +74,7 @@ class ResetTokenEmail(mixins.CreateModelMixin, viewsets.GenericViewSet):
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        email = serializer.validated_data['email']
+        email = serializer.validated_data["email"]
         user = User.objects.filter(email=email)
         if user.exists():
             user = user.first()
@@ -91,7 +91,7 @@ class ChangeEmail(mixins.CreateModelMixin, viewsets.GenericViewSet):
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        email = serializer.validated_data['email']
+        email = serializer.validated_data["email"]
         user = request.user
         user.profile.change_email(email)
         time.sleep(2)
@@ -107,13 +107,18 @@ class VerifyEmail(mixins.CreateModelMixin, viewsets.GenericViewSet):
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        code = serializer.validated_data['code']
+        code = serializer.validated_data["code"]
         try:
             profile = Profile.objects.get(verification_code=code)
             profile.verify_email()
             login(request, profile.user)
             messages.success(request, "Email verificado")
-            return response.Response({"message": "Email verificado", "token": jwt_encode_handler(jwt_payload_handler(profile.user))})
+            return response.Response(
+                {
+                    "message": "Email verificado",
+                    "token": jwt_encode_handler(jwt_payload_handler(profile.user)),
+                }
+            )
         except Profile.DoesNotExist:
             messages.error(request, "Código inválido")
             return response.Response({"error": "Código inválido"}, status=400)

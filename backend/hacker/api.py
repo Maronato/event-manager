@@ -53,7 +53,7 @@ class Admit(mixins.CreateModelMixin, viewsets.GenericViewSet):
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        unique_id = serializer.validated_data['unique_id']
+        unique_id = serializer.validated_data["unique_id"]
         hacker = get_object_or_404(Hacker, profile__unique_id=unique_id)
         if hacker.profile.state not in ["submitted", "declined"]:
             return response.Response(
@@ -70,7 +70,7 @@ class Decline(mixins.CreateModelMixin, viewsets.GenericViewSet):
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        unique_id = serializer.validated_data['unique_id']
+        unique_id = serializer.validated_data["unique_id"]
         hacker = get_object_or_404(Hacker, profile__unique_id=unique_id)
         if hacker.profile.state not in ["submitted", "admitted", "confirmed"]:
             return response.Response(
@@ -89,7 +89,7 @@ class Unwaitlist(mixins.CreateModelMixin, viewsets.GenericViewSet):
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        unique_id = serializer.validated_data['unique_id']
+        unique_id = serializer.validated_data["unique_id"]
         hacker = get_object_or_404(Hacker, profile__unique_id=unique_id)
         if hacker.profile.state != "waitlist":
             return response.Response({"message": "State is not waitlist"}, status=400)
@@ -104,7 +104,7 @@ class ToggleIsHacker(mixins.CreateModelMixin, viewsets.GenericViewSet):
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        unique_id = serializer.validated_data['unique_id']
+        unique_id = serializer.validated_data["unique_id"]
         profile = Profile.objects.get(unique_id=unique_id)
         if profile.is_hacker:
             profile.hacker.delete()
@@ -121,7 +121,7 @@ class FetchCheckinHacker(mixins.CreateModelMixin, viewsets.GenericViewSet):
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        unique_id = serializer.validated_data['unique_id']
+        unique_id = serializer.validated_data["unique_id"]
         try:
             profile = Profile.objects.get(
                 Q(unique_id=unique_id) | Q(user__email=unique_id)
@@ -175,7 +175,7 @@ class CheckinHacker(mixins.CreateModelMixin, viewsets.GenericViewSet):
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        unique_id = serializer.validated_data['unique_id']
+        unique_id = serializer.validated_data["unique_id"]
         profile = get_object_or_404(
             Profile, Q(unique_id=unique_id) | Q(user__email=unique_id)
         )

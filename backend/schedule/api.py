@@ -12,7 +12,7 @@ from .serializers import (
     FeedbackSerializer,
     AttendedEventSerializer,
     EventIDInputSerializer,
-    EventIDUniqueIDInputSerializer
+    EventIDUniqueIDInputSerializer,
 )
 from .models import Event, Feedback
 from .permissions import CanAttendEvents
@@ -209,13 +209,14 @@ class FeedbackViewset(
 class AttendEvent(mixins.CreateModelMixin, viewsets.GenericViewSet):
     """Attend event
     """
+
     permission_classes = [CanAttendEvents]
     serializer_class = EventIDInputSerializer
 
     def create(self, request):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        event_id = serializer.validated_data['event_id']
+        event_id = serializer.validated_data["event_id"]
         event = Event.objects.filter(pk=event_id)
         if not event.exists():
             return response.Response({"message": "Evento inválido"}, status=400)
@@ -233,7 +234,7 @@ class NeglectEvent(mixins.CreateModelMixin, viewsets.GenericViewSet):
     def create(self, request):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        event_id = serializer.validated_data['event_id']
+        event_id = serializer.validated_data["event_id"]
         event = Event.objects.filter(pk=event_id)
         if not event.exists():
             return response.Response({"message": "Evento inválido"}, status=400)
@@ -254,8 +255,8 @@ class FetchCheckinAttendee(mixins.CreateModelMixin, viewsets.GenericViewSet):
     def create(self, request):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        event_id = serializer.validated_data['event_id']
-        unique_id = serializer.validated_data['unique_id']
+        event_id = serializer.validated_data["event_id"]
+        unique_id = serializer.validated_data["unique_id"]
         event = Event.objects.filter(pk=event_id)
         if not event.exists():
             return response.Response(
@@ -303,8 +304,8 @@ class CheckinAttendee(mixins.CreateModelMixin, viewsets.GenericViewSet):
     def create(self, request):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        event_id = serializer.validated_data['event_id']
-        unique_id = serializer.validated_data['unique_id']
+        event_id = serializer.validated_data["event_id"]
+        unique_id = serializer.validated_data["unique_id"]
         event = Event.objects.filter(pk=event_id)
         if not event.exists():
             return response.Response(

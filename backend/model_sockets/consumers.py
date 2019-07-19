@@ -40,7 +40,7 @@ class ModelSignalConsumer(AsyncJsonWebsocketConsumer):
         print("Connecting")
         # Assert user is allowed
         user_is_allowed = await self.get_user_is_allowed(await get_user(self.scope))
-        print('User is allowed', user_is_allowed)
+        print("User is allowed", user_is_allowed)
         if not user_is_allowed:
             return await self.close()
         self.signal_group_name = await self.get_signal_group_name()
