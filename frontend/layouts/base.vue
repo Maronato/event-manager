@@ -8,13 +8,7 @@
     export default {
         data() {
             return {
-                pageTitle: "Login",
                 cookieListener: null
-            }
-        },
-        head() {
-            return {
-                title: this.pageTitle
             }
         },
         computed: {
@@ -40,23 +34,29 @@
         },
         methods: {
             notifyCookies() {
-                let messages = this.$cookies.get('messages')
-                if (messages) {
-                    messages = JSON.parse(messages.split('\\054').join(',').split('\\').join(''))
+                let messages = this.$cookies.get("messages")
+                if (messages && !Array.isArray(messages)) {
+                    messages = JSON.parse(
+                        messages
+                            .split("\\054")
+                            .join(",")
+                            .split("\\")
+                            .join("")
+                    )
                 }
                 if (Array.isArray(messages)) {
                     messages.forEach(message => {
-                        this.$toast('', message[3], message[2])
+                        this.$toast("", message[3], message[2])
                     })
                 }
-                this.$cookies.remove('messages')
+                this.$cookies.remove("messages")
             },
             registerNotifyCookies() {
-                this.cookieListener = setInterval(this.notifyCookies, 1000);
+                this.cookieListener = setInterval(this.notifyCookies, 1000)
             },
             unregisterNotifyCookies() {
                 clearInterval(this.cookieListener)
             }
-        },
+        }
     }
 </script>

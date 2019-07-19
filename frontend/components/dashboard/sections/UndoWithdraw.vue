@@ -1,66 +1,55 @@
 <template>
     <div>
-        <sui-divider />
-        <br>
-        <div class="header divided big-title">
-            Mudar de ideia
-        </div>
+        <v-divider />
+        <br />
+        <div class="header divided big-title">Mudar de ideia</div>
         <div class="description">
             <b>Você ainda tem até {{ conf_close }} para reativar sua aplicação!</b>
         </div>
-        <br>
-        <sui-button primary :loading="loading" @click="undo_withdraw()"
-:disabled="loading" content="Mudei de ideia!" />
-        <br>
+        <br />
+        <v-btn
+            color="primary"
+            :loading="loading"
+            :disabled="loading"
+            tile
+            @click="undo_withdraw()"
+            v-text="`Mudei de ideia!`"
+        />
+        <br />
     </div>
 </template>
 
 <script>
-    import axios from 'project/js/axios_csrf';
-    import toast from 'project/js/notifications';
-    import * as mome from 'moment';
-    import 'moment/locale/pt-br';
-
-    if ("default" in mome) {
-        var moment = mome.default;
-    }
-    else {
-        var moment = mome;
-    }
-
-    moment.locale('pt-BR');
-
     export default {
-        props: ['userContext', 'settingsContext', 'dashboardContext'],
         data() {
             return {
-                user: this.user_context,
-                settings: this.settings_context,
-                dashboard: this.dashboard_context,
-                conf_close_raw: this.settings_context.confirmation_seconds,
                 loading: false
             }
         },
         computed: {
             conf_close() {
-                return moment(this.conf_close_raw).calendar();
+                return this.$moment(
+                    this.$store.state.settings.settings.confirmation_seconds
+                ).calendar()
             }
         },
         methods: {
             undo_withdraw() {
-                self = this;
                 self.loading = true
-                axios.post(this.dashboard.api.undo_withdraw)
-                    .then(function (data) {
-                        toast('Ótimo!', data.data.message, 'success');
-                        self.user.state = data.data.state;
-                        self.loading = false
+                this.$auth
+                    .request({
+                        method: "post",
+                        url: "/api/hackers/me/undo_withdraw/"
                     })
-                    .catch(function (error) {
-                        console.log(error);
-                        toast('Opa!', 'Algo de errado aconteceu :(', 'error');
-                        self.loading = false
-                    });
+                    .then(data => {
+                        this.$toast("Ótimo!", data.message, "success")
+                        this.loading = false
+                    })
+                    .catch(error => {
+                        this.$toast("Opa!", "Algo de errado aconteceu :(", "error")
+                        this.loading = false
+                        return Promise.reject(error)
+                    })
             }
         }
     }

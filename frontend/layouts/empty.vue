@@ -6,8 +6,6 @@
 
 <script>
     export default {
-        options: {
-            auth: false
-        }
+        auth: false
     }
 </script>

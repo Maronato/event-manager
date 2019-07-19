@@ -8,12 +8,15 @@
     import baseLayout from './base'
     export default {
         components: { baseLayout },
-        options: {
-            auth: false
-        },
+        auth: false,
         data() {
             return {
-                page_title: 'Login'
+                pageTitle: 'Login'
+            }
+        },
+        head() {
+            return {
+                title: this.pageTitle
             }
         },
     }

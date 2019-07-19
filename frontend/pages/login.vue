@@ -234,9 +234,7 @@
                     })
             }
         },
-        options: {
-            auth: false,
-            layout: "login"
-        }
+        auth: false,
+        layout: "login"
     }
 </script>

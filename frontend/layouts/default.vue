@@ -94,11 +94,66 @@
                         to: "/"
                     }
                 ]
-                if (this.$auth.user.is_admin) {
+                if (
+                    this.$perms.application({
+                        app: this,
+                        user: this.$auth.user,
+                        settings: this.$store.state.settings.settings
+                    })
+                ) {
+                    items.push({
+                        icon: "fas fa-scroll",
+                        title: "Aplicação",
+                        to: "/application/"
+                    })
+                }
+                if (this.$perms.admin({ user: this.$auth.user })) {
                     items.push({
                         icon: "fas fa-users-cog",
                         title: "Admin",
                         to: "/admin/"
+                    })
+                }
+                if (this.$perms.staff({ user: this.$auth.user })) {
+                    items.push({
+                        icon: "fas fa-hands-helping",
+                        title: "Staff",
+                        to: "/staff/"
+                    })
+                }
+                if (this.$perms.company({ user: this.$auth.user })) {
+                    items.push({
+                        icon: "fas fa-building",
+                        title: "Empresa",
+                        to: "/company/"
+                    })
+                }
+                if (this.$perms.team({ user: this.$auth.user })) {
+                    items.push({
+                        icon: "fas fa-users",
+                        title: "Equipe",
+                        to: "/team/"
+                    })
+                }
+                if (this.$perms.schedule({ user: this.$auth.user })) {
+                    items.push({
+                        icon: "fas fa-calendar-day",
+                        title: "Eventos",
+                        to: "/schedule/"
+                    })
+                }
+                if (this.$perms.helper({ user: this.$auth.user })) {
+                    items.push({
+                        icon: "fas fa-life-ring",
+                        title: "Helper",
+                        to: "/helper/"
+                    })
+                }
+                if (this.$perms.stats({ user: this.$auth.user })) {
+                    items.push({
+                        icon: "fas fa-chart-bar",
+                        title: "Stats",
+                        to: "/stats/"
                     })
                 }
                 return items
@@ -106,7 +161,6 @@
         },
         beforeMount() {
             // API Fetch
-            this.fetchSettings()
             this.fetchAnnouncements()
             // WS Subscribe
             this.selfSub()
@@ -116,13 +170,6 @@
         methods: {
             logout() {
                 this.$auth.logout()
-            },
-
-            // API Fetch
-            fetchSettings() {
-                this.$auth.request("/api/settings/").then(settings => {
-                    this.$store.commit("settings/set", settings)
-                })
             },
             fetchAnnouncements() {
                 this.$auth.request("/api/announcements/").then(announcements => {
