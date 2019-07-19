@@ -1,7 +1,6 @@
 from copy import deepcopy
 from os import listdir, getcwd
 from os.path import isfile, join
-from django.template.defaultfilters import filesizeformat
 from rest_framework import serializers
 from settings.models import Settings
 from project.mixins import PrefetchMixin
@@ -42,7 +41,7 @@ class FormOptionChoicesSerializer(serializers.Serializer):
 
 
 class FormOptionSerializer(serializers.Serializer):
-    name = serializers.CharField()
+    text = serializers.CharField()
     value = serializers.CharField()
 
 
@@ -160,7 +159,7 @@ class ApplicationSerializer(serializers.ModelSerializer):
         try:
             url = upload(file.temporary_file_path())
         except Exception:
-            raise serializers.ValidationError("Erro fazendo upload do arquivo")
+            raise serializers.ValidationError({"file_cv": "Erro fazendo upload do arquivo"})
         return url
 
     def validate(self, data):

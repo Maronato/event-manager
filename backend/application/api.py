@@ -1,4 +1,4 @@
-from rest_framework import viewsets, mixins, response, permissions
+from rest_framework import viewsets, mixins, response, permissions, parsers
 from rest_condition import Or, And
 from project.mixins import PrefetchQuerysetModelMixin
 from hacker.permissions import IsSubmitted, IsIncomplete, IsHacker
@@ -79,6 +79,7 @@ class ApplicationViewset(
     ]
     serializer_class = ApplicationSerializer
     queryset = Application.objects.all()
+    parser_classes = [parsers.MultiPartParser, parsers.FormParser]
 
     def get_serializer_context(self):
         context = super().get_serializer_context()
