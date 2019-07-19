@@ -1,6 +1,7 @@
 import time
 from django.contrib.postgres.search import SearchVector, SearchQuery, SearchRank
 from django.contrib.auth import login
+from django.contrib import messages
 from django.db.models import Q
 from django.db import connection
 from rest_framework.permissions import IsAuthenticated, AllowAny
@@ -111,8 +112,10 @@ class VerifyEmail(mixins.CreateModelMixin, viewsets.GenericViewSet):
             profile = Profile.objects.get(verification_code=code)
             profile.verify_email()
             login(request, profile.user)
-            return response.Response({"message": "Email verificado"})
+            messages.success(request, "Email verificado")
+            return response.Response({"message": "Email verificado", "token": jwt_encode_handler(jwt_payload_handler(profile.user))})
         except Profile.DoesNotExist:
+            messages.error(request, "Código inválido")
             return response.Response({"error": "Código inválido"}, status=400)
 
 

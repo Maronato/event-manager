@@ -128,6 +128,7 @@
                 token: ""
             }
         },
+        middleware: 'redirect_login',
         computed: {
             error: function() {
                 return this.errorMessage !== ""
