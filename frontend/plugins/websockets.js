@@ -22,7 +22,9 @@ WSockets.install = function (Vue, options) {
     Vue.mixin({
         beforeDestroy() {
             if (typeof this.$store !== 'undefined') {
-                this.$store.commit('ws/disconnect', this._uid)
+                if (Array.isArray(this.$store.state.ws.registeredSockets[this._uid])) {
+                    this.$store.commit('ws/disconnect', this._uid)
+                }
             }
         },
         methods: {
