@@ -3,19 +3,31 @@ export const state = () => ({
     latest: {}
 })
 export const mutations = {
-    update(state, list) {
-        list.sort((a, b) => {
-            return new Date(b.created) - new Date(a.created)
-        })
+    setList(state, list) {
         state.list = list
-        state.latest = list[0] || null
     },
-    push(state, announcement) {
-        state.list.push(announcement)
+    pushToList(state, obj) {
+        state.list.push(obj)
+    },
+    sortList(state) {
         state.list.sort((a, b) => {
             return new Date(b.created) - new Date(a.created)
         })
+    },
+    setLatest(state) {
         state.latest = state.list[0] || null
     }
 }
 
+export const actions = {
+    update({ commit }, list) {
+        commit('setList', list)
+        commit('sortList')
+        commit('setLatest')
+    },
+    push({ commit }, announcement) {
+        commit('pushToList', announcement)
+        commit('sortList')
+        commit('setLatest')
+    }
+}

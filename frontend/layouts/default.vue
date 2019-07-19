@@ -173,7 +173,7 @@
             },
             fetchAnnouncements() {
                 this.$auth.request("/api/announcements/").then(announcements => {
-                    this.$store.commit("announcements/update", announcements)
+                    this.$store.dispatch("announcements/update", announcements)
                 })
             },
 
@@ -205,7 +205,7 @@
                     signal: "create",
                     debug: false,
                     callback: announcement => {
-                        this.$store.commit("announcements/push", announcement)
+                        this.$store.dispatch("announcements/push", announcement)
                     }
                 })
                 this.$modelWS({
