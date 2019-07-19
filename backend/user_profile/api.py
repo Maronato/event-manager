@@ -5,7 +5,8 @@ from django.contrib import messages
 from django.db.models import Q
 from django.db import connection
 from rest_framework.permissions import IsAuthenticated, AllowAny
-from rest_framework import response, mixins, viewsets, serializers
+from rest_framework import response, mixins, viewsets, serializers, pagination
+from rest_framework.decorators import action
 from rest_framework_jwt.settings import api_settings
 from godmode.permissions import IsAdmin
 from staff.permissions import IsStaff
@@ -134,10 +135,15 @@ class ChangeToken(mixins.CreateModelMixin, viewsets.GenericViewSet):
         return response.Response({"message": "Token alterado", "token": token})
 
 
-class ListProfiles(PrefetchListAPIView):
+class ListProfiles(mixins.ListModelMixin, viewsets.GenericViewSet):
     serializer_class = ListProfileSerializer
     queryset = Profile.objects.all()
     permission_classes = [IsAdmin]
+
+    @action(detail=False, methods=['get'])
+    def count(self, request):
+        queryset = self.get_queryset()
+        return response.Response({'count': queryset.count()})
 
 
 class ListHackerProfiles(PrefetchListAPIView):

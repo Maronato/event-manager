@@ -54,7 +54,7 @@
                 </v-layout>
                 <v-layout row wrap>
                     <v-spacer />
-                    <v-flex xs12 lg8 xl6>
+                    <v-flex xs12 md10 xl8>
                         <nuxt />
                     </v-flex>
                     <v-spacer />
