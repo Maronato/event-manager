@@ -44,9 +44,8 @@ export default function (ctx) {
     }
     // If settings is not set, fetch it
     if (Object.keys(ctx.store.state.settings.settings).length === 0) {
-        return ctx.$auth.request("/api/settings/").then(settings => {
-            ctx.store.commit("settings/set", settings)
-            // Execute async middleware
+        console.log('empty settings')
+        return ctx.store.dispatch('settings/fetch').then(() => {
             return runMiddleware(ctx, permissions)
         })
     }

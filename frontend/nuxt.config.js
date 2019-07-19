@@ -79,7 +79,7 @@ module.exports = {
         '@nuxtjs/eslint-module',
     ],
     router: {
-        middleware: ['auth', 'permissions']
+        middleware: ['auth', 'load_settings', 'permissions']
     },
     env: {
         WS_URL: process.env.WS_URL,
@@ -132,6 +132,9 @@ module.exports = {
                 }
             }
         },
+        watchLoggedIn: true,
+        rewriteRedirects: true,
+        fullPathRedirect: true,
         redirect: {
             login: '/login',
             logout: '/login',
