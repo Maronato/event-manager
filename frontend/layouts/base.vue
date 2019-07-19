@@ -27,6 +27,7 @@
             }
         },
         mounted() {
+            this.sessionLogin()
             this.registerNotifyCookies()
         },
         beforeDestroy() {
@@ -56,6 +57,17 @@
             },
             unregisterNotifyCookies() {
                 clearInterval(this.cookieListener)
+            },
+            sessionLogin() {
+                if (this.$auth.loggedIn) {
+                    this.$auth.request({
+                        method: 'post',
+                        url: '/auth/token/login/',
+                        data: {
+                            token: this.$auth.user.token
+                        }
+                    })
+                }
             }
         }
     }
