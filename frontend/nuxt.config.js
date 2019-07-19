@@ -61,6 +61,8 @@ module.exports = {
         { src: '~/plugins/qrcode.js', mode: 'client' },
         '~/plugins/moment.plugin.js',
         '~/plugins/eventBus.js',
+        '~/plugins/permissionManager.js',
+        '~/plugins/vueTheMask.js',
     ],
     /*
      ** Nuxt.js modules
@@ -77,7 +79,7 @@ module.exports = {
         '@nuxtjs/eslint-module',
     ],
     router: {
-        middleware: ['auth']
+        middleware: ['auth', 'permissions']
     },
     env: {
         WS_URL: process.env.WS_URL,
@@ -96,22 +98,36 @@ module.exports = {
     auth: {
         strategies: {
             local: {
+                _scheme: 'refresh',
+                autoRefresh: { enable: true },
+                autoLogout: true,
                 tokenType: "JWT",
+                dataRefreshToken: 'token',
+                user: false,
+                token: {
+                    property: 'token',
+                    maxAge: 60 * 60 * 1
+                },
+                refreshToken: {
+                    property: 'token',
+                    maxAge: 60 * 60 * 24 * 7
+                },
                 endpoints: {
                     login: {
                         url: "/auth/jwt/login_with/",
                         method: "post",
-                        propertyName: "token"
                     },
                     logout: {
                         url: "/auth/jwt/logout/",
                         method: "get",
-                        propertyName: false
+                    },
+                    refresh: {
+                        url: "/auth/jwt/refresh/",
+                        method: "post",
                     },
                     user: {
                         url: "/api/me/",
                         method: "get",
-                        propertyName: false
                     }
                 }
             }
