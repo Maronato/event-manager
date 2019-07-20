@@ -47,6 +47,9 @@
     // import Announcements from "./sections/announcements.vue"
 
     export default {
+        head() {
+            return { title: "Godmode" }
+        },
         components: {
             Users,
             // Create,

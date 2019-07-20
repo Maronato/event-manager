@@ -5,7 +5,7 @@ from django.contrib import messages
 from django.db.models import Q
 from django.db import connection
 from rest_framework.permissions import IsAuthenticated, AllowAny
-from rest_framework import response, mixins, viewsets, serializers, pagination
+from rest_framework import response, mixins, viewsets, serializers, pagination, filters
 from rest_framework.decorators import action
 from rest_framework_jwt.settings import api_settings
 from godmode.permissions import IsAdmin
@@ -19,8 +19,9 @@ from .serializers import (
     ListHackerProfileSerializer,
     SUIProfileListSerializer,
     TokenInputSerializer,
-    EmailnputSerializer,
-    CodenputSerializer,
+    EmailInputSerializer,
+    CodeInputSerializer,
+    ProfileFilterSerializer,
 )
 
 
@@ -70,7 +71,7 @@ class CheckToken(mixins.CreateModelMixin, viewsets.GenericViewSet):
 class ResetTokenEmail(mixins.CreateModelMixin, viewsets.GenericViewSet):
     permission_classes = [AllowAny]
     authentication_classes = []
-    serializer_class = EmailnputSerializer
+    serializer_class = EmailInputSerializer
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
@@ -87,7 +88,7 @@ class ResetTokenEmail(mixins.CreateModelMixin, viewsets.GenericViewSet):
 
 class ChangeEmail(mixins.CreateModelMixin, viewsets.GenericViewSet):
     permission_classes = [IsAuthenticated]
-    serializer_class = EmailnputSerializer
+    serializer_class = EmailInputSerializer
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
@@ -103,7 +104,7 @@ class VerifyEmail(mixins.CreateModelMixin, viewsets.GenericViewSet):
     permission_classes = [RegistrationOpen]
     permission_denied_message = "Estamos fora do período de registro"
     authentication_classes = []
-    serializer_class = CodenputSerializer
+    serializer_class = CodeInputSerializer
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
@@ -139,6 +140,17 @@ class ListProfiles(mixins.ListModelMixin, viewsets.GenericViewSet):
     serializer_class = ListProfileSerializer
     queryset = Profile.objects.all()
     permission_classes = [IsAdmin]
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['shortcuts__full_name', 'user__email', 'unique_id']
+
+    def filter_queryset(self, queryset):
+        serializer = ProfileFilterSerializer(data=self.request.query_params)
+        if serializer.is_valid():
+            qs_filter = {
+                '__'.join(['shortcuts', serializer.validated_data['filter']]): True
+            }
+            queryset = queryset.filter(**qs_filter)
+        return super().filter_queryset(queryset)
 
     @action(detail=False, methods=['get'])
     def count(self, request):

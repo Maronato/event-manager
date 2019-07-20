@@ -105,9 +105,12 @@ class TokenInputSerializer(serializers.Serializer):
     token = serializers.CharField()
 
 
-class EmailnputSerializer(serializers.Serializer):
+class EmailInputSerializer(serializers.Serializer):
     email = serializers.EmailField()
 
 
-class CodenputSerializer(serializers.Serializer):
+class CodeInputSerializer(serializers.Serializer):
     code = serializers.CharField()
+
+class ProfileFilterSerializer(serializers.Serializer):
+    filter = serializers.ChoiceField(choices=['is_mentor', 'is_admin', 'is_hacker', 'is_staff'])

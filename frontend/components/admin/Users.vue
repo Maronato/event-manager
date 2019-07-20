@@ -5,7 +5,7 @@
         <component
             :is="tableComponent"
             v-model="list"
-            :list-data="initialListData"
+            :initial-list-size="initialListSize"
             @toggle-hacker="toggleHacker"
             @toggle-staff="toggleStaff"
             @toggle-mentor="toggleMentor"
@@ -21,10 +21,9 @@
         components: { ClientTable, ServerTable },
         data() {
             return {
-                initialListData: {},
                 list: [],
                 initialListSize: 0,
-                listSizeThreshold: 200
+                listSizeThreshold: 500
             }
         },
         computed: {
@@ -35,7 +34,7 @@
                 return ServerTable
             },
             belowThreshold() {
-                return this.initialListSize < this.listSizeThreshold
+                return this.initialListSize <= this.listSizeThreshold
             }
         },
         mounted() {
@@ -50,14 +49,13 @@
                         this.initialListSize = response.count
                         let url = "/api/profiles/all/"
                         if (!this.belowThreshold) {
-                            url += "?limit=" + this.listSizeThreshold
+                            url += "?limit=" + 50
                         }
                         return this.$auth.request(url).then(response => {
                             if (this.belowThreshold) {
                                 this.list = response
                             } else {
                                 this.list = response.results
-                                this.initialListData = response
                             }
                         })
                     })
@@ -70,9 +68,13 @@
                     })
             },
             pushToList(object) {
-                this.list.push(object)
+                this.$eventBus.$emit('add-user')
+                if (this.belowThreshold) {
+                    this.list.push(object)
+                }
             },
             updateOnList(object) {
+                this.$eventBus.$emit('update-user')
                 const idx = this.list.findIndex(
                     obj => obj.unique_id === object.unique_id
                 )
@@ -81,6 +83,7 @@
                 }
             },
             removeFromList(object) {
+                this.$eventBus.$emit('remove-user')
                 const idx = this.list.findIndex(
                     obj => obj.unique_id === object.unique_id
                 )
