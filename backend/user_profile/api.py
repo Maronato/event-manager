@@ -136,26 +136,26 @@ class ChangeToken(mixins.CreateModelMixin, viewsets.GenericViewSet):
         return response.Response({"message": "Token alterado", "token": token})
 
 
-class ListProfiles(mixins.ListModelMixin, viewsets.GenericViewSet):
+class ListProfiles(PrefetchListAPIView):
     serializer_class = ListProfileSerializer
     queryset = Profile.objects.all()
     permission_classes = [IsAdmin]
     filter_backends = [filters.SearchFilter]
-    search_fields = ['shortcuts__full_name', 'user__email', 'unique_id']
+    search_fields = ["shortcuts__full_name", "user__email", "unique_id"]
 
     def filter_queryset(self, queryset):
         serializer = ProfileFilterSerializer(data=self.request.query_params)
         if serializer.is_valid():
             qs_filter = {
-                '__'.join(['shortcuts', serializer.validated_data['filter']]): True
+                "__".join(["shortcuts", serializer.validated_data["filter"]]): True
             }
             queryset = queryset.filter(**qs_filter)
         return super().filter_queryset(queryset)
 
-    @action(detail=False, methods=['get'])
+    @action(detail=False, methods=["get"])
     def count(self, request):
         queryset = self.get_queryset()
-        return response.Response({'count': queryset.count()})
+        return response.Response({"count": queryset.count()})
 
 
 class ListHackerProfiles(PrefetchListAPIView):
