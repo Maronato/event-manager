@@ -44,7 +44,7 @@
     import CreateUsers from "~/components/admin/CreateUsers.vue"
     // import Company from "./sections/company.vue"
     // import Settings from "./sections/settings.vue"
-    // import Announcements from "./sections/announcements.vue"
+    import Announcements from "~/components/admin/Announcements.vue"
 
     export default {
         head() {
@@ -55,7 +55,7 @@
             CreateUsers,
             // Company,
             // Settings,
-            // Announcements,
+            Announcements,
             // LatestAnnouncement
         },
         data() {
@@ -80,7 +80,7 @@
                     {
                         name: "Anúncios",
                         icon: "fas fa-folder",
-                        component: null
+                        component: Announcements
                     },
                     {
                         name: "Configurações",

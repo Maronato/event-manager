@@ -1,7 +1,7 @@
 <template>
     <div>
-        <div class="small big-title">Criar usuários</div>
-        <v-divider class="my-3" />
+        <br />
+        <div class="small big-title mb-3">Criar usuários</div>
         <br />
         <v-layout row wrap>
             <v-flex xs12 md6>
