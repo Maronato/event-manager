@@ -23,7 +23,7 @@
             return {
                 list: [],
                 initialListSize: 0,
-                listSizeThreshold: 500
+                listSizeThreshold: 250
             }
         },
         computed: {
@@ -125,10 +125,11 @@
                         this.$auth
                             .request({
                                 method: "delete",
-                                url: "/api/admin/delete/" + object.unique_id + "/"
+                                url: "/api/users/delete/" + object.unique_id + "/"
                             })
                             .then(() => {
                                 this.$toast("Aviso", "Usuário removido", "info")
+                                this.removeFromList(object)
                             })
                             .catch(() => {
                                 this.$toast(

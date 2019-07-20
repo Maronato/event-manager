@@ -25,7 +25,7 @@
                         mt-5
                         justify-center>
                         <v-flex xs12>
-                            <v-tabs-items v-model="tab">
+                            <v-tabs-items v-model="tab" continuous>
                                 <v-tab-item v-for="t in tabs" :key="t.name" :value="t.name">
                                     <component :is="t.component" v-if="t.component" />
                                 </v-tab-item>
@@ -41,7 +41,7 @@
 
 <script>
     import Users from "~/components/admin/Users.vue"
-    // import Create from "./sections/create_users.vue"
+    import CreateUsers from "~/components/admin/CreateUsers.vue"
     // import Company from "./sections/company.vue"
     // import Settings from "./sections/settings.vue"
     // import Announcements from "./sections/announcements.vue"
@@ -52,7 +52,7 @@
         },
         components: {
             Users,
-            // Create,
+            CreateUsers,
             // Company,
             // Settings,
             // Announcements,
@@ -70,7 +70,7 @@
                     {
                         name: "Criar",
                         icon: "fas fa-users",
-                        component: null
+                        component: CreateUsers
                     },
                     {
                         name: "Empresas",

@@ -59,6 +59,7 @@ module.exports = {
         { src: '~/plugins/toast.js', mode: 'client' },
         { src: '~/plugins/sweetAlerts.js', mode: 'client' },
         { src: '~/plugins/websockets.js', mode: 'client' },
+        { src: '~/plugins/clipboard.js', mode: 'client' },
         { src: '~/plugins/qrcode.js', mode: 'client' },
         '~/plugins/moment.plugin.js',
         '~/plugins/eventBus.js',
