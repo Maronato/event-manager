@@ -129,11 +129,11 @@
                             :rules="requiredRules"
                             label="Faculdade*"
                             hint="Não achou a sua? Digite o nome para criar!"
-                            auto-select-first
+                            :auto-select-first="true"
                             required
+                            chips
                             :return-object="false"
-                            @change="clearManualError('school')"
-                        />
+                            @change="clearManualError('school')"/>
                     </v-flex>
                     <v-flex v-if="higherEducation" xs12 md6>
                         <v-combobox
@@ -146,6 +146,7 @@
                             hint="Não achou a sua? Digite o nome para criar!"
                             auto-select-first
                             required
+                            chips
                             :return-object="false"
                             @change="clearManualError('course')"
                         />
