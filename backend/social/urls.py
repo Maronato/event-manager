@@ -1,14 +1,15 @@
-from django.urls import path, include
+from django.urls import path
+from project.router import base_router
 from . import views, api
 
-apipattens = [
-    path("unlink_provider/", api.UnlinkProvider.as_view(), name="unlink_provider")
-]
+
+base_router.register('social/unlink', api.UnlinkProvider, "social_unlink")
+
+apipattens = []
 
 app_name = "social"
 
 urlpatterns = [
-    path("api/", include((apipattens, "api")), name="api"),
     path("login/<str:provider>/", views.SocialLogin.as_view(), name="login"),
     path(
         "login_response/<str:provider>/",

@@ -34,16 +34,20 @@
             this.unregisterNotifyCookies()
         },
         methods: {
+            decode_django_cookie(val) {
+                if (val.indexOf("\\") === -1) {
+                    return val // not encoded
+                }
+                val = val.replace(/\\"/g, '"')
+                val = val.replace(/\\(\d{3})/g, function(match, octal) {
+                    return String.fromCharCode(parseInt(octal, 8))
+                })
+                return val.replace(/\\\\/g, "\\")
+            },
             notifyCookies() {
                 let messages = this.$cookies.get("messages")
                 if (messages && !Array.isArray(messages)) {
-                    messages = JSON.parse(
-                        messages
-                            .split("\\054")
-                            .join(",")
-                            .split("\\")
-                            .join("")
-                    )
+                    messages = JSON.parse(this.decode_django_cookie(messages))
                 }
                 if (Array.isArray(messages)) {
                     messages.forEach(message => {
@@ -61,8 +65,8 @@
             sessionLogin() {
                 if (this.$auth.loggedIn) {
                     this.$auth.request({
-                        method: 'post',
-                        url: '/auth/token/login/',
+                        method: "post",
+                        url: "/auth/token/login/",
                         data: {
                             token: this.$auth.user.token
                         }

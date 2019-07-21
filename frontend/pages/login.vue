@@ -15,7 +15,7 @@
                                         block
                                         tile
                                         color="blue"
-                                        :href="baseURL + `/social/login/facebook/`"
+                                        :href="baseURL + `/auth/social/login/facebook/`"
                                     >
                                         <v-icon left>fab fa-facebook-f</v-icon>Entrar com Facebook
                                     </v-btn>
@@ -24,7 +24,7 @@
                                         block
                                         tile
                                         color="black"
-                                        :href="baseURL + `/social/login/github/`"
+                                        :href="baseURL + `/auth/social/login/github/`"
                                     >
                                         <v-icon left>fab fa-github</v-icon>Entrar com GitHub
                                     </v-btn>
@@ -33,7 +33,7 @@
                                         block
                                         tile
                                         color="red"
-                                        :href="baseURL + `/social/login/google/`"
+                                        :href="baseURL + `/auth/social/login/google/`"
                                     >
                                         <v-icon left>fab fa-google</v-icon>Entrar com Google
                                     </v-btn>
@@ -128,7 +128,7 @@
                 token: ""
             }
         },
-        middleware: 'redirect_login',
+        middleware: "redirect_login",
         computed: {
             error: function() {
                 return this.errorMessage !== ""
@@ -147,7 +147,11 @@
         },
         beforeMount() {
             if (this.$route.query.token) {
-                this.login(this.$route.query.token)
+                const token = this.$route.query.token
+                const query = Object.assign({}, this.$route.query)
+                delete query.token
+                this.$router.replace({ query })
+                this.login(token)
             }
         },
         methods: {
@@ -215,7 +219,7 @@
                         }
                     })
                     .then(() => {
-                        this.$auth.redirect('home')
+                        this.$auth.redirect("home")
                     })
                     .catch(err => {
                         this.formLoading = false

@@ -19,13 +19,13 @@ def build_url(url, request):
     parts = list(urlparse(url))
     query = parse_qs(parts[4])
     params = {"messages": [], "errors": []}
-    for message in get_messages(request):
-        tag = message.level_tag
-        text = message.message
-        if tag in ["error", "warning"]:
-            params["errors"].append(text)
-        else:
-            params["messages"].append(text)
+    # for message in get_messages(request):
+    #     tag = message.level_tag
+    #     text = message.message
+    #     if tag in ["error", "warning"]:
+    #         params["errors"].append(text)
+    #     else:
+    #         params["messages"].append(text)
     if request.user.is_authenticated:
         params["token"] = jwt_encode_handler(jwt_payload_handler(request.user))
     query.update(params)

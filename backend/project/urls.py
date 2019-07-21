@@ -10,8 +10,7 @@ from hacker.urls import payment_urlpatterns as payment_urls
 from helper.urls import urlpatterns as helper_urls
 from schedule.urls import urlpatterns as schedule_urls
 from settings.urls import urlpatterns as settings_urls
-
-# TODO: Social URLs na API nova
+from social.urls import urlpatterns as social_urls
 from staff.urls import urlpatterns as staff_urls
 
 # TODO: Stats URLs na API nova
@@ -35,6 +34,7 @@ jwt_auth_patterns = [
 auth_patterns = [
     path("jwt/", include((jwt_auth_patterns, "jwt"), namespace="jwt")),
     path("token/", include((token_auth_patterns, "token"), namespace="token")),
+    path("social/", include((social_urls, 'social'), namespace="social"))
 ]
 
 api_patterns = base_router.urls

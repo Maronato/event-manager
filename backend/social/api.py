@@ -1,12 +1,11 @@
 from rest_framework.permissions import IsAuthenticated
-from rest_framework import views
+from rest_framework import views, mixins, viewsets
 
 
-class UnlinkProvider(views.APIView):
-
+class UnlinkProvider(mixins.CreateModelMixin, viewsets.GenericViewSet):
     permission_classes = [IsAuthenticated]
 
-    def post(self, request):
+    def create(self, request):
         provider = request.data.get("provider")
         profile = request.user.profile
         profile.unlink_social_provider(provider)

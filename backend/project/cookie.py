@@ -75,7 +75,7 @@ class JavascripAccessibleMessageStorage(CookieStorage):
 
     def _encode(self, messages, encode_empty=False):
         if messages or encode_empty:
-            return json.dumps(messages, cls=MessageEncoder)
+            return json.dumps(messages, cls=MessageEncoder, ensure_ascii=False)
 
     def _decode(self, data):
         if not data:

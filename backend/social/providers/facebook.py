@@ -35,13 +35,13 @@ def canv_url(request):
         return (
             "https://"
             + request.get_host()
-            + reverse("social:login_response", kwargs={"provider": "facebook"})
+            + reverse("auth:social:login_response", kwargs={"provider": "facebook"})
         )
     else:
         return (
             "https://"
             + request.get_host()
-            + reverse("social:login_response", kwargs={"provider": "facebook"})
+            + reverse("auth:social:login_response", kwargs={"provider": "facebook"})
         )
 
 
@@ -165,7 +165,7 @@ def code_already_used_url(next_url, redirected):
         state["next"] = next_url
     state["redirected"] = int(redirected) + 1 if redirected else 0
     return (
-        reverse("social:login", kwargs={"provider": "facebook"})
+        reverse("auth:social:login", kwargs={"provider": "facebook"})
         + "?"
         + urlencode(state)
     )

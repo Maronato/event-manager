@@ -37,14 +37,16 @@
                 <Withdraw v-if="$auth.user.state=='confirmed'" />
 
                 <!-- Visível sempre pra todos -->
-                <!-- <Access /> -->
+                <no-ssr>
+                    <Access />
+                </no-ssr>
             </div>
         </div>
     </div>
 </template>
 
 <script>
-    // import Access from "~/components/dashboard/sections/Access"
+    import Access from "~/components/dashboard/sections/Access"
     import QRid from "~/components/dashboard/sections/QRid"
     import State from "~/components/dashboard/sections/State"
     import ResendEmail from "~/components/dashboard/sections/ResendEmail"
@@ -58,7 +60,7 @@
 
     export default {
         components: {
-            // Access,
+            Access,
             QRid,
             State,
             ResendEmail,
