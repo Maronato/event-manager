@@ -23,7 +23,7 @@
                     :to="item.to"
                     router
                     exact>
-                    <v-list-item-action>
+                    <v-list-item-action v-if="showDrawerIcons">
                         <v-icon>{{ item.icon }}</v-icon>
                     </v-list-item-action>
                     <v-list-item-content>
@@ -31,7 +31,7 @@
                     </v-list-item-content>
                 </v-list-item>
                 <v-list-item @click="logout()">
-                    <v-list-item-action>
+                    <v-list-item-action v-if="showDrawerIcons">
                         <v-icon>fas fa-sign-out-alt</v-icon>
                     </v-list-item-action>
                     <v-list-item-content>
@@ -71,7 +71,8 @@
         components: { baseLayout, LatestAnnouncement },
         data() {
             return {
-                drawer: false
+                drawer: false,
+                showDrawerIcons: false
             }
         },
         computed: {
