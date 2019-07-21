@@ -201,10 +201,14 @@ LOGIN_URL = '/'
 LOGIN_REDIRECT_URL = '/'
 
 # AWS Storage settings
-AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
-AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
-AWS_STORAGE_BUCKET_NAME = os.environ.get('AWS_STORAGE_BUCKET_NAME')
+AWS_ACCESS_KEY_ID = os.environ.get("AWS_ACCESS_KEY_ID")
+AWS_SECRET_ACCESS_KEY = os.environ.get("AWS_SECRET_ACCESS_KEY")
+AWS_STORAGE_BUCKET_NAME = os.environ.get("AWS_STORAGE_BUCKET_NAME")
 AWS_QUERYSTRING_AUTH = False
+AWS_AUTO_CREATE_BUCKET = True
+AWS_DEFAULT_ACL = None
+AWS_BUCKET_ACL = "public-read"
+AWS_S3_REGION_NAME = "sa-east-1"
 
 
 # Static files (CSS, JavaScript, Images)
@@ -347,4 +351,5 @@ PROMETHEUS_EXPORT_MIGRATIONS = False
 # Shell plus settings
 SHELL_PLUS_PRINT_SQL = True
 SHELL_PLUS = "ptipython"
-SHELL_PLUS_SQLPARSE_FORMAT_KWARGS = dict(reindent_aligned=True, truncate_strings=500)
+SHELL_PLUS_PRINT_SQL_TRUNCATE = 10000
+SHELL_PLUS_SQLPARSE_FORMAT_KWARGS = {reindent_aligned=True, truncate_strings=10000}
