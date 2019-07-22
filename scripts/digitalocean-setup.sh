@@ -17,7 +17,7 @@ chmod +x /usr/local/bin/docker-compose
 docker-compose --version
 
 # Initialize app's variables
-python3 app/initialize.py
+python3 initialize.py
 mv .env app
 
 # Get env vars
@@ -51,4 +51,5 @@ docker network create -d overlay --attachable proxy || true
 touch acme.json
 chmod 600 acme.json
 
-./scripts/deploy.sh
+docker-compose -f docker-stack-${TAG}.yml build grafana prometheus
+TAG=$TAG ./scripts/deploy.sh
