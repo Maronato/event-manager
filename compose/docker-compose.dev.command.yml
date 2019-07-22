@@ -3,4 +3,6 @@ services:
   proxy:
     command: --docker
   backend:
+    command: python manage.py runserver_plus 0.0.0.0:8000
+  backend_ws:
     command: python manage.py runserver 0.0.0.0:8000

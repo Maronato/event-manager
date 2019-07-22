@@ -4,6 +4,10 @@ services:
     volumes:
       - ../app:/app
       - /app/node_modules
+  backend_ws:
+    volumes:
+      - ../app:/app
+      - /app/node_modules
   celeryworker:
     volumes:
       - ../app:/app

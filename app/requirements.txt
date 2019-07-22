@@ -1,6 +1,7 @@
 dj-database-url==0.5.0
 Django==2.2.1
 psycopg2
+gunicorn[eventlet]
 whitenoise==4.1.2
 django-extensions==2.1.7
 requests==2.22.0
@@ -11,6 +12,7 @@ django-maintenance-mode==0.13.1
 django-celery-email==2.0.1
 ptpython
 ptvsd
+Werkzeug
 
 # Async
 celery==4.3.0

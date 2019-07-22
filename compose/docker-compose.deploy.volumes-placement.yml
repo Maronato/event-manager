@@ -3,6 +3,9 @@ services:
   backend:
     volumes:
       - ../app/.env:/app/.env
+  backend_ws:
+    volumes:
+      - ../app/.env:/app/.env
   celeryworker:
     volumes:
       - ../app/.env:/app/.env

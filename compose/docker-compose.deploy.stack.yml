@@ -15,6 +15,11 @@ services:
       replicas: 2
       restart_policy:
         condition: on-failure
+  backend_ws:
+    deploy:
+      replicas: 2
+      restart_policy:
+        condition: on-failure
   celeryworker:
     deploy:
       replicas: 1

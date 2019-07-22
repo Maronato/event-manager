@@ -28,6 +28,20 @@ services:
         - traefik.redirectorservice.frontend.redirect.entryPoint=https
         # Traefik service that listens to HTTPS
         - traefik.webservice.frontend.entryPoints=https
+  backend_ws:
+    deploy:
+      labels:
+        - traefik.backend=backend_ws
+        - traefik.frontend.rule=Host:${DOMAIN};PathPrefix:/ws/
+        - traefik.enable=true
+        - traefik.port=8001
+        - traefik.tags=${TRAEFIK_PUBLIC_TAG:-traefik-public}
+        - traefik.docker.network=proxy
+        # Traefik service that listens to HTTP
+        - traefik.redirectorservice.frontend.entryPoints=http
+        - traefik.redirectorservice.frontend.redirect.entryPoint=https
+        # Traefik service that listens to HTTPS
+        - traefik.webservice.frontend.entryPoints=https
   grafana:
     deploy:
       labels:

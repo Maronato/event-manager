@@ -2,6 +2,8 @@ version: '3.7'
 services:
   backend:
     image: '${IMAGE_DOMAIN-localhost}/em-backend:${TAG-latest}'
+  backend_ws:
+    image: '${IMAGE_DOMAIN-localhost}/em-backend:${TAG-latest}'
   celeryworker:
     image: '${IMAGE_DOMAIN-localhost}/em-worker:${TAG-latest}'
   celerybeat:

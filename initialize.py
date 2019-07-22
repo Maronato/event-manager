@@ -236,7 +236,7 @@ if __name__ == "__main__":
             r = input()
         if r == 's':
             print('Salvando...')
-            copyfile('.env-temp', '.env')
+            copyfile('.env-temp', 'env-extra.env')
     except KeyboardInterrupt:
         print('\n')
         print('Revertendo alterações...')

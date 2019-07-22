@@ -20,4 +20,6 @@ services:
       --accessLog
       --api
   backend:
-    command: ["daphne", "project.asgi:application", "--port", "8000", "--bind", "0.0.0.0", "-v2"]
+    command: ["bash", "-c", "cd /app/ ; gunicorn --worker-class=eventlet --workers=$$(($$(nproc --all) * 2 + 1)) --bind=0.0.0.0:8000 project.wsgi --log-file -"]
+  backend_ws:
+    command: ["daphne", "project.asgi:application", "--port", "8001", "--bind", "0.0.0.0", "-v2"]

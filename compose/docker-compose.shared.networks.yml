@@ -4,6 +4,10 @@ services:
     networks:
       - default
       - proxy
+  backend_ws:
+    networks:
+      - default
+      - proxy
   grafana:
     networks:
       - default
