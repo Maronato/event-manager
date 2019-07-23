@@ -10,7 +10,7 @@ django-debug-panel
 pycpfcnpj==1.5.1
 django-maintenance-mode==0.13.1
 django-celery-email==2.0.1
-ptpython
+ptipython
 ptvsd
 Werkzeug
 
