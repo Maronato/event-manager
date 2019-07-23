@@ -78,6 +78,8 @@ COPY --from=cleanup /app/ /app/
 
 RUN touch .env
 
+RUN apk add bash
+
 # Final stage
 FROM ${APP_ENV}-prefinal as final
 RUN echo "Running final stage"
