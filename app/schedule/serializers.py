@@ -117,7 +117,7 @@ class FullEventSerializer(
         queryset = queryset.annotate(
             n_attendees=Count('attendees', distinct=True),
             n_attended=Count('attended', distinct=True),
-            avg_rating=Avg('feedbacks__rating', distinct=True)
+            avg_rating=Avg('feedbacks__rating')
         )
         return queryset
 
