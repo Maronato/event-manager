@@ -4,7 +4,7 @@
         <div class="small big-title">Lista de usuários</div>
         <UserTable
             v-model="list"
-            :list-size-threshold="50"
+            :list-size-threshold="500"
             @toggle-hacker="toggleHacker"
             @toggle-staff="toggleStaff"
             @toggle-mentor="toggleMentor"
