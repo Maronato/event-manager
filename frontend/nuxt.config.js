@@ -31,6 +31,14 @@ module.exports = {
                     'https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons'
             },
             {
+                rel: 'stylesheet',
+                href: '//fonts.googleapis.com/css?family=Montserrat:700'
+            },
+            {
+                rel: 'stylesheet',
+                href: '//fonts.googleapis.com/css?family=Lato:300,400'
+            },
+            {
                 rel: "stylesheet",
                 href: "//use.fontawesome.com/releases/v5.9.0/css/all.css"
             },
@@ -49,7 +57,9 @@ module.exports = {
      */
     css: [
         '~/assets/scss/normalize.css',
-        '~/assets/scss/site.scss'
+        '~/assets/scss/site.scss',
+        '~/assets/css/qrcode.css',
+        '~/assets/style/variables.scss',
     ],
     /*
      ** Plugins to load before mounting the App
@@ -78,6 +88,7 @@ module.exports = {
     ],
     devModules: [
         '@nuxtjs/vuetify',
+        'semantic-ui-vue/nuxt',
         '@nuxtjs/eslint-module',
     ],
     router: {
@@ -159,7 +170,9 @@ module.exports = {
         },
         icons: {
             iconfont: 'fa'
-        }
+        },
+        font: false,
+        customVariables: ['~/assets/style/variables.scss'],
     },
     /*
      ** Build configuration

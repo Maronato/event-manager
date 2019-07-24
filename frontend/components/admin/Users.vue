@@ -2,10 +2,9 @@
     <div>
         <br />
         <div class="small big-title">Lista de usuários</div>
-        <component
-            :is="tableComponent"
+        <UserTable
             v-model="list"
-            :initial-list-size="initialListSize"
+            :list-size-threshold="50"
             @toggle-hacker="toggleHacker"
             @toggle-staff="toggleStaff"
             @toggle-mentor="toggleMentor"
@@ -15,102 +14,15 @@
     </div>
 </template>
 <script>
-    import ClientTable from "./UserTables/ClientTable"
-    import ServerTable from "./UserTables/ServerTable"
+    import UserTable from "./UserTables/UserTable"
     export default {
-        components: { ClientTable, ServerTable },
+        components: { UserTable },
         data() {
             return {
-                list: [],
-                initialListSize: 0,
-                listSizeThreshold: 250
+                list: []
             }
-        },
-        computed: {
-            tableComponent() {
-                if (this.belowThreshold) {
-                    return ClientTable
-                }
-                return ServerTable
-            },
-            belowThreshold() {
-                return this.initialListSize <= this.listSizeThreshold
-            }
-        },
-        mounted() {
-            this.fetchList()
-            this.listSub()
         },
         methods: {
-            fetchList() {
-                this.$auth
-                    .request("/api/profiles/all/count/")
-                    .then(response => {
-                        this.initialListSize = response.count
-                        let url = "/api/profiles/all/"
-                        if (!this.belowThreshold) {
-                            url += "?limit=" + 50
-                        }
-                        return this.$auth.request(url).then(response => {
-                            if (this.belowThreshold) {
-                                this.list = response
-                            } else {
-                                this.list = response.results
-                            }
-                        })
-                    })
-                    .catch(() => {
-                        this.$toast(
-                            "Opa!",
-                            "Não conseguimos carregar a lista de usuários",
-                            "error"
-                        )
-                    })
-            },
-            pushToList(object) {
-                this.$eventBus.$emit('add-user')
-                if (this.belowThreshold) {
-                    this.list.push(object)
-                }
-            },
-            updateOnList(object) {
-                this.$eventBus.$emit('update-user')
-                const idx = this.list.findIndex(
-                    obj => obj.unique_id === object.unique_id
-                )
-                if (idx >= 0) {
-                    this.list.splice(idx, 1, object)
-                }
-            },
-            removeFromList(object) {
-                this.$eventBus.$emit('remove-user')
-                const idx = this.list.findIndex(
-                    obj => obj.unique_id === object.unique_id
-                )
-                if (idx >= 0) {
-                    this.list.splice(idx, 1)
-                }
-            },
-            listSub() {
-                this.$modelWS({
-                    app: "user_profile",
-                    model: "Profile",
-                    signal: "create",
-                    callback: this.pushToList
-                })
-                this.$modelWS({
-                    app: "user_profile",
-                    model: "Profile",
-                    signal: "update",
-                    callback: this.updateOnList
-                })
-                this.$modelWS({
-                    app: "user_profile",
-                    model: "Profile",
-                    signal: "delete",
-                    callback: this.removeFromList
-                })
-            },
 
             // Admin-Specific actions
             deleteObject(object) {
@@ -129,7 +41,6 @@
                             })
                             .then(() => {
                                 this.$toast("Aviso", "Usuário removido", "info")
-                                this.removeFromList(object)
                             })
                             .catch(() => {
                                 this.$toast(

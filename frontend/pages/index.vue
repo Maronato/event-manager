@@ -2,7 +2,7 @@
     <div id="dashboard" class="page">
         <div class="divided big-title">Dashboard</div>
         <div class="page">
-            <div class="status">
+            <div class="ui status segment">
                 <!-- Visível a hackers o tempo todo ou para outros não verificados -->
                 <State v-if="$auth.user.is_hacker || $auth.user.state === 'unverified'" />
 

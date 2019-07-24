@@ -18,24 +18,24 @@ class SimpleProfileSerializer(PrefetchMixin, serializers.ModelSerializer):
 
 
 class ListProfileSerializer(PrefetchMixin, serializers.ModelSerializer):
-    has_facebook = serializers.BooleanField(source="shortcuts.has_facebook")
-    has_github = serializers.BooleanField(source="shortcuts.has_github")
-    has_google = serializers.BooleanField(source="shortcuts.has_google")
+    has_facebook = serializers.BooleanField(source="shortcuts.has_facebook", required=False)
+    has_github = serializers.BooleanField(source="shortcuts.has_github", required=False)
+    has_google = serializers.BooleanField(source="shortcuts.has_google", required=False)
 
     # Belonging attributes
-    is_hacker = serializers.BooleanField(source="shortcuts.is_hacker")
-    is_staff = serializers.BooleanField(source="shortcuts.is_staff")
-    is_employee = serializers.BooleanField(source="shortcuts.is_employee")
-    is_admin = serializers.BooleanField(source="shortcuts.is_admin")
-    is_mentor = serializers.BooleanField(source="shortcuts.is_mentor")
+    is_hacker = serializers.BooleanField(source="shortcuts.is_hacker", required=False)
+    is_staff = serializers.BooleanField(source="shortcuts.is_staff", required=False)
+    is_employee = serializers.BooleanField(source="shortcuts.is_employee", required=False)
+    is_admin = serializers.BooleanField(source="shortcuts.is_admin", required=False)
+    is_mentor = serializers.BooleanField(source="shortcuts.is_mentor", required=False)
 
     # Control attributes
-    state = serializers.CharField(source="shortcuts.state")
-    is_verified = serializers.BooleanField(source="shortcuts.is_verified")
+    state = serializers.CharField(source="shortcuts.state", required=False)
+    is_verified = serializers.BooleanField(source="shortcuts.is_verified", required=False)
 
-    full_name = serializers.CharField(source="shortcuts.full_name")
+    full_name = serializers.CharField(source="shortcuts.full_name", required=False)
 
-    payment_state = serializers.CharField(source="shortcuts.payment_state")
+    payment_state = serializers.CharField(source="shortcuts.payment_state", required=False)
 
     class Meta:
         model = Profile

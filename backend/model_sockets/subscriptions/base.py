@@ -46,6 +46,10 @@ class BaseSubscriptionReceiver:
         if not serializer_class:
             return {}
         serializer = serializer_class(self.instance)
+        if serializer.instance is None:
+            serializer_raw = serializer_class(data=self.instance.__dict__)
+            if serializer_raw.is_valid():
+                return serializer_raw.validated_data
         return serializer.data
 
     def dispatch(self):

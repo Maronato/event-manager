@@ -55,6 +55,14 @@ $brand-tertiary: $tertiary;
 @import "team";
 @import "admin";
 
+.v-application {
+  line-height: 1.4285em !important;
+}
+
+.theme--light.v-application {
+    background: #fff !important;
+}
+
 html,
 body {
   height: 100%;

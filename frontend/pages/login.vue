@@ -77,7 +77,7 @@
                             <div v-if="loginState === 'forgot'">
                                 <div class="forgot-password form">
                                     <v-form :success="success" @submit.prevent="sendResetEmail()">
-                                        <v-message success>{{ successMessage }}</v-message>
+                                        <v-alert type="success">{{ successMessage }}</v-alert>
                                         <v-text-field
                                             v-model="resetEmail"
                                             type="email"

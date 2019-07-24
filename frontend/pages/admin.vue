@@ -1,41 +1,39 @@
 <template>
     <div id="admin" class="page">
         <div class="divided big-title">Admin</div>
-        <v-container>
-            <v-layout row wrap>
-                <v-spacer />
-                <v-flex xs12>
-                    <v-layout row wrap>
-                        <v-tabs
-                            v-model="tab"
-                            background-color="transparent"
-                            grow
-                            show-arrows
-                            center-active
-                            centered>
-                            <v-tabs-slider></v-tabs-slider>
-                            <v-tab v-for="t in tabs" :key="t.name" :href="`#` + t.name">
-                                {{ t.name }}
-                            </v-tab>
-                        </v-tabs>
-                    </v-layout>
-                    <v-layout
-                        row
-                        wrap
-                        mt-5
-                        justify-center>
-                        <v-flex xs12>
-                            <v-tabs-items v-model="tab" continuous>
-                                <v-tab-item v-for="t in tabs" :key="t.name" :value="t.name">
-                                    <component :is="t.component" v-if="t.component" />
-                                </v-tab-item>
-                            </v-tabs-items>
-                        </v-flex>
-                    </v-layout>
-                </v-flex>
-                <v-spacer />
-            </v-layout>
-        </v-container>
+        <v-layout row wrap>
+            <v-spacer />
+            <v-flex xs12>
+                <v-layout row wrap>
+                    <v-tabs
+                        v-model="tab"
+                        background-color="transparent"
+                        grow
+                        show-arrows
+                        center-active
+                        centered>
+                        <v-tabs-slider></v-tabs-slider>
+                        <v-tab v-for="t in tabs" :key="t.name" :href="`#` + t.name">
+                            {{ t.name }}
+                        </v-tab>
+                    </v-tabs>
+                </v-layout>
+                <v-layout
+                    row
+                    wrap
+                    mt-5
+                    justify-center>
+                    <v-flex xs12>
+                        <v-tabs-items v-model="tab" continuous>
+                            <v-tab-item v-for="t in tabs" :key="t.name" :value="t.name">
+                                <component :is="t.component" v-if="t.component" />
+                            </v-tab-item>
+                        </v-tabs-items>
+                    </v-flex>
+                </v-layout>
+            </v-flex>
+            <v-spacer />
+        </v-layout>
     </div>
 </template>
 

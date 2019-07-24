@@ -1,0 +1,7 @@
+@import '~vuetify/src/styles/styles.sass';
+$body-font-family: "Lato", "Helvetica Neue", "Helvetica", sans-serif;
+$heading-font-family: "Montserrat", "Helvetica Neue", "Helvetica", sans-serif;
+
+.v-application .title {
+    font-family: "Montserrat", "Helvetica Neue", "Helvetica", sans-serif !important;
+}

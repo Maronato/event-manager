@@ -43,7 +43,7 @@
         <div v-show="isMobile" class="tab" @click="drawer = !drawer">
             <img src="~/static/img/logo.svg" />
         </div>
-        <v-content>
+        <v-content class="content">
             <v-container>
                 <v-layout row wrap>
                     <v-spacer />
@@ -54,7 +54,7 @@
                 </v-layout>
                 <v-layout row wrap>
                     <v-spacer />
-                    <v-flex xs12 md10 xl8>
+                    <v-flex xs12 md8 xl6>
                         <nuxt />
                     </v-flex>
                     <v-spacer />
