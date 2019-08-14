@@ -39,6 +39,7 @@ class ListProfileSerializer(
         model = Profile
         fields = [
             'unique_id',
+            'token',
             'full_name',
             'email',
             'state',

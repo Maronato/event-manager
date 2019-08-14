@@ -36,6 +36,7 @@ class Profile(models.Model):
     msocks_allow = True
     msocks_fields = [
         'unique_id',
+        'token',
         'full_name',
         'email',
         'state',
