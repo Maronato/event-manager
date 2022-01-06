@@ -15,7 +15,7 @@ ptvsd
 Werkzeug
 
 # Async
-celery==4.3.0
+celery==5.2.2
 django-celery-beat==1.5.0
 redis==3.2.1
 django-redis==4.5.0
